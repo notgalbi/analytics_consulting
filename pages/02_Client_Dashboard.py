@@ -1,12 +1,15 @@
 """
-pages/02_Client_Dashboard.py — Clean, client-facing dashboard.
-Loaded via URL query param: ?dashboard_id=<id>
-Shows charts and executive summary only. No raw data, no PII info.
+pages/02_Client_Dashboard.py — Clean client-facing dashboard.
+
+Load via URL query param: ?dashboard_id=<id>
+Shows only: executive summary, KPI cards, charts, and data quality notes.
+Never shows: raw data, PII report details, or admin notes.
 """
 
 import streamlit as st
 import plotly.io as pio
 from utils import storage
+from utils.chart_generator import generate_kpi_cards
 
 st.set_page_config(
     page_title="Analytics Dashboard",
@@ -15,95 +18,115 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# ── Minimal sidebar for internal navigation ───────────────────────────────────
 with st.sidebar:
-    st.page_link("app.py",                      label="🏠 Upload & Analyse")
-    st.page_link("pages/01_Admin_Review.py",    label="🔍 Admin Review")
-    st.page_link("pages/02_Client_Dashboard.py",label="📈 Client Dashboard")
+    st.page_link("app.py",                       label="🏠 Upload & Analyse")
+    st.page_link("pages/01_Admin_Review.py",     label="🔍 Admin Review")
+    st.page_link("pages/02_Client_Dashboard.py", label="📈 Client Dashboard")
 
-# ── Resolve dashboard_id from query params ────────────────────────────────────
+# ── Resolve dashboard ID ──────────────────────────────────────────────────────
 query_params = st.query_params
 dashboard_id = query_params.get("dashboard_id", None)
 
 if not dashboard_id:
-    # Let admin pick from approved dashboards
+    # Let admin select from approved/delivered dashboards
     st.header("📈 Client Dashboard")
-    dashboards = storage.list_dashboards()
-    approved = [d for d in dashboards if d.get("review_status") == "approved"]
+    all_dash = storage.list_saved_dashboards()
+    shareable = [d for d in all_dash if d.get("delivery_status") in ("Approved", "Delivered")]
 
-    if not approved:
-        st.info("No approved dashboards available. Complete a review in the Admin Review page first.")
+    if not shareable:
+        st.info(
+            "No approved dashboards available. "
+            "Mark a dashboard as **Approved** in the Admin Review page first."
+        )
         st.stop()
 
     label_map = {
         f"{d['filename']}  (ID: {d['dashboard_id']})": d["dashboard_id"]
-        for d in approved
+        for d in shareable
     }
-    selected_label = st.selectbox("Select a dashboard", list(label_map.keys()))
-    dashboard_id = label_map[selected_label]
-    st.info(f"Shareable URL: add `?dashboard_id={dashboard_id}` to this page's URL.")
+    selected_label = st.selectbox("Select a dashboard to preview", list(label_map.keys()))
+    dashboard_id   = label_map[selected_label]
 
-# ── Load dashboard ────────────────────────────────────────────────────────────
-data = storage.load_dashboard(dashboard_id)
+# ── Load data ─────────────────────────────────────────────────────────────────
+data = storage.load_processed_output(dashboard_id)
 
 if data is None:
     st.error(f"Dashboard `{dashboard_id}` not found.")
     st.stop()
 
-if data.get("review_status") not in ("approved", "pending"):
-    # Rejected — don't expose to client
-    st.error("This dashboard is not available.")
+# Prevent access to dashboards that haven't been approved
+status = data.get("delivery_status", "Needs Review")
+if status == "Needs Review":
+    st.error("This dashboard is pending admin review and is not yet available.")
     st.stop()
 
-# ── Client view ───────────────────────────────────────────────────────────────
-filename     = data.get("metadata", {}).get("filename", "Dataset")
-dataset_type = data.get("dataset_type", "general").title()
-created_at   = data.get("created_at", "")[:10]
+# ── Header ────────────────────────────────────────────────────────────────────
+meta    = data.get("metadata", {})
+profile = data.get("profile", {})
+domain  = data.get("domain", "general").title()
+created = data.get("created_at", "")[:10]
+fname   = meta.get("filename", "Dataset")
 
-st.title(f"📈 {filename} — Analytics Report")
-st.caption(f"Dataset type: {dataset_type}  ·  Generated: {created_at}")
-st.divider()
+st.title(f"📈 {fname} — Analytics Report")
+st.caption(f"Domain: {domain}  ·  Prepared: {created}")
 
-# KPI highlights
-prof = data.get("profile", {})
-numeric = prof.get("numeric", {})
-if numeric:
-    cols = st.columns(min(len(numeric), 4))
-    for i, (col_name, stats) in enumerate(list(numeric.items())[:4]):
-        with cols[i]:
-            st.metric(label=col_name, value=f"{stats.get('mean', 0):,.2f}", help="Mean value")
+st.info(
+    "This dashboard was generated from processed and summarised data. "
+    "Sensitive fields are excluded from AI-generated analysis when detected.",
+    icon="🔒",
+)
 
 st.divider()
 
-# Charts
-st.subheader("Key Metrics & Visualisations")
+# ── KPI cards ─────────────────────────────────────────────────────────────────
+kpis_data   = data.get("kpis", {})
+calculated  = kpis_data.get("calculated", {})
+
+if calculated:
+    st.subheader("Key Performance Indicators")
+    kpi_fig = generate_kpi_cards(None, calculated)
+    if kpi_fig:
+        st.plotly_chart(kpi_fig, use_container_width=True)
+    else:
+        cols = st.columns(min(len(calculated), 4))
+        for i, (name, val) in enumerate(list(calculated.items())[:4]):
+            cols[i % 4].metric(name, val)
+    st.divider()
+
+# ── Data quality snapshot (safe summary only) ─────────────────────────────────
+st.subheader("Data Overview")
+q1, q2, q3 = st.columns(3)
+q1.metric("Total Records",  f"{profile.get('row_count', 0):,}")
+q2.metric("Fields Analysed", profile.get("col_count", 0))
+q3.metric("Data Completeness", f"{profile.get('completeness_pct', 0)}%")
+st.divider()
+
+# ── Charts ────────────────────────────────────────────────────────────────────
 charts_json = data.get("charts", {})
 if charts_json:
+    st.subheader("Visualisations")
     for title, spec in charts_json.items():
         try:
             fig = pio.from_json(spec)
             st.markdown(f"#### {title}")
             st.plotly_chart(fig, use_container_width=True)
         except Exception as e:
-            st.warning(f"Could not render '{title}': {e}")
-else:
-    st.info("No charts available.")
+            st.warning(f"Chart unavailable: {e}")
+    st.divider()
 
-st.divider()
-
-# Executive summary (no data quality or PII details)
+# ── Executive Summary ─────────────────────────────────────────────────────────
 summary = data.get("summary", "")
 if summary:
     st.subheader("Executive Summary")
     st.markdown(summary)
-
-# KPIs
-kpis = data.get("kpis", [])
-if kpis:
     st.divider()
-    st.subheader("Recommended KPIs")
-    for i, kpi in enumerate(kpis[:6], 1):
-        st.markdown(f"**{i}. {kpi['name']}** — {kpi['description']}")
 
-st.divider()
+# ── Recommended KPIs ─────────────────────────────────────────────────────────
+recommended = kpis_data.get("recommended", [])
+if recommended:
+    st.subheader("Recommended KPIs to Track")
+    for i, kpi in enumerate(recommended[:6], 1):
+        st.markdown(f"**{i}. {kpi['name']}** — {kpi['description']}")
+    st.divider()
+
 st.caption("Report generated by Data Dashboard MVP · Powered by Claude AI")

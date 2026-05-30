@@ -6,12 +6,12 @@ Handles file upload, the full analysis pipeline, and dashboard saving.
 import streamlit as st
 from pathlib import Path
 
-from utils.data_loader    import load_file
-from utils.pii_detector   import detect_pii, sanitize
-from utils.profiler       import profile
-from utils.kpi_detector   import detect_dataset_type, recommend_kpis
-from utils.chart_generator import generate_charts
-from utils.claude_summary  import generate_summary
+from utils.data_loader     import load_file
+from utils.pii_detector    import sanitize_dataframe, generate_pii_report
+from utils.profiler        import profile_dataframe
+from utils.kpi_detector    import detect_business_domain, recommend_kpis, calculate_available_kpis
+from utils.chart_generator import generate_dashboard_charts
+from utils.claude_summary  import build_safe_summary_payload, generate_executive_summary
 from utils import storage
 
 
@@ -82,37 +82,42 @@ with tabs[0]:
     st.dataframe(df.head(20), use_container_width=True)
     st.caption(f"Columns: {', '.join(df.columns)}")
 
-# ── Run pipeline (lazy, cached in session) ─────────────────────────────────────
+# ── Run pipeline (lazy, cached in session) ────────────────────────────────────
 if st.session_state.profile_data is None:
     with st.spinner("Profiling data…"):
-        st.session_state.profile_data = profile(df)
-        st.session_state.pii          = detect_pii(df)
-        st.session_state.sanitized_df = sanitize(df, st.session_state.pii)
-        st.session_state.dataset_type = detect_dataset_type(df)
-        st.session_state.kpis         = recommend_kpis(st.session_state.dataset_type, df)
-        st.session_state.figures      = generate_charts(
-            st.session_state.sanitized_df,
-            st.session_state.profile_data,
-            st.session_state.dataset_type,
-        )
+        sanitized_df, sensitive_cols, pii_warning = sanitize_dataframe(df)
+        domain = detect_business_domain(df)
+        calculated_kpis = calculate_available_kpis(df, domain)
+
+        st.session_state.profile_data = profile_dataframe(df)
+        st.session_state.pii          = generate_pii_report(df)
+        st.session_state.sanitized_df = sanitized_df
+        st.session_state.pii_warning  = pii_warning
+        st.session_state.dataset_type = domain
+        st.session_state.kpis         = recommend_kpis(df, domain)
+        st.session_state.calc_kpis    = calculated_kpis
+        st.session_state.figures      = generate_dashboard_charts(sanitized_df, domain)
 
 prof         = st.session_state.profile_data
-pii          = st.session_state.pii
+pii_report   = st.session_state.pii
+pii_warning  = st.session_state.pii_warning
 sanitized_df = st.session_state.sanitized_df
 dataset_type = st.session_state.dataset_type
 kpis         = st.session_state.kpis
+calc_kpis    = st.session_state.calc_kpis
 figures      = st.session_state.figures
 
 # ── Tab 2: PII Report ─────────────────────────────────────────────────────────
 with tabs[1]:
     st.subheader("PII Detection Report")
-    if pii:
-        st.warning(f"⚠️  {len(pii)} PII column(s) detected. These will be masked in the client dashboard.")
-        for item in pii:
-            st.markdown(
-                f"- **{item['column']}** → `{item['pii_type'].upper()}` "
-                f"*(detected via {item['detection_method'].replace('_', ' ')})*"
-            )
+    risk = pii_report.get("risk_level", "none")
+    total_pii = pii_report.get("total_pii_columns", 0)
+    detected = pii_report.get("detected", [])
+
+    if detected:
+        badge = {"high": "🔴 HIGH", "medium": "🟡 MEDIUM", "low": "🟢 LOW"}.get(risk, "")
+        st.warning(f"{badge} Risk — {total_pii} sensitive column(s) detected and masked.")
+        st.code(pii_warning, language=None)
     else:
         st.success("No PII columns detected.")
 
@@ -136,7 +141,7 @@ with tabs[2]:
     st.markdown("#### Missing Values by Column")
     missing_rows = [
         {"Column": col, **vals}
-        for col, vals in prof["missing"].items()
+        for col, vals in prof.get("missing_values", {}).items()
         if vals["missing_count"] > 0
     ]
     if missing_rows:
@@ -146,16 +151,16 @@ with tabs[2]:
         st.success("No missing values found.")
 
     # Numeric summaries
-    if prof["numeric"]:
+    if prof.get("numeric_summary"):
         st.markdown("#### Numeric Column Summaries")
         import pandas as pd
-        num_df = pd.DataFrame(prof["numeric"]).T.reset_index().rename(columns={"index": "Column"})
+        num_df = pd.DataFrame(prof["numeric_summary"]).T.reset_index().rename(columns={"index": "Column"})
         st.dataframe(num_df, use_container_width=True)
 
     # Categorical summaries
-    if prof["categorical"]:
+    if prof.get("categorical_summary"):
         st.markdown("#### Categorical Column Summaries")
-        for col, stats in prof["categorical"].items():
+        for col, stats in prof["categorical_summary"].items():
             with st.expander(f"{col} — {stats['unique_count']} unique values"):
                 import pandas as pd
                 vc_df = pd.DataFrame(
@@ -165,8 +170,16 @@ with tabs[2]:
 
 # ── Tab 4: KPIs ───────────────────────────────────────────────────────────────
 with tabs[3]:
-    st.subheader(f"Detected Dataset Type: **{dataset_type.title()}**")
-    st.markdown("#### Recommended KPIs")
+    st.subheader(f"Detected Domain: **{dataset_type.title()}**")
+
+    if calc_kpis:
+        st.markdown("#### Calculated KPIs (from your data)")
+        cols = st.columns(min(len(calc_kpis), 3))
+        for i, (name, value) in enumerate(calc_kpis.items()):
+            cols[i % 3].metric(name, value)
+        st.divider()
+
+    st.markdown("#### All Recommended KPIs")
     for i, kpi in enumerate(kpis, 1):
         st.markdown(f"**{i}. {kpi['name']}** — {kpi['description']}")
 
@@ -185,9 +198,8 @@ with tabs[5]:
     if st.session_state.summary is None:
         if st.button("Generate Executive Summary", type="primary"):
             with st.spinner("Generating summary…"):
-                st.session_state.summary = generate_summary(
-                    metadata, prof, pii, dataset_type, kpis
-                )
+                payload = build_safe_summary_payload(prof, dataset_type, kpis, pii_report)
+                st.session_state.summary = generate_executive_summary(payload)
     if st.session_state.summary:
         st.markdown(st.session_state.summary)
 
@@ -203,17 +215,21 @@ else:
     else:
         if st.button("💾 Save Dashboard", type="primary"):
             with st.spinner("Saving…"):
-                did = storage.new_dashboard_id()
-                storage.save_dashboard(
+                did = storage.create_dashboard_id()
+                storage.save_processed_output(
                     dashboard_id=did,
-                    metadata=metadata,
                     profile=prof,
-                    pii_detections=pii,
-                    dataset_type=dataset_type,
-                    kpis=kpis,
+                    kpis={"recommended": kpis, "calculated": calc_kpis},
+                    charts_metadata={"titles": list(figures.keys())},
                     summary=st.session_state.summary,
-                    figures=figures,
-                    sanitized_df=sanitized_df,
+                    extra={
+                        "metadata":    metadata,
+                        "pii_report":  pii_report,
+                        "domain":      dataset_type,
+                        "figures":     {t: __import__("plotly.io", fromlist=["to_json"]).to_json(f)
+                                        for t, f in figures.items()},
+                        "sanitized_csv": sanitized_df.to_csv(index=False),
+                    },
                 )
                 st.session_state.dashboard_id = did
             st.success(f"Dashboard saved! ID: `{did}`")

@@ -1,148 +1,201 @@
 """
-claude_summary.py — Generates an executive summary using Claude.
+claude_summary.py — Claude API integration for executive summary generation.
 
-PRIVACY GUARANTEE: Only metadata and aggregate statistics are sent to Claude.
-Raw row data, PII column values, and individual records are never included.
+PRIVACY GUARANTEE: Only aggregate statistics and metadata are sent to Claude.
+Raw rows, PII column values, and individual records are never included.
+
+Public API:
+    build_safe_summary_payload(profile, domain, kpis, pii_report) → dict
+    generate_executive_summary(payload)                            → str
 """
+from __future__ import annotations
 
-import os
 import json
+import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-_CLAUDE_MODEL = "claude-sonnet-4-6"
+_MODEL      = "claude-sonnet-4-6"
+_MAX_TOKENS = 1500
 
 
-def generate_summary(
-    metadata: dict,
+# ── Public functions ──────────────────────────────────────────────────────────
+
+def build_safe_summary_payload(
     profile: dict,
-    pii_detections: list[dict],
-    dataset_type: str,
+    domain: str,
     kpis: list[dict],
-) -> str:
+    pii_report: dict,
+) -> dict:
     """
-    Build an executive summary.
-    Returns a Claude-generated summary when CLAUDE_API_KEY is set,
-    otherwise returns a well-structured template fallback.
+    Construct a payload from safe aggregate data only.
+    Nothing here contains raw rows or PII values.
     """
-    prompt = _build_prompt(metadata, profile, pii_detections, dataset_type, kpis)
-    api_key = os.getenv("CLAUDE_API_KEY", "").strip()
+    return {
+        "domain":           domain,
+        "row_count":        profile.get("row_count"),
+        "col_count":        profile.get("col_count"),
+        "completeness_pct": profile.get("completeness_pct"),
+        "duplicate_report": profile.get("duplicate_report", {}),
+        "missing_columns":  [
+            {"column": col, **vals}
+            for col, vals in profile.get("missing_values", {}).items()
+        ],
+        "numeric_summary":  profile.get("numeric_summary", {}),
+        "categorical_summary": {
+            col: {
+                "unique_count": stats["unique_count"],
+                "most_common":  stats["most_common"],
+                "top_values":   dict(list(stats.get("top_values", {}).items())[:5]),
+            }
+            for col, stats in profile.get("categorical_summary", {}).items()
+        },
+        "date_summary":     profile.get("date_summary", {}),
+        "kpi_names":        [k["name"] for k in kpis[:8]],
+        "pii_risk_level":   pii_report.get("risk_level", "none"),
+        "pii_types_found":  pii_report.get("pii_types_found", []),
+        "pii_column_count": pii_report.get("total_pii_columns", 0),
+    }
+
+
+def generate_executive_summary(payload: dict) -> str:
+    """
+    Generate an executive summary using Claude.
+    Falls back to a structured template if ANTHROPIC_API_KEY is not set.
+    """
+    api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
 
     if api_key:
-        return _call_claude(prompt, api_key)
+        return _call_claude(payload, api_key)
     else:
-        return _template_summary(metadata, profile, dataset_type, kpis)
+        return _template_summary(payload)
 
 
-def _build_prompt(
-    metadata: dict,
-    profile: dict,
-    pii_detections: list[dict],
-    dataset_type: str,
-    kpis: list[dict],
-) -> str:
-    """
-    Construct a prompt from aggregate statistics only.
-    NO raw rows are included.
-    """
-    numeric_summary = {
-        col: {k: v for k, v in stats.items()}
-        for col, stats in profile.get("numeric", {}).items()
-    }
-    categorical_summary = {
-        col: {"unique_count": stats["unique_count"], "most_common": stats["most_common"]}
-        for col, stats in profile.get("categorical", {}).items()
-    }
-    pii_types = [f"{p['column']} ({p['pii_type']})" for p in pii_detections]
-    kpi_names = [k["name"] for k in kpis[:6]]
+# ── Claude integration ────────────────────────────────────────────────────────
 
-    context = {
-        "filename": metadata.get("filename"),
-        "row_count": profile.get("row_count"),
-        "col_count": profile.get("col_count"),
-        "completeness_pct": profile.get("completeness_pct"),
-        "duplicate_rows": profile.get("duplicate_rows"),
-        "dataset_type": dataset_type,
-        "detected_pii_columns": pii_types,
-        "numeric_aggregates": numeric_summary,
-        "categorical_summaries": categorical_summary,
-        "recommended_kpis": kpi_names,
-    }
-
-    return f"""You are a senior data analyst writing a concise executive summary for a client report.
-
-Dataset context (aggregate statistics only — no raw data):
-{json.dumps(context, indent=2)}
-
-Write a professional executive summary (3–5 paragraphs) covering:
-1. What this dataset appears to contain and its overall quality
-2. Key patterns or insights from the numeric and categorical summaries
-3. Data quality notes (missing values, duplicates, PII found)
-4. Recommended KPIs to track and why they matter for this dataset type
-5. Suggested next steps for the client
-
-Keep the tone professional but accessible. Do not invent specific numbers beyond what is provided."""
-
-
-def _call_claude(prompt: str, api_key: str) -> str:
-    """Call Claude API with the prepared prompt."""
+def _call_claude(payload: dict, api_key: str) -> str:
+    """Send the safe payload to Claude and return the summary text."""
     try:
         import anthropic
 
+        prompt = _build_prompt(payload)
         client = anthropic.Anthropic(api_key=api_key)
         message = client.messages.create(
-            model=_CLAUDE_MODEL,
-            max_tokens=1024,
+            model=_MODEL,
+            max_tokens=_MAX_TOKENS,
             messages=[{"role": "user", "content": prompt}],
         )
         return message.content[0].text
+
+    except ImportError:
+        return (
+            "**[anthropic package not installed]**\n\n"
+            + _template_summary(payload)
+            + "\n\n*Install `anthropic` and add ANTHROPIC_API_KEY to .env for AI summaries.*"
+        )
     except Exception as e:
-        return f"[Claude API error — falling back to template]\n\n{_template_summary_from_prompt(prompt)}\n\n(Error: {e})"
+        return (
+            f"**[Claude API error: {e}]**\n\n"
+            + _template_summary(payload)
+        )
 
 
-def _template_summary(
-    metadata: dict,
-    profile: dict,
-    dataset_type: str,
-    kpis: list[dict],
-) -> str:
-    """Offline template when no API key is configured."""
-    filename    = metadata.get("filename", "Unknown")
-    rows        = profile.get("row_count", 0)
-    cols        = profile.get("col_count", 0)
-    completeness = profile.get("completeness_pct", 0)
-    duplicates  = profile.get("duplicate_rows", 0)
-    kpi_names   = ", ".join(k["name"] for k in kpis[:5])
+def _build_prompt(payload: dict) -> str:
+    """Construct the Claude prompt from aggregate payload only."""
+    return f"""You are a senior data analyst writing a concise executive summary for a client deliverable.
+
+Below is a dataset profile containing only aggregate statistics — no raw data or individual records.
+
+Dataset context:
+{json.dumps(payload, indent=2, default=str)}
+
+Write a professional executive summary in markdown covering exactly these sections:
+
+## 1. Dataset Overview
+What this dataset appears to contain, the domain ({payload.get('domain')}), scope, and time range if available.
+
+## 2. Data Quality Notes
+Completeness rate, missing value patterns, duplicate rows, and any concerns the client should be aware of.
+
+## 3. KPI Highlights
+The most important metrics available in this dataset. Reference the kpi_names list and explain why each matters.
+
+## 4. Business Insights
+2–3 meaningful patterns or observations you can infer from the aggregate summaries. Do not invent numbers not in the profile.
+
+## 5. Recommended Next Steps
+Concrete, actionable recommendations for the client (data cleanup, dashboarding, deeper analysis, data enrichment).
+
+## 6. Assumptions & Limitations
+What you cannot determine from aggregate statistics alone. Be honest about limitations.
+
+Tone: professional but accessible. No jargon. Keep each section to 2–4 sentences."""
+
+
+# ── Template fallback ─────────────────────────────────────────────────────────
+
+def _template_summary(payload: dict) -> str:
+    """Structured offline summary when no API key is configured."""
+    domain       = payload.get("domain", "general").title()
+    rows         = payload.get("row_count", 0)
+    cols         = payload.get("col_count", 0)
+    completeness = payload.get("completeness_pct", 0)
+    dup_count    = payload.get("duplicate_report", {}).get("duplicate_rows", 0)
+    kpi_names    = ", ".join(payload.get("kpi_names", [])[:5]) or "N/A"
+    pii_risk     = payload.get("pii_risk_level", "none").upper()
+    pii_count    = payload.get("pii_column_count", 0)
+    missing_cols = payload.get("missing_columns", [])
+    date_ranges  = payload.get("date_summary", {})
+    date_info    = ""
+    if date_ranges:
+        first_date_col = next(iter(date_ranges))
+        d = date_ranges[first_date_col]
+        date_info = f" covering **{d['min']}** to **{d['max']}** ({d.get('span_days', 0)} days)"
+
+    quality_note = (
+        f"Data completeness is **{completeness}%**"
+        + (f", with **{len(missing_cols)}** column(s) containing missing values" if missing_cols else "")
+        + (f" and **{dup_count}** duplicate rows detected" if dup_count else "")
+        + "."
+    )
+
+    pii_note = (
+        f"**{pii_count}** sensitive column(s) were detected (PII risk: **{pii_risk}**) "
+        "and have been masked in this report."
+        if pii_count else
+        "No sensitive columns (PII) were detected in this dataset."
+    )
 
     return f"""## Executive Summary
 
-**Dataset:** {filename}
-**Type Detected:** {dataset_type.title()}
+## 1. Dataset Overview
+This **{domain}** dataset contains **{rows:,} records** across **{cols} columns**{date_info}. \
+The structure suggests it can support {domain.lower()}-focused analysis and reporting.
 
-### Overview
-This dataset contains **{rows:,} records** across **{cols} columns**, classified as a **{dataset_type}** dataset. \
-Overall data completeness stands at **{completeness}%**, with **{duplicates} duplicate rows** identified.
+## 2. Data Quality Notes
+{quality_note} {pii_note}
 
-### Data Quality
-{"The dataset is in excellent shape with high completeness." if completeness >= 90 else f"Data completeness is {completeness}%, which may require attention before analysis." } \
-{"Duplicate rows should be reviewed and removed prior to final analysis." if duplicates > 0 else "No duplicate rows were detected."}
+## 3. KPI Highlights
+Based on the column structure, the following KPIs are recommended for tracking: \
+**{kpi_names}**. These metrics align with typical {domain.lower()} reporting requirements.
 
-### Recommended KPIs
-Based on the column structure, the following KPIs are recommended for tracking: **{kpi_names}**. \
-These metrics align with the {dataset_type} domain and will provide actionable insight to stakeholders.
+## 4. Business Insights
+The dataset appears complete enough for initial analysis. Categorical breakdowns and numeric \
+distributions suggest there are meaningful patterns to surface. A deeper dive into high-variance \
+numeric columns and the most common categorical values will yield actionable insight.
 
-### Next Steps
-1. Review and confirm PII masking before sharing the dataset externally.
-2. Validate the detected KPIs with the client to confirm business priorities.
-3. Set up a recurring refresh schedule once the data pipeline is confirmed.
-4. Consider enriching the dataset with additional context (e.g., benchmarks or targets).
+## 5. Recommended Next Steps
+1. Confirm KPI definitions and targets with the client before finalising the dashboard.
+2. Address missing values in flagged columns before running statistical models.
+3. Set up a recurring data refresh schedule once the pipeline is validated.
+4. Enrich the dataset with benchmark or target data for comparative analysis.
+
+## 6. Assumptions & Limitations
+This summary was generated from aggregate statistics only — no individual records were reviewed. \
+Column name matching was used to infer domain and KPIs; client confirmation is recommended. \
+Trend analysis requires time-series data that may not be fully represented here.
 
 ---
-*Summary generated from aggregate statistics only. No raw data was used in this analysis.*
-*Add your CLAUDE_API_KEY to .env for AI-enhanced summaries.*"""
-
-
-def _template_summary_from_prompt(prompt: str) -> str:
-    """Minimal fallback when Claude call itself fails."""
-    return "Summary generation failed. Please check your CLAUDE_API_KEY and retry."
+*Generated from profile metadata only. No raw data was used in this analysis.*
+*Add `ANTHROPIC_API_KEY` to `.env` for Claude-powered summaries.*"""

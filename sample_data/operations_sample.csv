@@ -1,0 +1,131 @@
+ticket_date,team,ticket_type,status,response_time_hours,resolution_time_hours
+2025-11-22,Support Tier 1,Bug,Closed,34.76,141.15
+2025-10-07,DevOps,Bug,Closed,14.59,16.33
+2025-04-08,Operations,Billing Issue,Open,37.93,
+2025-10-06,DevOps,Incident,Escalated,7.27,88.44
+2025-12-19,DevOps,Bug,In Progress,2.13,78.53
+2025-11-17,Support Tier 2,Bug,In Progress,41.75,92.92
+2025-02-21,Support Tier 1,Access Request,In Progress,37.81,105.7
+2025-05-13,Engineering,Feature Request,Closed,1.88,5.31
+2025-10-17,DevOps,Bug,Closed,27.35,33.04
+2025-03-02,Operations,Billing Issue,Closed,21.57,24.25
+2025-07-18,DevOps,Billing Issue,In Progress,22.95,73.03
+2025-02-22,Support Tier 1,Incident,In Progress,43.02,118.62
+2025-08-07,Support Tier 1,Bug,Open,47.36,
+2025-02-15,Support Tier 2,Bug,In Progress,22.8,56.58
+2025-10-19,Support Tier 2,Incident,In Progress,44.31,88.85
+2025-12-22,Support Tier 2,Bug,Resolved,30.27,115.67
+2025-08-24,Engineering,Bug,Open,0.79,
+2025-01-08,DevOps,Bug,Closed,15.1,102.9
+2025-03-26,Operations,Billing Issue,Open,15.35,
+2025-10-22,Operations,Incident,In Progress,7.17,103.06
+2025-07-05,Support Tier 2,Incident,Closed,18.67,113.23
+2025-05-20,DevOps,Access Request,Resolved,13.62,88.62
+2025-11-30,DevOps,Access Request,Escalated,34.9,37.74
+2025-03-19,DevOps,Access Request,Escalated,20.71,127.4
+2025-07-12,Operations,Incident,Escalated,37.09,65.98
+2025-08-20,Engineering,Bug,Resolved,12.81,64.09
+2025-10-28,Support Tier 1,Access Request,In Progress,39.01,143.21
+2025-10-20,Support Tier 2,Access Request,Escalated,32.94,142.68
+2025-06-27,DevOps,Bug,Escalated,26.69,122.58
+2025-04-13,Support Tier 2,Access Request,Escalated,3.0,51.06
+2025-12-29,Support Tier 2,Access Request,Escalated,36.12,131.33
+2025-08-24,DevOps,Bug,Escalated,38.76,131.65
+2025-04-30,Operations,Billing Issue,Escalated,43.08,149.41
+2025-09-25,Engineering,Incident,Escalated,28.39,51.9
+2025-04-09,Support Tier 1,Feature Request,Resolved,17.57,85.74
+2025-07-26,DevOps,Feature Request,In Progress,2.38,122.04
+2025-07-11,Support Tier 1,Access Request,Closed,37.85,57.43
+2025-11-02,Support Tier 1,Access Request,Resolved,25.05,28.5
+2025-01-18,Support Tier 2,Billing Issue,Closed,28.27,54.69
+2025-05-24,Operations,Bug,Closed,36.89,135.33
+2025-03-09,Engineering,Bug,Resolved,9.85,32.36
+2025-02-12,Support Tier 1,Bug,Open,26.86,
+2025-12-28,Operations,Incident,Open,41.46,
+2025-11-24,Operations,Bug,Open,12.53,
+2025-10-17,Support Tier 2,Bug,Escalated,19.02,73.37
+2025-03-23,Engineering,Feature Request,In Progress,8.47,121.53
+2025-06-30,Support Tier 1,Billing Issue,Open,40.23,
+2025-01-25,Engineering,Billing Issue,Closed,2.91,21.14
+2025-01-03,Support Tier 2,Access Request,Escalated,28.49,119.68
+2025-02-23,Operations,Access Request,Resolved,12.52,28.29
+2025-09-04,Operations,Feature Request,Closed,11.64,29.67
+2025-12-13,Support Tier 1,Incident,In Progress,38.4,58.08
+2025-04-23,Support Tier 1,Billing Issue,Resolved,42.69,60.32
+2025-08-17,Support Tier 1,Incident,Open,30.25,
+2025-08-20,Engineering,Access Request,In Progress,23.05,98.8
+2025-03-15,Engineering,Feature Request,Open,8.86,
+2025-08-20,DevOps,Feature Request,Closed,41.83,74.53
+2025-07-30,Support Tier 2,Feature Request,Open,13.2,
+2025-06-01,Engineering,Feature Request,Resolved,23.7,62.55
+2025-09-05,Support Tier 1,Feature Request,Escalated,2.96,110.47
+2025-12-09,Support Tier 2,Billing Issue,Closed,40.13,55.31
+2025-04-14,Engineering,Incident,Resolved,47.91,158.99
+2025-02-19,Operations,Access Request,Closed,43.04,50.88
+2025-05-31,Support Tier 2,Bug,Closed,38.79,80.36
+2025-03-13,Operations,Bug,Escalated,13.93,57.78
+2025-01-21,Operations,Feature Request,Resolved,27.53,44.96
+2025-04-03,DevOps,Feature Request,In Progress,9.64,20.07
+2025-02-14,DevOps,Incident,Resolved,8.62,25.93
+2025-12-09,Support Tier 2,Billing Issue,Resolved,9.91,18.73
+2025-09-24,Operations,Bug,Escalated,38.96,79.85
+2025-11-24,Operations,Bug,Open,19.8,
+2025-09-02,Support Tier 2,Access Request,In Progress,9.13,109.09
+2025-07-07,Support Tier 1,Feature Request,Resolved,27.7,130.81
+2025-07-02,DevOps,Incident,Escalated,3.66,47.11
+2025-05-06,Engineering,Incident,Escalated,36.13,44.41
+2025-02-25,Operations,Incident,Escalated,1.47,98.21
+2025-03-10,Support Tier 1,Feature Request,Open,10.93,
+2025-04-04,Support Tier 2,Bug,Resolved,12.21,110.45
+2025-01-16,Support Tier 1,Bug,In Progress,12.73,113.37
+2025-11-23,DevOps,Incident,Escalated,11.63,65.49
+2025-06-29,Support Tier 1,Feature Request,Open,13.29,
+2025-08-27,Operations,Billing Issue,Escalated,36.61,50.7
+2025-03-04,Operations,Feature Request,Escalated,28.51,131.98
+2025-03-17,DevOps,Incident,Closed,8.1,107.4
+2025-11-22,Operations,Incident,Escalated,40.35,103.9
+2025-07-22,Support Tier 1,Access Request,Resolved,19.38,120.17
+2025-08-12,DevOps,Access Request,Closed,40.72,48.09
+2025-09-22,Support Tier 2,Access Request,In Progress,41.82,121.73
+2025-01-06,Engineering,Bug,Escalated,9.2,48.8
+2025-04-13,DevOps,Bug,In Progress,6.91,123.3
+2025-08-21,Support Tier 1,Bug,Open,41.58,
+2025-11-14,Engineering,Billing Issue,Resolved,30.25,127.2
+2025-01-19,DevOps,Bug,Resolved,6.06,8.69
+2025-05-02,Support Tier 1,Access Request,Open,14.83,
+2025-11-28,Support Tier 2,Bug,Open,28.63,
+2025-09-21,Engineering,Bug,Closed,28.43,140.33
+2025-08-14,Support Tier 1,Billing Issue,In Progress,42.52,152.47
+2025-10-23,Engineering,Access Request,In Progress,35.39,124.5
+2025-05-28,Operations,Billing Issue,Escalated,10.83,57.84
+2025-10-08,Engineering,Incident,Escalated,14.75,72.61
+2025-06-08,Support Tier 1,Feature Request,Resolved,10.83,72.81
+2025-07-16,DevOps,Incident,Open,44.38,
+2025-03-25,Support Tier 2,Access Request,Escalated,15.79,48.91
+2025-04-21,Engineering,Bug,Open,7.82,
+2025-02-04,DevOps,Access Request,Closed,31.66,94.18
+2025-08-14,Engineering,Bug,Escalated,11.0,126.16
+2025-03-21,Operations,Access Request,Resolved,6.95,32.05
+2025-11-09,Engineering,Billing Issue,Open,35.53,
+2025-09-01,Engineering,Feature Request,Closed,41.83,43.34
+2025-10-09,DevOps,Bug,Closed,19.23,138.39
+2025-03-18,Operations,Access Request,Escalated,29.25,75.42
+2025-08-20,Operations,Access Request,Resolved,14.24,61.73
+2025-10-12,DevOps,Incident,Resolved,0.57,90.32
+2025-09-13,Operations,Incident,Resolved,9.05,46.23
+2025-03-16,Operations,Billing Issue,Closed,28.02,39.48
+2025-06-19,Engineering,Billing Issue,In Progress,46.03,71.34
+2025-08-07,Support Tier 1,Bug,Open,12.5,
+2025-09-12,Engineering,Billing Issue,Resolved,25.96,145.76
+2025-09-22,DevOps,Incident,Closed,22.42,28.26
+2025-12-13,Engineering,Incident,Open,32.55,
+2025-09-26,Support Tier 2,Bug,Closed,18.13,66.84
+2025-10-15,DevOps,Feature Request,In Progress,46.3,105.22
+2025-08-14,DevOps,Billing Issue,Resolved,33.27,123.1
+2025-02-17,Support Tier 2,Access Request,Resolved,17.76,27.7
+2025-06-09,DevOps,Feature Request,Open,31.57,
+2025-05-31,Engineering,Billing Issue,Closed,30.39,93.75
+2025-09-19,Support Tier 2,Billing Issue,In Progress,19.94,28.1
+2025-10-17,DevOps,Bug,Resolved,27.46,103.59
+2025-01-22,Operations,Bug,Open,14.9,
+2025-12-20,DevOps,Bug,Resolved,19.23,31.95
