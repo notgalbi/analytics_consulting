@@ -132,7 +132,7 @@ with tabs[2]:
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Rows",        f"{prof['row_count']:,}")
     col2.metric("Columns",     prof["col_count"])
-    col3.metric("Duplicates",  prof["duplicate_rows"])
+    col3.metric("Duplicates",  prof["duplicate_report"]["duplicate_rows"])
     col4.metric("Completeness", f"{prof['completeness_pct']}%")
 
     st.divider()
