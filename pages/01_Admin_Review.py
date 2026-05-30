@@ -12,6 +12,7 @@ import plotly.io as pio
 import pandas as pd
 from utils import storage
 from utils.claude_summary import build_safe_summary_payload, regenerate_summary
+from utils.pdf_generator import generate_pdf
 
 st.set_page_config(
     page_title="Admin Review — Data Dashboard MVP",
@@ -87,6 +88,29 @@ c2.metric("Domain",     data.get("domain", "—").title())
 c3.metric("Rows",       f"{profile.get('row_count', 0):,}")
 c4.metric("PII Risk",   pii_rpt.get("risk_level", "none").upper())
 c5.metric("Status",     status)
+
+st.divider()
+
+# ── PDF Export ────────────────────────────────────────────────────────────────
+with st.spinner("Preparing PDF export…") if False else st.empty():
+    pass  # no-op context; export happens on button click below
+
+col_pdf, col_spacer = st.columns([1, 4])
+with col_pdf:
+    if st.button("📥 Export PDF Report", use_container_width=True):
+        with st.spinner("Generating PDF…"):
+            try:
+                pdf_bytes = generate_pdf(data)
+                fname     = f"{selected_id}.pdf"
+                st.download_button(
+                    label="⬇ Download PDF",
+                    data=pdf_bytes,
+                    file_name=fname,
+                    mime="application/pdf",
+                    use_container_width=True,
+                )
+            except Exception as e:
+                st.error(f"PDF generation failed: {e}")
 
 st.divider()
 
