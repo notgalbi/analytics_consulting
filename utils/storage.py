@@ -182,6 +182,30 @@ def update_delivery_status(dashboard_id: str, status: str, notes: str = "") -> b
     return True
 
 
+def update_summary(dashboard_id: str, summary: str) -> bool:
+    """Overwrite summary.txt with an edited or Claude-revised version."""
+    path = _OUTPUTS_DIR / dashboard_id / "summary.txt"
+    if not path.parent.exists():
+        return False
+    path.write_text(summary, encoding="utf-8")
+    return True
+
+
+def update_approved_charts(dashboard_id: str, approved_charts: list[str]) -> bool:
+    """
+    Persist the admin-selected chart titles to metadata.json.
+    The client dashboard uses this list to filter which charts are shown.
+    An empty list means all charts are hidden; None (key absent) means show all.
+    """
+    meta_path = _OUTPUTS_DIR / dashboard_id / "metadata.json"
+    if not meta_path.exists():
+        return False
+    meta = _read_json(meta_path)
+    meta["approved_charts"] = approved_charts
+    _write_json(meta_path, meta)
+    return True
+
+
 # ── Internal helpers ──────────────────────────────────────────────────────────
 
 def _write_json(path: Path, data: dict) -> None:

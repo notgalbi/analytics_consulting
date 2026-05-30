@@ -7,6 +7,7 @@ Raw rows, PII column values, and individual records are never included.
 Public API:
     build_safe_summary_payload(profile, domain, kpis, pii_report) → dict
     generate_executive_summary(payload)                            → str
+    regenerate_summary(payload, current_summary, instruction)      → str
 """
 from __future__ import annotations
 
@@ -131,6 +132,58 @@ Concrete, actionable recommendations for the client (data cleanup, dashboarding,
 What you cannot determine from aggregate statistics alone. Be honest about limitations.
 
 Tone: professional but accessible. No jargon. Keep each section to 2–4 sentences."""
+
+
+# ── Admin revision ───────────────────────────────────────────────────────────
+
+def regenerate_summary(payload: dict, current_summary: str, instruction: str) -> str:
+    """
+    Revise an existing executive summary based on an admin instruction.
+
+    Only the safe payload (aggregates) + the current summary text + the
+    admin's instruction are sent to Claude — no raw data ever leaves the app.
+
+    Falls back gracefully when ANTHROPIC_API_KEY is not set.
+    """
+    api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
+    if not api_key:
+        return (
+            f"> **[ANTHROPIC_API_KEY not set — revision not applied]**\n\n"
+            f"Instruction received: *{instruction}*\n\n"
+            "Add your API key to `.env` to enable Claude-powered revisions.\n\n"
+            "---\n\n"
+            + current_summary
+        )
+
+    prompt = f"""You are a senior data analyst revising a client-facing executive summary.
+
+Dataset context (aggregate statistics only — no raw data):
+{json.dumps(payload, indent=2, default=str)}
+
+Current summary:
+{current_summary}
+
+Admin revision instruction:
+{instruction}
+
+Rewrite the summary following the instruction exactly. Keep the same markdown section
+structure (##) unless the instruction says otherwise. Do not invent numbers or facts
+not present in the dataset context. Return only the revised summary — no preamble."""
+
+    try:
+        import anthropic
+        client  = anthropic.Anthropic(api_key=api_key)
+        message = client.messages.create(
+            model=_MODEL,
+            max_tokens=_MAX_TOKENS,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        return message.content[0].text
+    except Exception as e:
+        return (
+            f"> **[Claude API error: {e}]**\n\n"
+            + current_summary
+        )
 
 
 # ── Template fallback ─────────────────────────────────────────────────────────

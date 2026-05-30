@@ -101,11 +101,19 @@ q2.metric("Fields Analysed", profile.get("col_count", 0))
 q3.metric("Data Completeness", f"{profile.get('completeness_pct', 0)}%")
 st.divider()
 
-# ── Charts ────────────────────────────────────────────────────────────────────
-charts_json = data.get("charts", {})
-if charts_json:
+# ── Charts (respects admin selection) ────────────────────────────────────────
+charts_json     = data.get("charts", {})
+approved_charts = data.get("approved_charts", None)  # None = all shown
+
+# Filter to admin-approved titles; if key is absent show everything
+if approved_charts is not None:
+    charts_to_show = {t: s for t, s in charts_json.items() if t in approved_charts}
+else:
+    charts_to_show = charts_json
+
+if charts_to_show:
     st.subheader("Visualisations")
-    for title, spec in charts_json.items():
+    for title, spec in charts_to_show.items():
         try:
             fig = pio.from_json(spec)
             st.markdown(f"#### {title}")
