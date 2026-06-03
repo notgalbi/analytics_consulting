@@ -1,0 +1,601 @@
+month,plan_type,status,mrr,seats,industry,acquisition_channel,nps_score,contract_months,support_tickets
+2024-05,Growth,Expanded,114,4,Real Estate,Partner,7,1,5
+2024-07,Starter,Churned,39,2,Education,Cold Outbound,9,12,2
+2024-08,Starter,Expanded,36,2,Healthcare,Event,4,24,2
+2024-09,Pro,Active,302,13,Retail,Referral,10,12,8
+2024-10,Growth,Active,104,3,Finance,Paid Search,10,1,0
+2024-09,Pro,Active,305,16,Retail,Cold Outbound,9,12,6
+2024-08,Starter,Active,42,1,Technology,Partner,9,24,2
+2024-04,Pro,Churned,302,25,Legal,Partner,8,12,0
+2024-11,Starter,Active,37,3,Retail,Organic,6,12,0
+2024-12,Growth,New,98,5,Finance,Referral,10,6,2
+2024-01,Starter,Active,26,3,Legal,Event,9,1,8
+2024-04,Pro,Active,299,27,Legal,Referral,9,24,8
+2024-11,Pro,Expanded,312,10,Legal,Organic,9,1,5
+2024-03,Starter,New,30,3,Healthcare,Organic,9,6,7
+2024-01,Starter,New,37,3,Healthcare,Cold Outbound,9,12,2
+2024-03,Starter,Active,28,1,Education,Organic,10,12,3
+2024-03,Starter,Expanded,29,1,Retail,Partner,7,24,1
+2024-11,Starter,Active,33,1,Healthcare,Organic,9,12,0
+2024-10,Starter,Active,39,3,Technology,Referral,4,1,0
+2024-02,Starter,Active,24,2,Retail,Referral,7,24,6
+2024-06,Starter,Active,34,2,Legal,Partner,6,12,0
+2024-06,Pro,Expanded,297,1,Legal,Partner,10,6,0
+2024-10,Starter,Active,40,2,Retail,Event,6,12,8
+2024-07,Growth,New,94,6,Healthcare,Organic,3,12,7
+2024-04,Growth,Active,106,10,Retail,Partner,4,1,6
+2024-05,Growth,Active,98,9,Retail,Organic,3,12,8
+2024-08,Starter,New,38,1,Education,Paid Search,10,6,3
+2024-03,Pro,New,296,4,Technology,Paid Search,9,12,6
+2024-05,Starter,New,32,3,Technology,Cold Outbound,10,6,8
+2024-11,Pro,Expanded,296,26,Finance,Event,8,24,1
+2024-11,Starter,Expanded,36,3,Finance,Paid Search,9,12,1
+2024-05,Starter,New,26,2,Technology,Event,6,12,2
+2024-06,Enterprise,Active,1012,95,Technology,Event,3,24,3
+2024-07,Enterprise,Expanded,1004,99,Legal,Paid Search,8,24,3
+2024-02,Starter,Active,41,2,Real Estate,Referral,8,6,7
+2024-11,Growth,New,113,5,Legal,Cold Outbound,5,1,5
+2024-05,Growth,New,97,5,Real Estate,Paid Search,10,12,4
+2024-12,Enterprise,Expanded,995,43,Legal,Paid Search,5,6,0
+2024-03,Pro,Active,306,10,Education,Partner,5,12,6
+2024-11,Growth,Active,105,7,Education,Cold Outbound,9,12,4
+2024-12,Enterprise,Active,1011,51,Healthcare,Event,4,1,4
+2024-08,Growth,New,112,3,Retail,Referral,10,6,3
+2024-04,Pro,Active,300,24,Legal,Event,3,1,2
+2024-07,Enterprise,Active,1007,87,Technology,Referral,5,12,2
+2024-01,Starter,Churned,40,3,Retail,Paid Search,8,12,3
+2024-01,Starter,New,36,2,Education,Paid Search,7,12,1
+2024-08,Pro,New,314,13,Legal,Partner,7,12,0
+2024-02,Starter,Active,27,2,Education,Event,6,24,7
+2024-05,Growth,Active,97,10,Retail,Cold Outbound,5,12,4
+2024-10,Starter,Active,34,1,Real Estate,Cold Outbound,5,1,6
+2024-09,Pro,Churned,310,16,Real Estate,Event,4,24,1
+2024-04,Enterprise,Active,997,24,Education,Partner,5,12,1
+2024-01,Starter,Active,30,3,Education,Referral,5,1,1
+2024-02,Growth,Active,105,9,Legal,Organic,5,6,4
+2024-01,Enterprise,Active,1010,38,Education,Partner,10,12,8
+2024-06,Growth,New,110,4,Real Estate,Organic,4,6,0
+2024-04,Starter,Churned,30,1,Healthcare,Referral,6,6,6
+2024-02,Growth,Active,102,7,Retail,Organic,5,12,6
+2024-12,Starter,New,30,1,Legal,Cold Outbound,7,6,5
+2024-10,Growth,Active,110,10,Real Estate,Paid Search,5,12,6
+2024-07,Starter,Active,43,1,Technology,Event,4,1,8
+2024-07,Starter,Active,44,1,Real Estate,Referral,8,6,3
+2024-05,Starter,Active,36,1,Real Estate,Organic,9,6,8
+2024-12,Pro,Active,312,27,Education,Referral,10,24,4
+2024-09,Starter,Active,27,1,Real Estate,Partner,5,6,5
+2024-12,Growth,Active,111,9,Education,Paid Search,9,12,0
+2024-11,Growth,Active,98,3,Education,Cold Outbound,5,12,0
+2024-12,Growth,New,105,4,Retail,Paid Search,9,12,5
+2024-08,Growth,Active,102,7,Legal,Organic,6,12,6
+2024-06,Pro,New,314,3,Finance,Organic,4,6,0
+2024-02,Pro,Expanded,311,30,Real Estate,Organic,10,12,8
+2024-12,Starter,Active,39,3,Technology,Event,4,6,0
+2024-12,Growth,New,111,6,Legal,Event,6,24,0
+2024-10,Growth,Active,99,9,Technology,Referral,6,6,8
+2024-06,Enterprise,Active,1007,64,Healthcare,Organic,9,12,3
+2024-09,Pro,Active,297,10,Healthcare,Referral,7,6,0
+2024-12,Growth,New,106,4,Education,Organic,7,12,7
+2024-01,Starter,Active,43,2,Healthcare,Organic,8,1,5
+2024-12,Starter,Active,35,1,Retail,Paid Search,4,1,8
+2024-09,Pro,Active,307,4,Finance,Cold Outbound,10,12,3
+2024-08,Starter,Active,33,2,Education,Referral,9,1,7
+2024-11,Pro,New,299,5,Retail,Organic,8,12,3
+2024-02,Starter,Active,25,1,Legal,Referral,9,1,2
+2024-11,Starter,Active,39,3,Retail,Partner,7,24,7
+2024-11,Pro,Churned,304,25,Legal,Cold Outbound,9,12,2
+2024-02,Enterprise,Active,994,17,Education,Organic,5,6,0
+2024-11,Pro,Active,307,20,Retail,Referral,3,12,7
+2024-02,Pro,New,301,20,Education,Paid Search,5,6,4
+2024-02,Pro,Active,301,22,Retail,Cold Outbound,9,1,8
+2024-10,Starter,Active,42,3,Technology,Paid Search,5,12,0
+2024-05,Enterprise,Churned,998,55,Finance,Organic,3,1,6
+2024-07,Growth,Active,114,4,Retail,Partner,6,1,8
+2024-07,Growth,Active,103,2,Healthcare,Referral,7,12,3
+2024-06,Pro,Active,299,2,Legal,Cold Outbound,3,12,3
+2024-05,Growth,Active,113,2,Healthcare,Partner,9,12,5
+2024-05,Starter,Active,24,3,Healthcare,Cold Outbound,5,12,8
+2024-10,Starter,Churned,44,2,Retail,Organic,6,1,2
+2024-11,Pro,Active,297,2,Legal,Partner,6,1,1
+2024-09,Growth,Churned,103,8,Legal,Paid Search,6,1,2
+2024-04,Growth,Active,102,9,Retail,Cold Outbound,8,1,6
+2024-02,Growth,Active,110,9,Education,Referral,3,6,4
+2024-01,Enterprise,New,995,89,Real Estate,Partner,6,12,8
+2024-09,Enterprise,Churned,999,57,Real Estate,Partner,9,12,4
+2024-04,Starter,Churned,29,3,Legal,Organic,6,24,7
+2024-09,Pro,Expanded,310,9,Finance,Referral,7,12,8
+2024-02,Starter,Active,25,3,Technology,Cold Outbound,6,6,4
+2024-03,Starter,Expanded,25,3,Finance,Event,6,1,0
+2024-11,Starter,Active,43,2,Legal,Event,8,12,2
+2024-07,Pro,New,303,11,Real Estate,Organic,3,12,3
+2024-12,Enterprise,Churned,999,33,Legal,Event,3,1,6
+2024-11,Starter,Expanded,44,3,Retail,Paid Search,6,12,4
+2024-04,Growth,Active,106,3,Legal,Cold Outbound,10,12,5
+2024-03,Enterprise,Active,996,64,Finance,Paid Search,5,6,7
+2024-12,Starter,Active,33,1,Finance,Partner,7,24,3
+2024-02,Starter,New,37,1,Retail,Organic,10,24,2
+2024-12,Pro,Active,294,20,Retail,Organic,4,1,0
+2024-11,Enterprise,Active,998,32,Finance,Cold Outbound,4,24,0
+2024-01,Enterprise,Expanded,997,70,Legal,Organic,8,6,2
+2024-08,Pro,Active,308,27,Healthcare,Partner,5,6,3
+2024-01,Growth,Active,102,9,Real Estate,Organic,4,1,8
+2024-05,Starter,Active,37,1,Technology,Paid Search,3,12,6
+2024-03,Starter,New,33,1,Legal,Organic,9,12,2
+2024-02,Starter,Churned,33,2,Healthcare,Organic,4,12,1
+2024-01,Growth,Churned,99,7,Finance,Cold Outbound,8,12,2
+2024-11,Growth,Active,113,5,Healthcare,Partner,8,12,4
+2024-12,Pro,Expanded,294,28,Legal,Paid Search,5,12,2
+2024-07,Growth,Churned,109,2,Retail,Cold Outbound,4,12,2
+2024-02,Starter,Active,28,1,Healthcare,Partner,9,12,7
+2024-12,Enterprise,Active,1013,82,Real Estate,Cold Outbound,8,6,6
+2024-07,Growth,Churned,111,9,Education,Paid Search,10,12,1
+2024-10,Pro,New,310,19,Technology,Paid Search,6,12,0
+2024-04,Enterprise,Active,994,47,Technology,Organic,10,12,5
+2024-03,Starter,Active,28,3,Finance,Paid Search,9,1,2
+2024-02,Enterprise,New,998,49,Retail,Referral,3,1,1
+2024-11,Growth,Active,109,10,Finance,Referral,5,6,1
+2024-04,Starter,Expanded,42,2,Finance,Partner,5,6,8
+2024-12,Enterprise,Active,1009,53,Real Estate,Cold Outbound,8,1,4
+2024-02,Starter,Churned,44,1,Finance,Organic,5,12,6
+2024-11,Enterprise,Churned,1008,71,Education,Referral,7,6,6
+2024-03,Starter,Active,26,3,Legal,Paid Search,9,12,0
+2024-04,Starter,Expanded,41,3,Legal,Partner,4,12,5
+2024-11,Growth,Expanded,106,3,Healthcare,Cold Outbound,3,12,3
+2024-05,Starter,Active,26,2,Finance,Referral,8,6,8
+2024-02,Starter,Active,43,1,Education,Paid Search,7,1,3
+2024-05,Starter,Churned,42,3,Real Estate,Partner,3,1,0
+2024-06,Starter,Expanded,33,1,Healthcare,Partner,8,24,3
+2024-06,Pro,Active,305,5,Retail,Cold Outbound,4,24,1
+2024-09,Pro,Active,298,1,Education,Organic,9,12,2
+2024-03,Growth,Active,96,2,Real Estate,Cold Outbound,6,6,2
+2024-09,Growth,Active,113,9,Real Estate,Paid Search,8,12,4
+2024-06,Growth,Active,107,1,Finance,Event,9,24,1
+2024-03,Growth,Active,109,2,Real Estate,Referral,3,24,1
+2024-08,Starter,Active,34,1,Technology,Referral,7,24,5
+2024-06,Starter,Active,29,3,Retail,Referral,10,12,2
+2024-02,Enterprise,Expanded,1009,6,Healthcare,Partner,8,12,2
+2024-08,Starter,Active,43,2,Legal,Partner,8,24,7
+2024-05,Pro,New,295,20,Real Estate,Paid Search,3,24,0
+2024-03,Pro,Churned,303,13,Retail,Organic,5,6,6
+2024-08,Growth,New,105,8,Education,Partner,10,1,1
+2024-03,Pro,Active,306,25,Retail,Referral,9,1,5
+2024-06,Enterprise,Active,1009,28,Healthcare,Partner,10,1,8
+2024-03,Enterprise,Active,998,82,Education,Organic,6,24,6
+2024-01,Enterprise,Active,1005,56,Technology,Paid Search,10,1,6
+2024-05,Starter,Active,29,1,Healthcare,Partner,5,1,4
+2024-12,Growth,New,107,9,Healthcare,Paid Search,6,1,1
+2024-07,Starter,Active,33,1,Retail,Partner,6,12,8
+2024-12,Pro,Expanded,307,12,Technology,Event,9,24,3
+2024-02,Pro,Active,312,20,Legal,Cold Outbound,5,12,0
+2024-03,Pro,Active,298,16,Real Estate,Cold Outbound,8,12,4
+2024-09,Pro,New,308,27,Retail,Cold Outbound,5,24,1
+2024-01,Starter,Churned,30,2,Retail,Paid Search,5,12,3
+2024-04,Enterprise,Expanded,1012,2,Healthcare,Organic,8,12,4
+2024-09,Pro,New,297,23,Retail,Partner,10,12,5
+2024-06,Pro,Active,307,17,Finance,Partner,8,12,5
+2024-03,Growth,Active,99,9,Healthcare,Cold Outbound,9,12,4
+2024-12,Growth,Active,97,2,Legal,Organic,4,24,6
+2024-02,Growth,New,113,9,Retail,Event,4,24,0
+2024-11,Starter,Expanded,37,1,Retail,Event,6,12,1
+2024-04,Pro,Active,297,12,Real Estate,Cold Outbound,10,12,0
+2024-06,Pro,New,310,10,Healthcare,Referral,7,12,3
+2024-01,Enterprise,Active,1007,5,Finance,Referral,3,24,5
+2024-06,Starter,Churned,42,2,Retail,Paid Search,6,24,6
+2024-01,Pro,New,312,14,Retail,Cold Outbound,5,6,6
+2024-06,Growth,New,107,4,Real Estate,Paid Search,4,24,1
+2024-11,Growth,Active,106,5,Finance,Organic,5,1,0
+2024-07,Starter,Churned,42,1,Legal,Event,3,1,6
+2024-01,Pro,Active,298,15,Finance,Cold Outbound,8,6,4
+2024-04,Growth,New,101,7,Technology,Referral,7,1,2
+2024-11,Starter,Active,42,1,Education,Organic,4,1,2
+2024-05,Starter,Active,29,1,Real Estate,Referral,4,6,6
+2024-02,Growth,Active,94,7,Legal,Organic,4,6,6
+2024-07,Pro,Expanded,314,30,Finance,Paid Search,10,12,0
+2024-03,Growth,Active,114,10,Healthcare,Referral,3,12,8
+2024-01,Starter,Churned,32,1,Technology,Event,6,1,8
+2024-09,Pro,Active,300,28,Finance,Organic,8,12,2
+2024-04,Starter,Active,28,2,Finance,Organic,7,12,8
+2024-11,Starter,Active,39,2,Healthcare,Paid Search,9,6,4
+2024-07,Starter,Expanded,42,2,Finance,Cold Outbound,5,12,6
+2024-08,Growth,Churned,102,6,Retail,Partner,4,6,5
+2024-06,Pro,Active,296,15,Education,Referral,5,24,6
+2024-05,Growth,Active,114,9,Technology,Organic,8,6,5
+2024-07,Pro,Active,305,8,Legal,Referral,4,12,2
+2024-06,Starter,New,34,3,Healthcare,Paid Search,3,12,5
+2024-04,Growth,Churned,106,5,Finance,Organic,6,24,4
+2024-12,Growth,New,96,10,Real Estate,Partner,9,12,5
+2024-04,Starter,Active,39,2,Retail,Organic,3,1,7
+2024-03,Growth,Churned,112,7,Technology,Referral,6,1,0
+2024-08,Starter,Active,36,1,Legal,Organic,3,1,7
+2024-02,Pro,Active,307,24,Healthcare,Referral,7,12,1
+2024-09,Pro,Active,309,20,Healthcare,Cold Outbound,3,12,7
+2024-11,Enterprise,Active,997,48,Finance,Organic,4,1,2
+2024-02,Enterprise,Active,1007,29,Finance,Cold Outbound,5,12,8
+2024-01,Enterprise,Active,995,34,Technology,Referral,3,1,4
+2024-06,Growth,Active,106,5,Education,Partner,5,1,2
+2024-06,Pro,New,312,29,Retail,Cold Outbound,9,1,8
+2024-09,Starter,Active,39,3,Healthcare,Cold Outbound,10,12,3
+2024-02,Starter,Active,33,3,Education,Paid Search,4,6,1
+2024-02,Enterprise,New,995,28,Finance,Partner,3,12,3
+2024-08,Starter,Expanded,30,3,Healthcare,Cold Outbound,8,12,2
+2024-09,Starter,Active,28,1,Retail,Event,8,24,3
+2024-07,Starter,New,32,2,Healthcare,Event,5,1,2
+2024-08,Pro,Active,297,8,Finance,Referral,3,1,7
+2024-11,Growth,Churned,105,5,Technology,Referral,4,12,3
+2024-03,Starter,Active,37,3,Retail,Referral,8,12,1
+2024-01,Growth,Active,107,4,Retail,Paid Search,7,24,4
+2024-09,Growth,New,110,7,Technology,Cold Outbound,4,6,1
+2024-04,Starter,Active,25,3,Technology,Event,7,1,4
+2024-04,Pro,Active,306,13,Finance,Cold Outbound,9,12,7
+2024-04,Starter,New,30,2,Education,Referral,7,1,1
+2024-03,Growth,Expanded,113,8,Legal,Paid Search,7,6,5
+2024-11,Starter,Active,29,2,Technology,Cold Outbound,10,12,6
+2024-06,Starter,New,32,1,Real Estate,Organic,5,24,5
+2024-08,Growth,Active,109,4,Technology,Organic,10,24,4
+2024-04,Growth,Active,99,3,Healthcare,Cold Outbound,4,12,7
+2024-08,Pro,Active,311,9,Healthcare,Partner,10,1,5
+2024-05,Pro,Active,310,25,Healthcare,Cold Outbound,10,24,0
+2024-03,Enterprise,Active,1001,85,Retail,Organic,5,6,6
+2024-06,Starter,New,26,1,Technology,Referral,9,24,7
+2024-09,Starter,Churned,35,2,Retail,Referral,9,12,3
+2024-01,Growth,Active,104,10,Real Estate,Partner,4,24,5
+2024-05,Starter,Active,24,2,Legal,Paid Search,5,24,4
+2024-10,Growth,Active,99,5,Technology,Referral,10,1,7
+2024-01,Starter,Active,42,1,Healthcare,Organic,3,12,5
+2024-11,Pro,Active,295,9,Healthcare,Event,5,24,2
+2024-02,Pro,Active,298,24,Education,Organic,6,12,3
+2024-01,Growth,Active,105,4,Retail,Organic,9,12,4
+2024-10,Starter,Expanded,42,2,Education,Paid Search,8,6,4
+2024-03,Growth,Active,100,5,Healthcare,Event,7,12,8
+2024-03,Starter,Churned,37,1,Retail,Cold Outbound,5,12,8
+2024-11,Pro,Active,308,12,Retail,Partner,9,12,0
+2024-09,Starter,Churned,37,1,Healthcare,Paid Search,5,24,8
+2024-06,Starter,Active,41,3,Real Estate,Partner,7,6,6
+2024-11,Starter,Active,40,2,Technology,Referral,3,1,5
+2024-10,Starter,New,33,3,Healthcare,Organic,10,1,8
+2024-12,Pro,Churned,300,17,Legal,Partner,5,6,3
+2024-11,Growth,New,98,5,Technology,Partner,7,24,3
+2024-02,Starter,Churned,28,3,Technology,Paid Search,4,6,1
+2024-08,Starter,Active,40,2,Technology,Referral,9,12,7
+2024-03,Pro,Expanded,311,9,Legal,Event,10,1,6
+2024-03,Growth,Active,99,3,Education,Cold Outbound,6,24,3
+2024-08,Growth,Active,103,2,Legal,Referral,10,12,6
+2024-12,Pro,Active,308,14,Technology,Referral,9,12,1
+2024-10,Starter,New,42,2,Legal,Cold Outbound,3,24,7
+2024-01,Enterprise,New,1005,18,Retail,Referral,10,1,2
+2024-06,Growth,New,110,4,Education,Partner,8,24,1
+2024-03,Growth,Active,105,10,Legal,Paid Search,8,12,4
+2024-07,Starter,Active,44,2,Education,Cold Outbound,9,6,8
+2024-11,Growth,Churned,98,6,Education,Partner,8,1,0
+2024-01,Pro,New,299,8,Technology,Partner,4,12,5
+2024-04,Enterprise,New,1001,14,Retail,Partner,5,1,0
+2024-10,Starter,Active,25,3,Real Estate,Referral,4,24,0
+2024-03,Starter,New,38,2,Education,Event,5,6,3
+2024-05,Growth,New,103,4,Finance,Partner,6,24,3
+2024-02,Growth,Active,114,2,Real Estate,Paid Search,6,1,5
+2024-07,Growth,New,96,6,Legal,Cold Outbound,5,24,7
+2024-04,Pro,Churned,312,27,Healthcare,Referral,10,24,8
+2024-03,Pro,Expanded,308,14,Technology,Event,9,1,2
+2024-09,Starter,Active,27,2,Education,Event,6,12,0
+2024-04,Pro,Active,303,30,Legal,Referral,7,1,2
+2024-05,Starter,Active,42,1,Education,Organic,7,24,1
+2024-10,Growth,Active,102,1,Retail,Referral,3,6,5
+2024-01,Starter,Expanded,41,3,Legal,Organic,8,6,7
+2024-02,Pro,Active,312,29,Technology,Partner,3,24,1
+2024-09,Growth,Active,98,5,Technology,Partner,3,24,3
+2024-11,Starter,Active,39,2,Technology,Organic,6,6,8
+2024-10,Pro,Active,294,18,Retail,Partner,10,6,6
+2024-12,Growth,Active,98,2,Education,Referral,10,12,3
+2024-06,Growth,Active,95,4,Education,Organic,6,6,6
+2024-12,Pro,Expanded,311,19,Technology,Cold Outbound,3,6,0
+2024-02,Starter,Active,38,1,Healthcare,Referral,7,24,3
+2024-05,Starter,New,36,2,Technology,Organic,4,12,8
+2024-04,Growth,New,105,4,Healthcare,Referral,10,24,4
+2024-11,Starter,Active,32,2,Healthcare,Partner,4,24,7
+2024-05,Starter,Active,28,3,Legal,Event,6,6,1
+2024-06,Pro,New,298,2,Retail,Cold Outbound,6,12,1
+2024-01,Growth,Churned,95,5,Retail,Referral,7,1,0
+2024-05,Pro,Expanded,306,16,Retail,Partner,3,12,0
+2024-04,Starter,Churned,29,3,Technology,Cold Outbound,9,12,0
+2024-09,Pro,Expanded,294,30,Healthcare,Event,8,6,0
+2024-06,Pro,Expanded,313,14,Legal,Cold Outbound,9,1,1
+2024-09,Starter,Active,33,3,Education,Cold Outbound,10,24,8
+2024-05,Starter,Active,36,2,Technology,Referral,6,12,1
+2024-04,Pro,Active,303,11,Education,Referral,9,12,4
+2024-11,Starter,Active,44,3,Healthcare,Event,3,12,4
+2024-03,Growth,Active,94,8,Technology,Referral,3,12,8
+2024-04,Growth,Churned,112,2,Education,Referral,7,1,7
+2024-03,Starter,Active,32,2,Finance,Cold Outbound,10,6,2
+2024-10,Growth,Active,101,2,Legal,Event,3,12,5
+2024-01,Growth,Active,101,1,Technology,Cold Outbound,7,12,8
+2024-12,Starter,Active,31,2,Education,Partner,4,1,8
+2024-02,Starter,Expanded,34,3,Real Estate,Cold Outbound,8,12,1
+2024-11,Growth,Active,103,3,Education,Referral,3,12,6
+2024-11,Starter,Active,33,3,Healthcare,Organic,3,12,2
+2024-10,Starter,Churned,43,1,Legal,Cold Outbound,8,24,5
+2024-04,Starter,Active,42,1,Real Estate,Cold Outbound,5,1,1
+2024-04,Growth,Churned,112,9,Legal,Organic,9,24,0
+2024-10,Growth,Active,110,9,Healthcare,Paid Search,10,24,4
+2024-04,Starter,Active,35,1,Legal,Organic,10,6,7
+2024-12,Enterprise,Active,1007,47,Education,Event,4,1,5
+2024-11,Growth,Active,101,8,Education,Paid Search,9,24,3
+2024-07,Growth,Expanded,98,10,Healthcare,Referral,7,12,1
+2024-02,Growth,New,110,3,Real Estate,Paid Search,10,6,7
+2024-01,Starter,New,37,2,Technology,Paid Search,10,1,6
+2024-01,Growth,Active,96,3,Healthcare,Paid Search,9,12,8
+2024-04,Pro,Churned,297,11,Education,Event,8,1,0
+2024-02,Pro,New,305,15,Retail,Cold Outbound,9,12,4
+2024-08,Pro,Active,299,24,Technology,Event,4,24,5
+2024-11,Growth,Active,106,6,Education,Cold Outbound,10,24,4
+2024-02,Starter,Churned,39,2,Education,Event,3,24,8
+2024-07,Starter,Active,36,2,Technology,Cold Outbound,5,6,6
+2024-09,Starter,Active,43,2,Healthcare,Paid Search,4,1,4
+2024-05,Growth,Active,101,3,Education,Organic,7,6,4
+2024-03,Starter,Active,41,3,Education,Organic,5,24,8
+2024-04,Starter,Active,24,2,Education,Partner,6,12,8
+2024-03,Pro,New,303,30,Legal,Organic,4,12,6
+2024-08,Starter,Active,28,2,Real Estate,Organic,4,6,1
+2024-06,Starter,New,34,2,Legal,Event,10,1,5
+2024-01,Growth,Expanded,110,6,Education,Cold Outbound,6,1,0
+2024-04,Starter,Active,36,1,Retail,Paid Search,6,12,2
+2024-12,Growth,Churned,98,4,Real Estate,Cold Outbound,4,6,0
+2024-07,Starter,New,41,3,Finance,Organic,6,12,4
+2024-10,Starter,Active,42,1,Education,Cold Outbound,8,6,4
+2024-04,Pro,Churned,309,16,Healthcare,Event,9,12,4
+2024-02,Starter,Active,33,2,Finance,Cold Outbound,10,12,1
+2024-03,Growth,New,104,2,Retail,Cold Outbound,8,6,7
+2024-08,Growth,Active,101,1,Education,Paid Search,7,12,0
+2024-09,Pro,Active,302,22,Retail,Partner,8,12,6
+2024-05,Enterprise,Active,1002,63,Legal,Organic,6,12,7
+2024-07,Starter,Expanded,29,3,Legal,Organic,6,24,5
+2024-03,Growth,Active,94,1,Real Estate,Cold Outbound,9,12,5
+2024-09,Starter,Active,25,3,Education,Paid Search,6,6,8
+2024-07,Pro,Active,301,10,Healthcare,Partner,5,6,8
+2024-12,Starter,Expanded,24,1,Education,Organic,3,24,6
+2024-08,Starter,Active,33,2,Legal,Cold Outbound,3,6,0
+2024-05,Pro,Active,306,21,Real Estate,Cold Outbound,9,12,1
+2024-02,Starter,New,37,1,Real Estate,Event,3,24,2
+2024-02,Pro,Expanded,306,7,Healthcare,Partner,7,24,0
+2024-05,Starter,New,30,1,Education,Partner,7,12,4
+2024-07,Starter,Active,37,3,Healthcare,Cold Outbound,7,24,8
+2024-04,Starter,Active,39,3,Real Estate,Event,9,1,7
+2024-04,Growth,Active,94,7,Healthcare,Partner,6,24,1
+2024-11,Starter,Active,28,3,Education,Paid Search,4,6,7
+2024-10,Starter,Churned,28,2,Legal,Event,10,6,0
+2024-08,Starter,Expanded,33,3,Finance,Organic,8,12,6
+2024-01,Starter,Churned,30,3,Retail,Referral,10,6,5
+2024-08,Pro,Active,310,18,Retail,Cold Outbound,4,1,6
+2024-03,Pro,Active,299,17,Finance,Partner,4,1,0
+2024-07,Growth,Active,114,9,Legal,Event,10,12,6
+2024-01,Starter,Churned,37,2,Healthcare,Event,7,12,2
+2024-03,Starter,Churned,30,3,Education,Referral,8,12,7
+2024-04,Enterprise,Active,998,22,Healthcare,Partner,10,6,2
+2024-08,Starter,Active,24,2,Legal,Organic,6,24,7
+2024-06,Starter,Active,43,2,Healthcare,Cold Outbound,5,24,3
+2024-06,Growth,Expanded,100,5,Real Estate,Partner,7,24,4
+2024-06,Growth,Active,106,5,Education,Paid Search,6,1,3
+2024-05,Starter,Expanded,42,1,Education,Event,5,12,5
+2024-10,Pro,Expanded,312,20,Legal,Event,7,12,3
+2024-03,Starter,Expanded,31,1,Education,Paid Search,4,6,2
+2024-08,Pro,Active,304,3,Education,Partner,3,12,7
+2024-06,Starter,Active,27,1,Real Estate,Partner,9,12,5
+2024-05,Pro,Churned,304,17,Real Estate,Paid Search,4,6,4
+2024-12,Starter,Active,37,3,Legal,Referral,10,1,8
+2024-07,Growth,Expanded,99,1,Retail,Cold Outbound,8,12,6
+2024-04,Growth,Active,100,7,Legal,Organic,8,6,7
+2024-06,Growth,Active,94,10,Technology,Referral,7,12,8
+2024-01,Growth,Active,95,5,Technology,Cold Outbound,10,12,4
+2024-11,Starter,Churned,42,1,Legal,Partner,10,12,2
+2024-08,Pro,Active,314,25,Healthcare,Organic,4,24,2
+2024-12,Pro,Expanded,298,3,Real Estate,Organic,9,1,7
+2024-11,Pro,Expanded,304,4,Finance,Cold Outbound,7,24,0
+2024-06,Pro,Churned,304,29,Legal,Referral,5,24,0
+2024-11,Growth,Expanded,95,2,Real Estate,Event,6,6,4
+2024-02,Starter,New,25,2,Education,Partner,6,6,0
+2024-05,Starter,Active,35,1,Education,Cold Outbound,8,1,7
+2024-02,Starter,Active,26,1,Healthcare,Event,4,1,2
+2024-01,Starter,New,35,2,Finance,Referral,4,6,2
+2024-05,Starter,Active,33,1,Education,Referral,7,12,3
+2024-04,Starter,Active,30,1,Legal,Partner,7,12,1
+2024-08,Starter,Expanded,35,2,Legal,Cold Outbound,10,6,0
+2024-10,Starter,New,41,3,Retail,Referral,6,12,3
+2024-06,Growth,Active,110,9,Education,Paid Search,7,12,3
+2024-08,Starter,Active,27,3,Finance,Partner,5,24,5
+2024-06,Growth,New,112,1,Technology,Cold Outbound,8,12,0
+2024-03,Growth,Active,104,6,Healthcare,Referral,4,6,7
+2024-09,Starter,Churned,24,2,Education,Cold Outbound,10,12,6
+2024-08,Pro,Churned,302,24,Healthcare,Partner,8,12,4
+2024-01,Enterprise,Active,1001,98,Retail,Referral,4,24,6
+2024-10,Starter,Churned,40,1,Legal,Event,7,6,2
+2024-03,Growth,Expanded,95,2,Real Estate,Paid Search,7,12,7
+2024-07,Starter,Active,24,3,Finance,Referral,5,12,1
+2024-03,Starter,New,30,2,Finance,Paid Search,4,24,5
+2024-01,Growth,Churned,105,2,Legal,Partner,10,6,7
+2024-11,Starter,Expanded,38,3,Technology,Partner,6,6,5
+2024-03,Starter,Churned,34,2,Retail,Event,9,1,5
+2024-08,Growth,Churned,112,1,Finance,Paid Search,6,12,5
+2024-06,Growth,Active,94,10,Legal,Paid Search,9,6,7
+2024-04,Starter,Active,33,2,Retail,Cold Outbound,4,6,6
+2024-03,Starter,Active,36,3,Healthcare,Partner,10,6,2
+2024-07,Growth,Active,97,8,Legal,Cold Outbound,4,1,6
+2024-01,Starter,New,28,3,Retail,Organic,9,12,6
+2024-07,Pro,New,303,14,Legal,Organic,7,24,7
+2024-09,Starter,Expanded,39,3,Education,Referral,8,1,2
+2024-07,Growth,Active,106,2,Healthcare,Cold Outbound,5,24,4
+2024-04,Growth,Active,113,8,Retail,Referral,9,1,1
+2024-08,Growth,Active,95,10,Retail,Referral,8,12,0
+2024-09,Starter,Active,33,2,Retail,Referral,9,12,0
+2024-10,Starter,Active,25,3,Finance,Organic,9,24,1
+2024-03,Pro,Active,314,16,Healthcare,Partner,9,24,3
+2024-12,Pro,Active,312,15,Healthcare,Referral,3,1,2
+2024-10,Enterprise,Churned,1014,13,Legal,Organic,9,12,4
+2024-07,Growth,Expanded,99,5,Retail,Organic,4,6,4
+2024-05,Growth,Active,111,4,Education,Partner,3,6,6
+2024-05,Pro,Churned,299,9,Retail,Paid Search,3,12,4
+2024-01,Growth,Active,94,7,Healthcare,Partner,5,24,5
+2024-02,Starter,Active,24,3,Technology,Event,8,12,7
+2024-10,Growth,Active,113,6,Education,Organic,9,12,5
+2024-06,Starter,Expanded,38,1,Legal,Partner,10,6,8
+2024-12,Starter,Active,36,2,Legal,Event,9,1,7
+2024-09,Enterprise,Active,996,27,Healthcare,Referral,8,12,7
+2024-01,Starter,Churned,42,1,Retail,Partner,8,1,4
+2024-09,Pro,Active,301,13,Education,Organic,5,1,6
+2024-04,Starter,Active,27,3,Real Estate,Paid Search,7,12,8
+2024-07,Starter,Active,30,2,Real Estate,Referral,7,1,5
+2024-09,Growth,Active,106,4,Real Estate,Partner,9,12,7
+2024-03,Enterprise,Active,999,52,Education,Referral,7,12,2
+2024-11,Enterprise,Active,1006,75,Retail,Paid Search,9,1,3
+2024-03,Growth,Active,110,2,Healthcare,Event,9,6,2
+2024-10,Growth,New,96,6,Education,Cold Outbound,3,12,8
+2024-09,Pro,New,299,15,Real Estate,Paid Search,8,6,7
+2024-12,Enterprise,Active,1004,17,Technology,Paid Search,7,24,7
+2024-08,Starter,Expanded,43,2,Finance,Partner,6,24,1
+2024-10,Pro,New,299,8,Technology,Organic,10,1,6
+2024-09,Enterprise,Active,1006,10,Legal,Event,9,1,8
+2024-12,Starter,Active,39,3,Real Estate,Partner,3,1,5
+2024-07,Pro,Active,310,21,Real Estate,Organic,10,1,2
+2024-05,Pro,New,312,25,Finance,Referral,4,12,5
+2024-03,Enterprise,Active,1009,27,Healthcare,Cold Outbound,7,1,7
+2024-12,Growth,Active,101,5,Legal,Partner,8,12,7
+2024-12,Starter,Expanded,32,3,Finance,Paid Search,3,24,4
+2024-01,Starter,New,35,3,Healthcare,Referral,8,6,4
+2024-08,Pro,Active,303,5,Education,Referral,5,12,4
+2024-11,Starter,Active,30,3,Education,Organic,7,12,5
+2024-12,Growth,Churned,110,7,Finance,Referral,10,6,8
+2024-06,Growth,Expanded,106,8,Education,Partner,5,6,7
+2024-07,Starter,Active,26,2,Finance,Paid Search,6,6,4
+2024-10,Pro,Active,297,21,Retail,Partner,6,24,0
+2024-12,Pro,New,310,29,Finance,Referral,6,1,6
+2024-11,Starter,Active,34,3,Education,Event,4,24,1
+2024-01,Growth,Active,110,4,Real Estate,Cold Outbound,6,6,3
+2024-04,Growth,Churned,108,3,Healthcare,Event,3,12,1
+2024-12,Starter,Active,26,1,Finance,Paid Search,7,6,7
+2024-08,Starter,Active,25,2,Retail,Organic,4,12,1
+2024-08,Starter,Churned,41,3,Retail,Referral,6,24,0
+2024-10,Growth,Churned,97,8,Real Estate,Cold Outbound,6,24,7
+2024-01,Starter,Active,37,3,Legal,Paid Search,7,12,8
+2024-08,Growth,Expanded,114,5,Education,Paid Search,7,12,4
+2024-11,Growth,Expanded,103,8,Finance,Partner,4,1,5
+2024-09,Growth,Expanded,99,3,Retail,Cold Outbound,4,12,1
+2024-08,Starter,Expanded,41,1,Technology,Paid Search,6,6,4
+2024-09,Starter,New,40,2,Healthcare,Event,4,6,2
+2024-06,Starter,Churned,36,1,Legal,Paid Search,5,12,8
+2024-08,Growth,Active,107,5,Retail,Referral,6,12,2
+2024-05,Starter,Active,35,3,Healthcare,Partner,8,24,6
+2024-07,Starter,Active,36,1,Legal,Paid Search,9,12,4
+2024-01,Pro,Active,300,7,Real Estate,Referral,7,1,5
+2024-07,Pro,Expanded,304,18,Finance,Event,6,24,7
+2024-05,Starter,New,31,1,Retail,Cold Outbound,8,24,7
+2024-01,Pro,Active,306,23,Healthcare,Event,10,24,6
+2024-01,Starter,Churned,44,2,Healthcare,Partner,7,12,1
+2024-08,Starter,Expanded,26,2,Finance,Paid Search,9,24,4
+2024-10,Starter,Active,26,2,Education,Event,6,12,8
+2024-09,Pro,Expanded,294,5,Real Estate,Cold Outbound,4,12,5
+2024-08,Pro,Active,300,6,Finance,Partner,8,12,5
+2024-04,Growth,Active,102,5,Technology,Cold Outbound,3,12,6
+2024-07,Pro,Churned,295,27,Healthcare,Organic,3,24,6
+2024-01,Enterprise,Active,1004,69,Education,Referral,10,1,1
+2024-10,Starter,Expanded,41,1,Education,Organic,5,24,7
+2024-10,Growth,Expanded,100,2,Healthcare,Partner,9,12,2
+2024-11,Starter,Active,29,3,Education,Cold Outbound,8,12,0
+2024-07,Growth,Active,94,10,Technology,Paid Search,9,12,6
+2024-03,Starter,Churned,31,3,Retail,Cold Outbound,8,6,5
+2024-12,Pro,Active,298,7,Healthcare,Paid Search,5,1,0
+2024-09,Growth,Active,95,3,Healthcare,Referral,8,6,3
+2024-04,Starter,Active,37,2,Real Estate,Referral,6,1,2
+2024-08,Starter,Expanded,36,1,Legal,Cold Outbound,10,6,6
+2024-01,Growth,Expanded,106,4,Retail,Event,6,1,1
+2024-03,Growth,Active,112,9,Real Estate,Paid Search,4,1,7
+2024-12,Growth,Active,104,7,Technology,Event,6,12,7
+2024-05,Growth,Active,108,1,Real Estate,Partner,3,12,1
+2024-06,Starter,Expanded,33,1,Legal,Referral,9,6,1
+2024-11,Growth,Active,106,8,Legal,Cold Outbound,3,12,0
+2024-03,Pro,Active,299,19,Education,Paid Search,3,6,7
+2024-01,Starter,Active,30,3,Education,Partner,7,6,6
+2024-03,Starter,Active,40,1,Technology,Paid Search,5,1,7
+2024-04,Starter,Churned,44,2,Healthcare,Organic,7,1,5
+2024-01,Pro,Active,295,24,Technology,Event,5,12,8
+2024-03,Starter,Active,24,2,Retail,Organic,6,1,7
+2024-08,Enterprise,Expanded,1011,57,Education,Cold Outbound,5,1,4
+2024-08,Growth,New,102,3,Education,Referral,8,24,1
+2024-08,Growth,Active,112,4,Education,Paid Search,5,6,3
+2024-11,Starter,Active,27,3,Education,Organic,9,6,3
+2024-05,Starter,New,33,2,Education,Event,10,24,4
+2024-03,Starter,Churned,35,3,Legal,Organic,5,12,0
+2024-04,Enterprise,Expanded,994,19,Real Estate,Paid Search,3,6,6
+2024-06,Starter,Active,39,2,Legal,Event,8,12,7
+2024-04,Growth,Active,102,9,Legal,Referral,10,24,5
+2024-06,Enterprise,Expanded,999,33,Real Estate,Partner,8,24,7
+2024-11,Starter,Active,34,3,Real Estate,Referral,7,12,0
+2024-09,Starter,Active,31,2,Education,Cold Outbound,4,12,2
+2024-06,Starter,Expanded,37,3,Education,Paid Search,4,12,8
+2024-04,Starter,New,31,1,Legal,Referral,6,24,2
+2024-10,Pro,Churned,310,2,Finance,Cold Outbound,8,24,2
+2024-06,Starter,Expanded,29,3,Real Estate,Cold Outbound,6,6,8
+2024-10,Growth,Active,100,5,Healthcare,Partner,3,24,6
+2024-08,Growth,Active,98,5,Healthcare,Cold Outbound,3,24,4
+2024-04,Enterprise,Active,1013,77,Real Estate,Partner,4,6,2
+2024-08,Pro,New,301,13,Retail,Partner,5,24,3
+2024-04,Pro,Active,296,8,Retail,Organic,7,24,2
+2024-04,Growth,New,102,6,Technology,Event,3,12,8
+2024-02,Pro,New,313,16,Retail,Referral,6,1,8
+2024-12,Growth,Active,98,2,Technology,Partner,8,12,1
+2024-11,Growth,Expanded,112,3,Healthcare,Paid Search,10,24,1
+2024-02,Enterprise,Active,1013,77,Real Estate,Cold Outbound,8,12,6
+2024-07,Starter,Active,27,2,Legal,Event,7,12,6
+2024-11,Pro,Active,305,3,Legal,Partner,3,6,7
+2024-04,Growth,Churned,102,2,Education,Event,10,12,8
+2024-11,Starter,Churned,43,1,Technology,Organic,4,6,5
+2024-10,Growth,New,113,7,Legal,Organic,9,12,7
+2024-08,Growth,Expanded,110,1,Real Estate,Cold Outbound,9,12,0
+2024-04,Growth,Active,94,6,Retail,Organic,4,12,4
+2024-06,Pro,Active,305,12,Retail,Organic,6,12,7
+2024-12,Enterprise,Active,1002,99,Education,Event,5,12,6
+2024-06,Pro,Expanded,299,28,Technology,Referral,10,12,8
+2024-12,Pro,Active,301,11,Legal,Organic,7,12,5
+2024-10,Growth,Active,99,7,Real Estate,Cold Outbound,6,12,5
+2024-06,Pro,Active,305,25,Healthcare,Organic,5,1,3
+2024-10,Starter,Expanded,40,3,Education,Event,7,6,6
+2024-10,Growth,New,100,2,Education,Cold Outbound,4,12,4
+2024-03,Pro,Active,311,12,Retail,Organic,9,12,1
+2024-06,Enterprise,Churned,1008,6,Finance,Cold Outbound,6,12,0
+2024-08,Starter,Active,31,1,Legal,Paid Search,6,6,0
+2024-05,Starter,Expanded,24,3,Retail,Partner,10,24,8
+2024-10,Starter,New,29,3,Education,Partner,9,12,5
+2024-05,Growth,Churned,105,4,Healthcare,Organic,8,6,5
+2024-12,Starter,Active,41,3,Real Estate,Event,5,12,8
+2024-06,Starter,New,43,1,Legal,Cold Outbound,8,24,3
+2024-08,Starter,Active,25,2,Education,Partner,10,1,2
+2024-01,Growth,Active,111,1,Real Estate,Cold Outbound,8,6,1
+2024-11,Starter,New,32,3,Technology,Cold Outbound,7,24,7
+2024-07,Pro,New,298,13,Retail,Referral,6,24,4
+2024-06,Starter,Expanded,40,2,Education,Cold Outbound,5,24,5
+2024-01,Enterprise,Churned,995,92,Technology,Organic,8,24,1
+2024-09,Growth,Churned,99,4,Real Estate,Paid Search,6,6,0
+2024-11,Enterprise,Active,997,43,Retail,Event,4,12,6
+2024-07,Growth,Active,98,6,Healthcare,Referral,5,6,6
+2024-05,Growth,Active,99,5,Finance,Referral,9,1,5
+2024-08,Pro,Churned,310,9,Technology,Event,3,1,5
+2024-02,Starter,Active,40,1,Retail,Referral,3,1,5
+2024-02,Enterprise,Active,1000,82,Education,Paid Search,10,12,1
+2024-11,Enterprise,Active,1013,48,Legal,Paid Search,5,24,2
+2024-08,Starter,Expanded,25,3,Healthcare,Referral,4,1,5
+2024-11,Starter,Active,40,1,Finance,Event,4,6,5
+2024-08,Enterprise,Active,1011,50,Legal,Event,10,1,5
+2024-04,Starter,Expanded,31,2,Retail,Organic,6,12,0
+2024-08,Pro,New,312,4,Legal,Referral,4,24,8
+2024-09,Starter,Active,41,3,Healthcare,Paid Search,6,12,3
+2024-05,Enterprise,Active,1007,52,Technology,Partner,9,1,7
+2024-02,Starter,Active,39,3,Retail,Referral,9,1,8
+2024-01,Starter,New,26,2,Healthcare,Cold Outbound,5,1,8
+2024-01,Starter,Active,33,2,Education,Organic,6,12,8
+2024-09,Pro,Active,310,12,Technology,Partner,3,6,3
+2024-12,Starter,Churned,30,2,Legal,Event,6,1,0
+2024-07,Starter,Active,27,2,Legal,Referral,3,6,6
+2024-04,Starter,Active,36,1,Education,Paid Search,5,24,4
+2024-07,Growth,New,114,5,Legal,Referral,6,12,0
+2024-07,Pro,Expanded,306,9,Real Estate,Partner,6,12,0
+2024-11,Growth,New,95,8,Legal,Paid Search,5,1,1
+2024-02,Starter,Churned,39,1,Healthcare,Paid Search,5,12,6
+2024-05,Growth,Active,103,10,Real Estate,Organic,7,12,3
+2024-02,Growth,Churned,109,4,Technology,Partner,5,12,1
