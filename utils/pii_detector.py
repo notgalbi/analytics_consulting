@@ -17,7 +17,9 @@ import pandas as pd
 # Maps PII type → substrings that indicate that type in a column name.
 # Order matters: more specific entries should come first.
 _COLUMN_KEYWORDS: dict[str, list[str]] = {
-    "ssn":         ["ssn", "social_security", "social security", "sin", "tax_id", "taxid"],
+    # "sin" omitted — too short; matched inside words like "days_since_*".
+    # Canada SIN columns should be caught by "ssn" or "social_security" variants.
+    "ssn":         ["ssn", "social_security", "social security", "tax_id", "taxid"],
     "email":       ["email", "e-mail", "e_mail"],
     "phone":       ["phone", "mobile", "cell", "tel", "fax"],
     "dob":         ["dob", "date_of_birth", "birthdate", "birthday", "birth_date"],
@@ -28,10 +30,16 @@ _COLUMN_KEYWORDS: dict[str, list[str]] = {
     "customer_id": ["customer_id", "cust_id", "client_id", "user_id", "account_id"],
 }
 
-# Standalone "name" keyword is intentionally last — it's a common false-positive
-# (e.g. "product_name", "company_name") so we only match it when no other type
-# claimed the column first.
+# Standalone "name" keyword is intentionally last — it's a common false-positive.
+# We match it only when the prefix before "_name" is not a known business noun.
 _STANDALONE_NAME_KEYWORDS = ["name"]
+
+_NON_PERSON_NAME_PREFIXES: frozenset[str] = frozenset({
+    "product", "company", "brand", "category", "item", "file", "page",
+    "table", "column", "field", "domain", "service", "campaign", "ad",
+    "store", "site", "app", "feature", "event", "action", "report",
+    "team", "group", "tag", "label", "source", "type", "class", "role",
+})
 
 # ── Value regex patterns ──────────────────────────────────────────────────────
 # DOB is intentionally absent — ISO date strings are indistinguishable from
@@ -172,9 +180,12 @@ def _match_column_name(col: str) -> str | None:
                 return pii_type
 
     # Generic standalone "name" check — only after specific keywords failed.
-    # Skips columns like "product_name" or "company_name" by requiring the
-    # match to appear at the start or after an underscore boundary.
+    # Skip if the word immediately before "_name" is a known business noun
+    # (e.g. "product_name", "company_name" are not personal identifiers).
     for kw in _STANDALONE_NAME_KEYWORDS:
+        m = re.search(r"(?:^|_)([a-z]+)_name(?:_|$)", normalized)
+        if m and m.group(1) in _NON_PERSON_NAME_PREFIXES:
+            continue
         if re.search(r"(^|_)" + re.escape(kw) + r"(_|$)", normalized):
             return "name"
 
