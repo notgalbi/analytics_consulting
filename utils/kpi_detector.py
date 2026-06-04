@@ -57,6 +57,21 @@ _DOMAIN_SIGNALS: dict[str, list[tuple[str, int]]] = {
         ("cost_price", 5), ("sell_price", 5), ("margin_pct", 5),
         ("restock", 4), ("supplier", 2),
     ],
+    "real_estate": [
+        ("sqft", 7), ("bedrooms", 7), ("days_on_market", 7), ("asking_price", 6),
+        ("neighborhood", 5), ("listing", 5), ("property_type", 5), ("bathrooms", 4),
+        ("agent", 3), ("mortgage", 3), ("closing", 3),
+    ],
+    "hospitality": [
+        ("covers", 7), ("avg_check", 7), ("food_cost_pct", 6), ("labor_cost_pct", 6),
+        ("reservations", 5), ("walk_ins", 5), ("no_shows", 4), ("table_turn", 5),
+        ("gross_profit", 3), ("revenue_per_cover", 5),
+    ],
+    "healthcare": [
+        ("appointment", 7), ("patient_satisfaction", 7), ("wait_time", 6), ("no_show", 6),
+        ("billing_amount", 6), ("insurance", 5), ("department", 4), ("procedure", 5),
+        ("duration_mins", 4), ("clinical", 5), ("diagnosis", 5),
+    ],
 }
 
 # ── KPI catalogue ─────────────────────────────────────────────────────────────
@@ -135,6 +150,37 @@ _KPI_CATALOGUE: dict[str, list[dict]] = {
         {"name": "Avg Sell Price",      "formula": "mean(sell_price)",                 "description": "Average retail price across SKUs."},
         {"name": "Est. 30d Revenue",    "formula": "sum(units_sold_30d * sell_price)",  "description": "Estimated 30-day revenue based on recent sell-through."},
     ],
+    "real_estate": [
+        {"name": "Total Sales Volume",   "formula": "sum(sale_price)",              "description": "Gross sales value for all closed transactions."},
+        {"name": "Avg Sale Price",       "formula": "mean(sale_price)",             "description": "Average price achieved per property sold."},
+        {"name": "Median Sale Price",    "formula": "median(sale_price)",           "description": "Median sale price — less sensitive to outliers than mean."},
+        {"name": "Total Listings",       "formula": "count(listing_id)",            "description": "Total properties listed in the period."},
+        {"name": "Avg Days on Market",   "formula": "mean(days_on_market)",         "description": "How long properties sit before selling — demand indicator."},
+        {"name": "List-to-Sale Ratio",   "formula": "sale_price / asking_price",   "description": "% of asking price achieved — negotiation strength metric."},
+        {"name": "Price per Sqft",       "formula": "sale_price / sqft",            "description": "Average price per square foot across sold properties."},
+        {"name": "Sale Rate",            "formula": "sold / total_listings",        "description": "% of listings that successfully closed."},
+    ],
+    "hospitality": [
+        {"name": "Total Revenue",        "formula": "sum(revenue)",                 "description": "Gross revenue for the period."},
+        {"name": "Avg Daily Revenue",    "formula": "mean(revenue)",                "description": "Average revenue per trading day."},
+        {"name": "Avg Check Size",       "formula": "mean(avg_check)",              "description": "Average spend per cover — upsell and menu mix indicator."},
+        {"name": "Avg Daily Covers",     "formula": "mean(covers)",                 "description": "Average guests served per day."},
+        {"name": "Food Cost %",          "formula": "mean(food_cost_pct)",          "description": "Food cost as a % of revenue — target typically 28–35%."},
+        {"name": "Labor Cost %",         "formula": "mean(labor_cost_pct)",         "description": "Labor cost as a % of revenue — target typically 25–35%."},
+        {"name": "Prime Cost %",         "formula": "food_cost + labor_cost",       "description": "Combined food + labor cost — the single most important restaurant metric."},
+        {"name": "No-Show Rate",         "formula": "no_shows / reservations",      "description": "% of reservations that did not arrive."},
+        {"name": "MoM Revenue Growth",   "formula": "last_month / prev_month - 1",  "description": "Month-over-month revenue trend."},
+    ],
+    "healthcare": [
+        {"name": "Total Appointments",   "formula": "count(appointment_id)",        "description": "Total patient appointments in the period."},
+        {"name": "No-Show Rate",         "formula": "no_shows / total",             "description": "% of appointments where patient did not attend."},
+        {"name": "Avg Wait Time",        "formula": "mean(wait_time_mins)",         "description": "Average patient wait time in minutes — satisfaction driver."},
+        {"name": "Avg Duration",         "formula": "mean(duration_mins)",          "description": "Average appointment length in minutes."},
+        {"name": "Total Billing",        "formula": "sum(billing_amount)",          "description": "Gross billing across all completed appointments."},
+        {"name": "Avg Billing per Appt", "formula": "mean(billing_amount)",         "description": "Average revenue generated per appointment."},
+        {"name": "Patient Satisfaction", "formula": "mean(patient_satisfaction)",   "description": "Average satisfaction score — key quality indicator."},
+        {"name": "Completion Rate",      "formula": "1 - no_show_rate",             "description": "% of scheduled appointments successfully completed."},
+    ],
     "general": [
         {"name": "Row Count",     "formula": "len(df)",            "description": "Total records in the dataset."},
         {"name": "Completeness",  "formula": "non_null / total",   "description": "% of cells with non-null values."},
@@ -176,6 +222,23 @@ _COLUMN_ALIASES: dict[str, list[str]] = {
     "units_sold_30d":        ["units_sold_30d", "units_sold", "monthly_sold", "qty_sold"],
     "cost_price":            ["cost_price", "unit_cost", "purchase_price", "cogs"],
     "sell_price":            ["sell_price", "selling_price", "unit_price", "retail_price", "price"],
+    # Real estate
+    "sale_price":            ["sale_price", "sold_price", "transaction_price", "closing_price"],
+    "asking_price":          ["asking_price", "list_price", "listing_price"],
+    "days_on_market":        ["days_on_market", "dom", "days_listed", "time_on_market"],
+    "sqft":                  ["sqft", "square_feet", "sq_ft", "floor_area", "size_sqft"],
+    # Hospitality
+    "covers":                ["covers", "guests", "diners", "pax", "covers_per_day"],
+    "avg_check":             ["avg_check", "average_check", "check_size", "spend_per_cover"],
+    "food_cost_pct":         ["food_cost_pct", "food_cost_percent", "food_cost"],
+    "labor_cost_pct":        ["labor_cost_pct", "labour_cost_pct", "labor_cost", "staff_cost"],
+    "no_shows_count":        ["no_shows", "no_show_count"],
+    "reservations_count":    ["reservations", "bookings", "booking_count"],
+    # Healthcare
+    "billing_amount":        ["billing_amount", "billed", "charge", "fee", "billing"],
+    "wait_time_mins":        ["wait_time_mins", "wait_time", "waiting_time", "queue_time"],
+    "patient_satisfaction":  ["patient_satisfaction", "satisfaction_score", "patient_rating"],
+    "duration_mins":         ["duration_mins", "duration", "appointment_duration", "session_length"],
 }
 
 
@@ -216,14 +279,17 @@ def calculate_available_kpis(df: pd.DataFrame, domain: str) -> dict[str, str]:
     results: dict[str, str] = {}
 
     calculators = {
-        "marketing":  _calc_marketing,
-        "sales":      _calc_sales,
-        "operations": _calc_operations,
-        "finance":    _calc_finance,
-        "hr":         _calc_hr,
-        "saas":       _calc_saas,
-        "ecommerce":  _calc_ecommerce,
-        "retail":     _calc_retail,
+        "marketing":   _calc_marketing,
+        "sales":       _calc_sales,
+        "operations":  _calc_operations,
+        "finance":     _calc_finance,
+        "hr":          _calc_hr,
+        "saas":        _calc_saas,
+        "ecommerce":   _calc_ecommerce,
+        "retail":      _calc_retail,
+        "real_estate": _calc_real_estate,
+        "hospitality": _calc_hospitality,
+        "healthcare":  _calc_healthcare,
     }
 
     calc_fn = calculators.get(domain)
@@ -418,6 +484,87 @@ def _calc_retail(df: pd.DataFrame, r: dict) -> dict:
     if r.get("units_sold_30d") and r.get("sell_price"):
         est_rev = (df[r["units_sold_30d"]] * df[r["sell_price"]]).sum()
         out["Est. 30d Revenue"] = _fmt_currency(est_rev)
+    return out
+
+
+def _calc_real_estate(df: pd.DataFrame, r: dict) -> dict:
+    out = {}
+    out["Total Listings"] = f"{len(df):,}"
+    # Only use rows where a sale actually occurred
+    sold_col = _find_col(df, ["sold", "sale_flag", "is_sold"])
+    if sold_col:
+        sold_df = df[df[sold_col].astype(str).str.lower().isin(["true", "yes", "1", "sold"])]
+    else:
+        sold_df = df
+    if r.get("sale_price") and not sold_df.empty:
+        prices = sold_df[r["sale_price"]].dropna()
+        out["Total Sales Volume"]  = _fmt_currency(prices.sum())
+        out["Avg Sale Price"]      = _fmt_currency(prices.mean())
+        out["Median Sale Price"]   = _fmt_currency(prices.median())
+        if sold_col and len(df):
+            out["Sale Rate"] = f"{len(sold_df) / len(df) * 100:.1f}%"
+    if r.get("days_on_market"):
+        out["Avg Days on Market"] = f"{sold_df[r['days_on_market']].mean():.0f} days" if not sold_df.empty else f"{df[r['days_on_market']].mean():.0f} days"
+    if r.get("sale_price") and r.get("asking_price") and not sold_df.empty:
+        ratio = (sold_df[r["sale_price"]] / sold_df[r["asking_price"]].replace(0, pd.NA)).dropna()
+        if not ratio.empty:
+            out["List-to-Sale Ratio"] = f"{ratio.mean() * 100:.1f}%"
+    if r.get("sale_price") and r.get("sqft") and not sold_df.empty:
+        ppsf = (sold_df[r["sale_price"]] / sold_df[r["sqft"]].replace(0, pd.NA)).dropna()
+        if not ppsf.empty:
+            out["Avg Price per Sqft"] = _fmt_currency(ppsf.mean())
+    return out
+
+
+def _calc_hospitality(df: pd.DataFrame, r: dict) -> dict:
+    out = {}
+    if r.get("revenue"):
+        out["Total Revenue"]     = _fmt_currency(df[r["revenue"]].sum())
+        out["Avg Daily Revenue"] = _fmt_currency(df[r["revenue"]].mean())
+        growth = _calc_mom_growth(df, r["revenue"])
+        if growth is not None:
+            out["MoM Revenue Growth"] = f"{growth:+.1f}%"
+    if r.get("covers"):
+        out["Avg Daily Covers"] = f"{df[r['covers']].mean():.0f}"
+    if r.get("avg_check"):
+        out["Avg Check Size"] = _fmt_currency(df[r["avg_check"]].mean())
+    if r.get("food_cost_pct"):
+        out["Food Cost %"] = f"{df[r['food_cost_pct']].mean():.1f}%"
+    if r.get("labor_cost_pct"):
+        out["Labor Cost %"] = f"{df[r['labor_cost_pct']].mean():.1f}%"
+    if r.get("food_cost_pct") and r.get("labor_cost_pct"):
+        prime = df[r["food_cost_pct"]].mean() + df[r["labor_cost_pct"]].mean()
+        out["Prime Cost %"] = f"{prime:.1f}%"
+    if r.get("no_shows_count") and r.get("reservations_count"):
+        no_shows = df[r["no_shows_count"]].sum()
+        reservations = df[r["reservations_count"]].sum()
+        if reservations > 0:
+            out["No-Show Rate"] = f"{no_shows / reservations * 100:.1f}%"
+    return out
+
+
+def _calc_healthcare(df: pd.DataFrame, r: dict) -> dict:
+    out = {}
+    out["Total Appointments"] = f"{len(df):,}"
+    no_show_col = _find_col(df, ["no_show", "no_shows", "did_not_attend"])
+    if no_show_col:
+        col = df[no_show_col]
+        if pd.api.types.is_bool_dtype(col):
+            no_show_n = col.sum()
+        else:
+            no_show_n = col.astype(str).str.lower().isin(["true", "yes", "1", "no-show"]).sum()
+        rate = no_show_n / len(df)
+        out["No-Show Rate"]     = f"{rate * 100:.1f}%"
+        out["Completion Rate"]  = f"{(1 - rate) * 100:.1f}%"
+    if r.get("wait_time_mins"):
+        out["Avg Wait Time"] = f"{df[r['wait_time_mins']].mean():.0f} min"
+    if r.get("duration_mins"):
+        out["Avg Duration"] = f"{df[r['duration_mins']].mean():.0f} min"
+    if r.get("billing_amount"):
+        out["Total Billing"]        = _fmt_currency(df[r["billing_amount"]].sum())
+        out["Avg Billing per Appt"] = _fmt_currency(df[r["billing_amount"]].mean())
+    if r.get("patient_satisfaction"):
+        out["Patient Satisfaction"] = f"{df[r['patient_satisfaction']].mean():.2f} / 5"
     return out
 
 

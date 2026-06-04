@@ -1,0 +1,601 @@
+appointment_date,appointment_type,department,wait_time_mins,duration_mins,no_show,billing_amount,insurance_type,patient_satisfaction,status
+2024-11-21,Procedure,Cardiology,30,57,False,593.52,Private,3.4,Completed
+2024-01-15,Consultation,Orthopedics,5,27,False,242.93,Private,4.9,Completed
+2023-06-15,Consultation,General Practice,33,37,False,162.41,Medicare,3.3,Completed
+2024-08-14,Follow-up,Dermatology,16,15,False,128.79,Private,3.9,Completed
+2024-06-06,Consultation,Orthopedics,14,29,False,251.47,Medicare,4.0,Completed
+2023-05-22,Consultation,Cardiology,22,42,True,218.45,Medicare,,No-Show
+2024-05-09,Consultation,Cardiology,6,49,False,243.92,Self-pay,4.2,Completed
+2024-04-04,Follow-up,Dermatology,26,24,False,132.79,Medicare,4.1,Completed
+2023-07-20,Procedure,Dermatology,19,81,False,504.04,Medicare,4.1,Completed
+2023-11-10,Follow-up,Cardiology,13,15,False,141.84,Medicaid,3.5,Completed
+2024-09-05,Consultation,General Practice,23,15,False,171.83,Private,2.5,Completed
+2023-05-09,Procedure,General Practice,14,68,False,389.37,Medicare,3.4,Completed
+2024-06-12,Consultation,General Practice,25,25,False,172.66,Private,3.5,Completed
+2024-08-30,Procedure,General Practice,24,56,False,440.43,Medicare,3.2,Completed
+2024-11-14,Follow-up,General Practice,17,15,False,104.52,Private,4.0,Completed
+2023-08-25,Consultation,General Practice,34,24,False,158.57,Private,,Cancelled
+2023-07-14,Follow-up,Dermatology,25,15,False,121.44,Medicare,4.5,Completed
+2024-11-13,Consultation,Dermatology,14,29,False,204.48,Private,4.7,Completed
+2023-12-05,Procedure,Dermatology,12,55,False,475.1,Private,4.7,Completed
+2024-02-20,Consultation,Orthopedics,21,36,False,233.62,Private,3.5,Completed
+2024-01-10,Procedure,Orthopedics,17,74,False,732.67,Medicaid,4.1,Completed
+2024-01-11,Procedure,General Practice,19,68,False,502.48,Private,3.9,Completed
+2024-04-02,Procedure,Orthopedics,12,40,False,741.32,Private,,Cancelled
+2023-11-06,Procedure,General Practice,25,67,True,461.34,Self-pay,,No-Show
+2023-10-13,Consultation,Cardiology,21,36,False,243.36,Medicaid,3.3,Completed
+2023-10-20,Follow-up,Mental Health,12,18,False,100.56,Private,5.0,Completed
+2024-04-24,Procedure,Dermatology,16,59,False,563.62,Private,3.9,Completed
+2024-08-20,Consultation,General Practice,15,37,False,158.15,Private,2.7,Completed
+2024-02-09,Consultation,Orthopedics,23,26,False,194.11,Medicaid,3.8,Completed
+2024-05-09,Consultation,General Practice,28,32,False,134.13,Private,2.3,Completed
+2023-10-30,Consultation,General Practice,45,49,True,158.48,Private,,No-Show
+2024-07-18,Procedure,General Practice,24,51,False,417.37,Private,4.3,Completed
+2023-10-16,Follow-up,General Practice,30,15,True,87.93,Medicare,,No-Show
+2023-11-03,Follow-up,Orthopedics,40,19,False,124.85,Private,3.0,Completed
+2023-02-09,Procedure,Cardiology,21,46,False,737.06,Medicare,3.9,Completed
+2023-07-11,Consultation,General Practice,27,15,False,174.31,Private,2.9,Completed
+2024-06-24,Procedure,Mental Health,5,55,False,485.94,Medicare,4.8,Completed
+2023-03-06,Consultation,Cardiology,32,52,False,265.27,Medicaid,3.3,Completed
+2023-06-13,Consultation,Cardiology,10,34,False,260.95,Private,4.2,Completed
+2024-07-22,Consultation,Cardiology,23,37,True,214.2,Private,,No-Show
+2024-09-30,Consultation,Cardiology,16,15,False,209.68,Private,5.0,Completed
+2023-10-31,Follow-up,Cardiology,18,25,False,130.63,Medicare,4.1,Completed
+2023-10-25,Follow-up,Orthopedics,6,21,False,120.84,Private,4.2,Completed
+2024-01-08,Consultation,Dermatology,25,27,False,193.7,Medicare,3.9,Completed
+2024-07-17,Consultation,General Practice,25,37,False,143.02,Private,3.1,Completed
+2023-12-08,Follow-up,Cardiology,10,22,False,160.71,Medicare,3.8,Completed
+2023-05-08,Consultation,General Practice,38,22,False,158.21,Medicare,2.7,Completed
+2023-11-13,Procedure,Dermatology,10,63,True,523.0,Private,,No-Show
+2023-07-05,Procedure,General Practice,30,74,False,506.26,Private,3.0,Completed
+2024-05-14,Follow-up,General Practice,34,17,False,106.21,Medicare,2.3,Completed
+2023-04-14,Follow-up,Mental Health,15,15,True,107.27,Private,,No-Show
+2024-03-20,Follow-up,Orthopedics,5,17,True,149.53,Medicare,,No-Show
+2023-04-05,Follow-up,General Practice,33,30,True,106.89,Medicaid,,No-Show
+2024-12-11,Procedure,General Practice,27,45,True,455.32,Private,,No-Show
+2024-04-12,Procedure,Cardiology,17,66,True,753.07,Private,,No-Show
+2023-04-12,Follow-up,Mental Health,11,15,False,86.08,Private,,Cancelled
+2024-12-02,Follow-up,Cardiology,7,22,False,145.32,Private,4.4,Completed
+2024-02-23,Procedure,General Practice,29,53,False,442.33,Self-pay,3.0,Completed
+2024-03-19,Consultation,Orthopedics,7,28,False,193.8,Self-pay,,Cancelled
+2023-02-16,Follow-up,Cardiology,17,38,False,125.28,Private,3.8,Completed
+2023-05-18,Follow-up,General Practice,29,15,False,80.09,Medicaid,3.1,Completed
+2024-08-13,Follow-up,Dermatology,23,25,False,108.36,Private,4.4,Completed
+2023-12-08,Consultation,General Practice,21,55,False,132.51,Self-pay,3.7,Completed
+2024-03-26,Consultation,Dermatology,26,43,False,184.64,Medicaid,3.9,Completed
+2024-12-23,Consultation,Dermatology,22,19,False,206.73,Private,3.9,Completed
+2023-11-09,Follow-up,General Practice,24,15,False,96.69,Medicare,4.0,Completed
+2023-10-05,Procedure,Orthopedics,9,50,False,683.89,Medicare,4.5,Completed
+2024-08-08,Procedure,Dermatology,5,61,False,469.26,Private,4.2,Completed
+2023-02-17,Consultation,Orthopedics,20,37,True,247.92,Private,,No-Show
+2023-11-29,Consultation,Orthopedics,12,19,False,201.12,Medicare,4.6,Completed
+2024-09-17,Procedure,General Practice,37,49,True,415.83,Private,,No-Show
+2023-06-15,Follow-up,General Practice,22,15,False,93.97,Private,3.3,Completed
+2023-08-10,Follow-up,Orthopedics,10,17,True,155.24,Private,,No-Show
+2023-12-12,Consultation,General Practice,29,58,False,175.87,Medicare,3.4,Completed
+2023-02-23,Consultation,General Practice,22,23,False,165.97,Private,3.3,Completed
+2023-02-21,Procedure,Cardiology,20,48,False,722.5,Private,4.4,Completed
+2023-07-04,Follow-up,General Practice,35,15,False,94.28,Private,3.6,Completed
+2024-10-17,Consultation,Dermatology,15,42,False,198.39,Private,4.4,Completed
+2023-06-12,Procedure,Dermatology,15,59,False,487.76,Medicare,4.7,Completed
+2024-06-18,Follow-up,Dermatology,16,15,False,107.5,Private,4.2,Completed
+2023-11-08,Procedure,General Practice,14,55,False,506.26,Medicare,3.8,Completed
+2024-07-09,Follow-up,Cardiology,23,15,True,163.58,Private,,No-Show
+2023-08-30,Follow-up,Dermatology,16,23,False,109.37,Medicare,4.6,Completed
+2024-10-01,Procedure,Cardiology,27,90,True,623.48,Private,,No-Show
+2023-09-28,Procedure,Orthopedics,22,66,False,597.26,Medicaid,4.2,Completed
+2024-08-01,Procedure,Orthopedics,16,58,False,647.05,Private,4.9,Completed
+2024-08-29,Procedure,General Practice,36,52,False,405.37,Medicaid,2.9,Completed
+2023-11-13,Follow-up,General Practice,25,15,False,97.67,Private,3.2,Completed
+2024-05-02,Consultation,Orthopedics,19,43,False,196.3,Private,3.9,Completed
+2023-03-28,Consultation,General Practice,25,43,False,134.81,Medicare,3.2,Completed
+2023-12-29,Procedure,Dermatology,18,54,False,509.46,Private,3.3,Completed
+2023-09-29,Consultation,Orthopedics,14,49,False,243.73,Private,4.7,Completed
+2024-11-28,Procedure,General Practice,41,60,False,418.57,Medicaid,2.6,Completed
+2024-11-13,Procedure,Orthopedics,34,69,False,644.31,Medicare,3.8,Completed
+2024-07-25,Procedure,Cardiology,26,63,True,707.76,Medicare,,No-Show
+2024-11-25,Procedure,General Practice,40,57,False,480.26,Self-pay,3.2,Completed
+2024-12-13,Follow-up,Mental Health,5,15,False,93.27,Private,4.2,Completed
+2024-07-15,Follow-up,Orthopedics,6,18,False,147.03,Private,,Cancelled
+2024-03-08,Procedure,Orthopedics,15,70,False,608.28,Medicaid,4.2,Completed
+2023-05-30,Consultation,Dermatology,15,28,False,197.19,Private,3.9,Completed
+2024-08-19,Consultation,Cardiology,18,40,False,230.55,Private,3.7,Completed
+2023-05-23,Procedure,Cardiology,6,47,False,762.52,Private,4.2,Completed
+2023-05-16,Follow-up,General Practice,37,29,False,107.02,Private,,Cancelled
+2024-10-04,Follow-up,General Practice,45,23,False,101.19,Private,2.6,Completed
+2023-03-24,Consultation,Cardiology,30,20,True,263.17,Private,,No-Show
+2023-04-14,Follow-up,Cardiology,28,17,True,127.41,Medicare,,No-Show
+2024-01-09,Procedure,Orthopedics,19,71,False,680.12,Medicare,4.2,Completed
+2024-03-01,Follow-up,Cardiology,13,15,False,130.06,Medicaid,4.6,Completed
+2023-02-02,Follow-up,Orthopedics,18,15,False,128.3,Private,3.6,Completed
+2023-10-04,Follow-up,Dermatology,31,19,False,116.29,Private,3.8,Completed
+2023-06-14,Procedure,Mental Health,9,85,False,501.98,Medicare,4.9,Completed
+2023-08-09,Procedure,General Practice,24,51,False,471.37,Private,4.1,Completed
+2023-05-12,Follow-up,Mental Health,20,25,False,109.97,Private,3.8,Completed
+2024-05-09,Follow-up,Dermatology,24,23,False,117.55,Medicare,3.7,Completed
+2023-12-12,Consultation,General Practice,21,27,False,172.57,Medicare,3.5,Completed
+2024-12-02,Follow-up,General Practice,25,21,True,104.38,Private,,No-Show
+2023-01-06,Consultation,General Practice,23,29,False,169.02,Medicare,3.0,Completed
+2024-07-22,Follow-up,Orthopedics,18,15,False,126.34,Medicare,4.1,Completed
+2024-10-25,Follow-up,Orthopedics,26,15,False,138.8,Medicaid,4.5,Completed
+2023-12-21,Consultation,Cardiology,13,34,True,250.58,Private,,No-Show
+2024-05-27,Consultation,Dermatology,23,45,False,216.0,Medicare,4.6,Completed
+2023-11-20,Consultation,General Practice,28,35,False,130.58,Medicare,3.0,Completed
+2024-03-11,Consultation,Cardiology,38,48,False,221.86,Private,3.7,Completed
+2024-10-24,Follow-up,Dermatology,17,26,False,110.04,Medicare,4.8,Completed
+2024-01-23,Consultation,Mental Health,11,34,False,151.72,Medicare,4.5,Completed
+2024-02-27,Consultation,Dermatology,19,27,False,207.0,Private,4.0,Completed
+2024-12-23,Procedure,General Practice,25,54,False,381.68,Private,3.6,Completed
+2023-12-29,Consultation,General Practice,13,17,False,146.55,Private,3.5,Completed
+2023-05-08,Procedure,General Practice,26,56,False,470.07,Medicare,3.5,Completed
+2024-05-14,Follow-up,Cardiology,17,21,False,139.0,Private,3.9,Completed
+2024-05-21,Follow-up,General Practice,15,40,False,83.52,Private,3.8,Completed
+2023-06-22,Follow-up,Mental Health,11,26,False,102.29,Private,3.8,Completed
+2024-06-17,Consultation,Orthopedics,5,24,False,226.53,Medicare,3.9,Completed
+2023-02-16,Procedure,Cardiology,17,42,False,773.72,Medicare,3.4,Completed
+2023-08-23,Procedure,General Practice,29,57,False,474.95,Private,3.2,Completed
+2024-09-17,Consultation,Cardiology,20,44,False,268.13,Private,3.3,Completed
+2024-03-27,Procedure,Cardiology,16,57,False,612.39,Private,3.7,Completed
+2024-03-19,Follow-up,Orthopedics,17,26,False,148.29,Private,3.6,Completed
+2024-03-29,Procedure,General Practice,21,57,False,448.85,Medicare,4.0,Completed
+2023-05-02,Procedure,Dermatology,15,68,False,580.81,Private,3.8,Completed
+2024-12-03,Consultation,General Practice,28,15,False,151.51,Medicare,2.7,Completed
+2023-08-07,Procedure,General Practice,20,79,False,403.86,Medicare,3.5,Completed
+2024-07-29,Procedure,Mental Health,14,46,False,404.22,Medicaid,5.0,Completed
+2024-12-24,Follow-up,General Practice,30,29,False,102.99,Private,3.2,Completed
+2023-06-26,Consultation,General Practice,26,31,False,167.45,Private,3.3,Completed
+2024-04-09,Procedure,Orthopedics,37,58,False,584.2,Private,4.2,Completed
+2023-02-01,Follow-up,Cardiology,18,17,False,149.23,Medicaid,4.3,Completed
+2024-04-10,Consultation,General Practice,25,38,False,163.91,Medicare,3.5,Completed
+2023-11-20,Procedure,General Practice,24,65,False,449.64,Medicare,3.1,Completed
+2023-02-22,Follow-up,General Practice,20,32,False,88.37,Medicare,3.6,Completed
+2024-05-06,Procedure,Cardiology,25,76,True,753.26,Private,,No-Show
+2024-12-09,Follow-up,General Practice,22,23,False,97.5,Medicare,3.1,Completed
+2023-03-02,Consultation,Dermatology,10,55,True,201.49,Medicaid,,No-Show
+2024-10-15,Procedure,Dermatology,10,61,False,570.92,Private,4.8,Completed
+2024-09-09,Follow-up,General Practice,20,32,False,99.71,Self-pay,3.6,Completed
+2024-02-05,Follow-up,General Practice,13,25,False,83.54,Medicaid,2.8,Completed
+2024-10-21,Follow-up,General Practice,24,15,False,105.35,Self-pay,2.8,Completed
+2023-08-15,Consultation,General Practice,34,37,False,143.17,Medicaid,2.8,Completed
+2024-06-10,Follow-up,General Practice,29,26,False,102.94,Private,3.2,Completed
+2024-05-24,Follow-up,Dermatology,27,19,False,129.13,Medicare,3.5,Completed
+2024-02-29,Procedure,General Practice,34,64,True,462.05,Private,,No-Show
+2024-09-02,Procedure,Cardiology,24,70,False,695.94,Medicare,4.5,Completed
+2024-10-02,Procedure,Orthopedics,33,59,False,573.76,Private,3.9,Completed
+2024-07-29,Consultation,Dermatology,14,15,False,185.38,Medicaid,4.3,Completed
+2024-03-06,Follow-up,General Practice,28,40,False,96.63,Private,2.8,Completed
+2024-12-16,Consultation,General Practice,27,31,False,133.81,Private,2.6,Completed
+2024-02-12,Procedure,Mental Health,24,50,False,413.45,Private,,Cancelled
+2024-04-10,Follow-up,General Practice,28,15,False,107.34,Medicare,2.6,Completed
+2023-05-18,Procedure,Orthopedics,12,55,False,617.29,Private,4.2,Completed
+2023-08-23,Consultation,Orthopedics,22,28,False,214.86,Private,4.1,Completed
+2024-10-23,Consultation,Cardiology,13,26,False,216.56,Private,3.7,Completed
+2023-12-29,Procedure,General Practice,32,51,True,461.36,Private,,No-Show
+2024-01-09,Follow-up,General Practice,31,26,False,92.74,Medicaid,3.8,Completed
+2024-08-20,Procedure,Cardiology,18,84,False,734.9,Private,4.7,Completed
+2023-08-28,Procedure,Cardiology,24,69,False,678.53,Private,4.1,Completed
+2023-07-13,Follow-up,Dermatology,5,33,False,98.71,Private,4.3,Completed
+2023-01-06,Follow-up,Orthopedics,19,15,True,136.79,Private,,No-Show
+2023-06-19,Follow-up,Mental Health,8,21,False,85.79,Private,5.0,Completed
+2024-01-10,Procedure,Mental Health,34,65,False,513.88,Private,3.1,Completed
+2024-06-13,Procedure,Orthopedics,19,52,False,574.66,Private,4.6,Completed
+2023-08-29,Consultation,General Practice,23,29,False,140.01,Private,3.1,Completed
+2023-11-21,Follow-up,Cardiology,8,30,False,141.28,Private,3.9,Completed
+2023-06-12,Consultation,Orthopedics,28,48,False,204.42,Medicare,3.7,Completed
+2024-08-20,Follow-up,Orthopedics,15,20,True,139.12,Private,,No-Show
+2024-01-18,Procedure,General Practice,21,45,False,436.79,Medicare,2.9,Completed
+2023-04-17,Procedure,Orthopedics,20,56,False,738.24,Medicare,3.9,Completed
+2024-03-21,Follow-up,General Practice,33,15,False,81.95,Medicaid,3.4,Completed
+2023-09-04,Consultation,General Practice,33,35,False,156.52,Private,3.2,Completed
+2024-09-24,Consultation,Dermatology,15,38,False,201.5,Medicare,4.4,Completed
+2023-07-14,Consultation,Cardiology,21,31,False,207.86,Medicaid,3.8,Completed
+2024-09-24,Consultation,Cardiology,21,37,False,243.58,Self-pay,4.2,Completed
+2024-05-24,Procedure,Orthopedics,20,65,False,721.03,Medicaid,4.4,Completed
+2023-04-10,Follow-up,Orthopedics,21,23,False,149.36,Private,4.4,Completed
+2024-07-09,Consultation,General Practice,36,20,False,172.97,Medicaid,3.3,Completed
+2024-06-11,Follow-up,Orthopedics,18,16,False,146.6,Medicaid,4.4,Completed
+2023-11-30,Consultation,General Practice,21,39,False,148.13,Private,3.7,Completed
+2023-04-27,Consultation,Orthopedics,16,53,False,253.38,Private,5.0,Completed
+2023-12-15,Procedure,General Practice,34,56,False,405.58,Medicaid,,Cancelled
+2024-03-20,Consultation,Mental Health,5,41,False,166.07,Private,4.5,Completed
+2023-04-06,Follow-up,Dermatology,5,30,False,124.71,Medicare,4.0,Completed
+2023-09-07,Follow-up,Cardiology,27,17,False,158.97,Private,3.7,Completed
+2024-05-28,Consultation,General Practice,40,48,False,172.12,Medicare,2.9,Completed
+2024-02-08,Consultation,Cardiology,9,49,False,204.87,Private,4.3,Completed
+2024-12-25,Consultation,Orthopedics,18,51,False,240.26,Medicare,3.8,Completed
+2023-06-08,Consultation,Orthopedics,14,40,False,205.03,Private,4.6,Completed
+2024-07-23,Procedure,Orthopedics,15,88,False,704.43,Medicaid,,Cancelled
+2023-11-08,Follow-up,Dermatology,17,15,False,122.45,Private,3.5,Completed
+2023-06-13,Follow-up,Cardiology,9,45,False,129.33,Private,4.1,Completed
+2024-11-26,Consultation,Orthopedics,9,44,False,247.47,Private,3.9,Completed
+2024-04-01,Procedure,Cardiology,17,76,True,668.25,Private,,No-Show
+2024-01-26,Consultation,Orthopedics,16,31,False,227.96,Self-pay,3.8,Completed
+2023-08-03,Procedure,Cardiology,10,70,False,771.6,Private,3.8,Completed
+2024-10-07,Consultation,Dermatology,21,52,False,197.88,Private,4.1,Completed
+2023-01-23,Procedure,General Practice,24,46,False,453.74,Medicaid,3.1,Completed
+2023-03-27,Consultation,General Practice,24,33,False,130.82,Private,3.1,Completed
+2023-05-11,Consultation,General Practice,30,15,False,139.19,Private,3.2,Completed
+2024-04-22,Follow-up,Mental Health,10,17,False,84.94,Medicare,4.8,Completed
+2023-03-16,Consultation,Cardiology,26,25,False,222.3,Private,4.4,Completed
+2024-08-06,Procedure,Cardiology,12,57,False,644.47,Medicaid,4.1,Completed
+2023-05-24,Follow-up,Cardiology,8,55,False,144.3,Medicare,4.2,Completed
+2024-05-09,Follow-up,Cardiology,17,40,False,151.14,Private,3.9,Completed
+2024-08-05,Consultation,Dermatology,15,17,False,170.82,Medicare,4.4,Completed
+2024-10-03,Follow-up,Mental Health,5,26,False,102.02,Medicaid,4.7,Completed
+2023-08-02,Consultation,Dermatology,5,44,False,212.64,Private,4.9,Completed
+2023-02-23,Procedure,Dermatology,16,55,False,494.4,Medicare,3.4,Completed
+2024-07-08,Follow-up,General Practice,21,22,False,97.96,Private,3.3,Completed
+2023-11-24,Follow-up,General Practice,16,23,False,80.75,Private,3.6,Completed
+2024-11-25,Procedure,Orthopedics,25,43,False,656.07,Medicare,3.9,Completed
+2023-05-18,Follow-up,Orthopedics,12,15,True,147.46,Private,,No-Show
+2024-02-23,Follow-up,General Practice,37,22,False,80.43,Private,2.5,Completed
+2023-03-29,Consultation,Orthopedics,18,36,False,213.77,Private,4.4,Completed
+2023-12-21,Follow-up,General Practice,30,15,False,104.1,Medicare,2.9,Completed
+2023-01-02,Consultation,General Practice,26,25,False,140.4,Medicare,2.6,Completed
+2024-07-02,Consultation,General Practice,6,33,False,163.23,Private,4.0,Completed
+2024-03-18,Procedure,Dermatology,5,70,False,564.38,Private,4.6,Completed
+2023-03-13,Consultation,Orthopedics,16,34,False,202.3,Medicaid,4.0,Completed
+2024-01-01,Follow-up,Cardiology,22,39,True,153.37,Private,,No-Show
+2023-11-09,Consultation,Dermatology,5,26,False,190.82,Private,4.4,Completed
+2024-05-07,Follow-up,Dermatology,14,22,True,102.06,Private,,No-Show
+2024-01-01,Procedure,Cardiology,11,55,False,767.13,Medicare,3.4,Completed
+2023-12-01,Consultation,Dermatology,16,42,False,188.54,Private,3.6,Completed
+2024-08-29,Follow-up,General Practice,27,15,False,100.37,Medicaid,3.0,Completed
+2024-01-15,Follow-up,Cardiology,25,43,True,130.89,Medicare,,No-Show
+2024-08-19,Procedure,General Practice,36,39,False,393.89,Private,2.9,Completed
+2024-10-09,Consultation,Cardiology,23,55,False,250.94,Medicare,4.1,Completed
+2024-09-11,Procedure,Cardiology,26,61,False,711.25,Private,4.2,Completed
+2024-11-28,Follow-up,General Practice,25,26,False,87.16,Private,3.4,Completed
+2024-05-24,Follow-up,Cardiology,42,36,False,153.57,Medicare,3.7,Completed
+2024-02-15,Consultation,Orthopedics,8,45,False,225.34,Private,4.3,Completed
+2024-01-23,Consultation,Orthopedics,13,26,False,214.78,Medicaid,4.1,Completed
+2023-05-30,Follow-up,General Practice,35,27,False,101.55,Medicare,2.6,Completed
+2024-08-28,Consultation,General Practice,34,57,True,158.36,Private,,No-Show
+2024-05-21,Follow-up,Cardiology,23,15,False,143.31,Self-pay,3.3,Completed
+2024-09-30,Follow-up,Dermatology,20,45,False,124.96,Private,4.0,Completed
+2024-05-28,Follow-up,Dermatology,5,24,False,117.05,Private,4.5,Completed
+2023-12-18,Consultation,General Practice,40,29,True,173.13,Private,,No-Show
+2023-08-04,Consultation,Orthopedics,16,24,False,246.47,Self-pay,4.1,Completed
+2024-12-20,Follow-up,Orthopedics,27,17,False,131.65,Private,3.5,Completed
+2024-06-19,Follow-up,Mental Health,5,15,False,97.96,Private,4.1,Completed
+2024-10-01,Procedure,General Practice,30,55,False,502.64,Private,2.9,Completed
+2024-03-04,Follow-up,Cardiology,15,16,False,159.95,Private,3.6,Completed
+2024-01-09,Follow-up,Orthopedics,22,15,False,124.76,Private,4.2,Completed
+2023-01-25,Consultation,General Practice,30,43,False,142.64,Medicare,3.1,Completed
+2023-02-21,Procedure,General Practice,30,57,True,424.02,Medicaid,,No-Show
+2024-05-30,Consultation,General Practice,19,27,False,170.44,Medicare,,Cancelled
+2023-06-14,Consultation,Cardiology,19,31,False,264.0,Private,3.8,Completed
+2023-03-01,Consultation,Orthopedics,16,39,True,245.41,Private,,No-Show
+2024-07-22,Consultation,Orthopedics,21,35,False,209.86,Private,3.3,Completed
+2024-03-28,Procedure,General Practice,35,51,False,493.32,Private,3.6,Completed
+2023-03-23,Consultation,Dermatology,16,36,False,162.51,Medicare,4.8,Completed
+2024-01-01,Consultation,Cardiology,9,34,False,228.58,Private,4.4,Completed
+2023-12-11,Consultation,Mental Health,12,21,True,156.05,Medicaid,,No-Show
+2023-01-03,Procedure,General Practice,45,56,True,446.67,Private,,No-Show
+2024-03-18,Procedure,Dermatology,28,66,False,555.93,Medicare,3.8,Completed
+2023-10-18,Procedure,Mental Health,5,66,False,429.45,Medicaid,4.2,Completed
+2024-10-03,Procedure,Dermatology,15,57,False,497.61,Medicare,4.0,Completed
+2023-03-27,Procedure,Dermatology,22,68,False,595.72,Medicaid,3.8,Completed
+2024-09-11,Follow-up,Cardiology,18,15,False,124.82,Medicaid,3.6,Completed
+2023-01-05,Consultation,Orthopedics,14,23,False,224.55,Medicare,4.6,Completed
+2024-07-11,Consultation,Orthopedics,15,31,False,204.19,Private,3.8,Completed
+2024-07-25,Consultation,Cardiology,24,52,False,221.33,Private,3.8,Completed
+2023-10-25,Follow-up,Mental Health,5,21,False,92.39,Medicaid,3.9,Completed
+2023-07-25,Consultation,General Practice,37,31,True,162.57,Private,,No-Show
+2023-04-14,Consultation,Cardiology,19,53,False,230.91,Medicaid,3.5,Completed
+2023-09-06,Follow-up,Mental Health,5,16,False,93.04,Private,4.0,Completed
+2024-05-03,Consultation,General Practice,36,61,False,168.21,Medicare,3.0,Completed
+2024-06-13,Consultation,General Practice,15,28,False,133.99,Private,3.9,Completed
+2023-05-12,Consultation,General Practice,23,22,False,165.23,Self-pay,3.5,Completed
+2023-01-09,Follow-up,Dermatology,10,18,False,106.78,Private,4.5,Completed
+2024-02-15,Consultation,Dermatology,32,32,False,212.7,Private,3.8,Completed
+2024-02-29,Consultation,General Practice,22,25,False,130.31,Medicaid,3.2,Completed
+2024-12-17,Consultation,Orthopedics,5,66,False,228.82,Private,4.6,Completed
+2024-07-10,Procedure,Orthopedics,13,63,False,673.84,Private,3.9,Completed
+2024-02-07,Consultation,Orthopedics,21,40,False,230.22,Medicaid,4.3,Completed
+2024-03-07,Consultation,Orthopedics,24,29,False,246.26,Medicaid,4.4,Completed
+2024-04-16,Procedure,Mental Health,30,53,False,413.55,Private,3.7,Completed
+2023-11-27,Procedure,General Practice,39,72,False,430.8,Medicare,2.7,Completed
+2024-05-09,Consultation,General Practice,29,15,False,169.7,Private,3.0,Completed
+2023-05-24,Consultation,Orthopedics,10,21,False,251.24,Private,3.6,Completed
+2024-08-29,Consultation,Cardiology,32,32,False,233.88,Medicare,3.5,Completed
+2024-09-20,Follow-up,Cardiology,17,36,False,145.49,Private,4.5,Completed
+2023-11-15,Consultation,General Practice,22,30,True,165.11,Private,,No-Show
+2023-11-30,Procedure,General Practice,24,64,False,479.08,Private,3.9,Completed
+2023-12-29,Procedure,Mental Health,5,60,False,522.49,Medicaid,4.3,Completed
+2024-08-20,Follow-up,General Practice,24,35,False,103.15,Medicare,4.2,Completed
+2023-05-09,Consultation,Orthopedics,16,15,False,219.22,Private,3.8,Completed
+2023-09-07,Procedure,Dermatology,20,68,False,570.53,Medicaid,4.0,Completed
+2024-03-25,Follow-up,General Practice,24,17,False,93.03,Medicaid,3.0,Completed
+2024-05-21,Procedure,General Practice,17,71,False,391.34,Private,3.2,Completed
+2023-08-04,Consultation,Cardiology,7,25,False,256.58,Self-pay,4.7,Completed
+2023-03-28,Follow-up,Cardiology,21,20,False,147.37,Private,4.1,Completed
+2024-01-05,Procedure,General Practice,28,58,False,383.39,Private,3.7,Completed
+2024-04-11,Procedure,Orthopedics,13,47,True,684.49,Private,,No-Show
+2024-07-15,Follow-up,General Practice,24,15,False,87.42,Private,3.6,Completed
+2023-01-03,Follow-up,General Practice,31,15,False,81.42,Medicare,2.8,Completed
+2023-01-13,Follow-up,General Practice,39,21,False,96.49,Medicare,2.5,Completed
+2023-10-10,Follow-up,General Practice,21,15,False,100.01,Medicaid,3.5,Completed
+2024-02-16,Procedure,Cardiology,20,56,True,679.51,Private,,No-Show
+2023-01-03,Follow-up,Mental Health,19,15,False,84.32,Private,4.2,Completed
+2023-05-08,Consultation,General Practice,21,30,False,156.53,Private,,Cancelled
+2023-11-02,Consultation,Cardiology,19,47,False,199.36,Private,4.3,Completed
+2023-07-24,Follow-up,Orthopedics,17,28,False,155.09,Medicaid,4.6,Completed
+2024-06-03,Procedure,Orthopedics,7,58,False,604.62,Medicare,3.8,Completed
+2023-01-26,Consultation,Orthopedics,19,37,False,250.04,Medicare,4.6,Completed
+2024-10-10,Consultation,General Practice,28,25,False,130.61,Medicare,4.0,Completed
+2023-05-04,Procedure,Orthopedics,22,79,False,571.46,Private,3.8,Completed
+2023-11-20,Follow-up,General Practice,18,44,False,92.14,Private,2.8,Completed
+2024-12-23,Consultation,Dermatology,15,36,True,203.66,Private,,No-Show
+2024-04-29,Consultation,General Practice,39,66,False,173.31,Medicaid,2.8,Completed
+2024-12-31,Follow-up,Orthopedics,34,15,True,138.37,Private,,No-Show
+2023-01-16,Consultation,Orthopedics,28,19,False,215.24,Private,,Cancelled
+2024-06-10,Follow-up,Orthopedics,8,15,False,118.71,Medicare,4.0,Completed
+2023-02-24,Follow-up,General Practice,31,17,False,95.85,Private,2.9,Completed
+2024-03-22,Follow-up,Orthopedics,14,47,False,132.55,Private,3.6,Completed
+2023-08-28,Follow-up,Orthopedics,20,16,False,154.38,Private,4.3,Completed
+2024-07-22,Consultation,Cardiology,13,24,True,232.6,Private,,No-Show
+2023-03-31,Consultation,General Practice,14,24,False,165.18,Private,4.4,Completed
+2024-10-17,Consultation,General Practice,25,48,False,168.98,Medicaid,,Cancelled
+2023-12-18,Consultation,General Practice,33,46,False,134.56,Medicare,3.5,Completed
+2024-01-16,Follow-up,Dermatology,17,15,False,113.45,Private,4.1,Completed
+2024-02-22,Consultation,Cardiology,23,15,False,261.64,Medicare,3.4,Completed
+2023-01-26,Follow-up,Orthopedics,19,15,False,134.38,Medicare,3.7,Completed
+2023-08-16,Consultation,Orthopedics,21,55,False,229.4,Medicare,3.4,Completed
+2024-06-03,Consultation,Orthopedics,22,43,False,250.18,Medicaid,4.3,Completed
+2024-12-03,Consultation,Orthopedics,15,35,True,206.95,Medicaid,,No-Show
+2024-12-19,Follow-up,Orthopedics,18,42,False,153.78,Private,4.4,Completed
+2024-01-26,Follow-up,Cardiology,33,43,False,138.58,Private,3.7,Completed
+2023-07-07,Procedure,General Practice,29,59,True,454.34,Private,,No-Show
+2023-12-15,Consultation,Dermatology,15,34,False,179.25,Private,3.7,Completed
+2023-12-05,Follow-up,Mental Health,12,15,False,99.81,Self-pay,4.5,Completed
+2023-10-18,Procedure,Cardiology,18,56,False,584.6,Medicare,,Cancelled
+2023-09-21,Consultation,Mental Health,8,17,False,140.87,Private,,Cancelled
+2024-09-26,Consultation,Mental Health,13,17,False,157.86,Medicaid,4.1,Completed
+2023-10-12,Consultation,Cardiology,15,15,False,222.41,Medicare,4.2,Completed
+2023-01-23,Consultation,Orthopedics,16,48,False,232.82,Private,4.7,Completed
+2024-06-11,Procedure,Orthopedics,11,41,False,559.89,Medicaid,4.3,Completed
+2024-05-01,Consultation,General Practice,28,58,False,137.75,Private,3.6,Completed
+2023-10-04,Follow-up,General Practice,32,15,False,85.35,Private,3.4,Completed
+2024-04-04,Procedure,Cardiology,18,80,False,663.93,Private,4.7,Completed
+2024-11-19,Consultation,Dermatology,5,30,True,174.65,Medicaid,,No-Show
+2024-11-06,Follow-up,General Practice,32,15,False,83.34,Private,3.4,Completed
+2024-07-31,Consultation,Dermatology,15,50,False,194.53,Private,4.2,Completed
+2024-03-01,Follow-up,Orthopedics,10,36,False,147.56,Medicare,3.9,Completed
+2023-01-20,Consultation,Orthopedics,24,24,False,237.51,Medicaid,3.4,Completed
+2024-01-10,Consultation,General Practice,16,31,False,142.73,Private,,Cancelled
+2024-08-21,Consultation,Cardiology,28,24,False,258.88,Private,3.3,Completed
+2024-09-10,Follow-up,General Practice,27,18,False,96.64,Medicaid,3.6,Completed
+2024-07-18,Follow-up,General Practice,9,21,False,96.72,Medicare,,Cancelled
+2024-12-20,Follow-up,General Practice,29,15,False,85.45,Private,3.6,Completed
+2024-01-12,Consultation,General Practice,24,15,False,141.17,Private,3.1,Completed
+2023-03-22,Procedure,General Practice,23,53,False,438.65,Private,3.0,Completed
+2023-12-29,Consultation,Orthopedics,12,43,False,207.3,Medicare,4.3,Completed
+2023-08-22,Procedure,Cardiology,18,57,False,714.14,Medicare,3.8,Completed
+2024-09-03,Follow-up,General Practice,24,16,False,88.13,Medicare,2.8,Completed
+2024-07-22,Follow-up,Dermatology,5,15,False,103.44,Private,5.0,Completed
+2023-11-07,Follow-up,Cardiology,30,15,False,128.05,Medicaid,3.4,Completed
+2023-10-11,Procedure,Mental Health,10,76,False,415.66,Private,4.0,Completed
+2023-04-27,Follow-up,Orthopedics,12,15,False,135.01,Medicaid,4.1,Completed
+2023-02-01,Consultation,General Practice,18,43,False,130.19,Private,3.9,Completed
+2023-08-17,Procedure,Mental Health,18,60,False,473.95,Private,3.4,Completed
+2023-06-26,Consultation,Dermatology,5,37,False,177.56,Private,4.9,Completed
+2023-07-13,Follow-up,Orthopedics,19,15,False,139.66,Private,3.7,Completed
+2024-12-31,Follow-up,Cardiology,15,15,False,161.68,Private,4.1,Completed
+2024-05-13,Procedure,Cardiology,15,59,False,750.84,Medicare,3.7,Completed
+2024-02-07,Follow-up,Cardiology,11,15,False,146.28,Medicaid,4.9,Completed
+2023-05-11,Consultation,Dermatology,10,38,False,184.35,Private,4.3,Completed
+2024-09-06,Follow-up,Cardiology,20,25,False,151.51,Private,3.6,Completed
+2024-04-16,Consultation,General Practice,29,61,False,172.42,Private,3.1,Completed
+2024-01-11,Follow-up,General Practice,21,23,False,93.21,Medicaid,3.4,Completed
+2023-12-07,Follow-up,General Practice,27,15,False,82.26,Private,3.3,Completed
+2024-02-08,Procedure,General Practice,35,73,True,477.28,Private,,No-Show
+2024-09-05,Consultation,Cardiology,6,32,False,199.64,Private,4.2,Completed
+2024-06-10,Consultation,Dermatology,14,59,False,204.01,Private,3.7,Completed
+2023-12-21,Follow-up,General Practice,20,37,True,81.86,Medicare,,No-Show
+2024-05-02,Consultation,General Practice,19,28,False,134.94,Private,3.7,Completed
+2024-11-11,Consultation,General Practice,30,43,False,165.93,Private,2.9,Completed
+2023-08-28,Consultation,Cardiology,15,27,False,247.3,Medicaid,4.3,Completed
+2024-10-21,Follow-up,Orthopedics,8,20,False,140.05,Private,4.3,Completed
+2024-03-19,Consultation,Cardiology,30,43,False,256.51,Medicare,3.6,Completed
+2023-05-16,Follow-up,Mental Health,19,33,False,109.44,Private,4.7,Completed
+2024-12-06,Procedure,Mental Health,5,70,False,462.03,Medicaid,3.8,Completed
+2024-05-16,Follow-up,Dermatology,5,20,True,132.7,Medicare,,No-Show
+2023-10-10,Consultation,Dermatology,19,64,False,180.92,Private,4.6,Completed
+2023-06-07,Consultation,Cardiology,17,30,True,210.94,Medicaid,,No-Show
+2024-10-31,Consultation,Orthopedics,30,15,False,248.35,Private,4.7,Completed
+2024-08-23,Follow-up,Cardiology,24,15,False,139.38,Private,3.8,Completed
+2023-02-02,Follow-up,Dermatology,17,37,False,128.48,Medicare,4.3,Completed
+2024-04-09,Consultation,General Practice,19,34,False,132.86,Medicare,3.7,Completed
+2023-03-24,Consultation,General Practice,31,36,False,135.15,Private,3.7,Completed
+2023-08-03,Consultation,General Practice,17,28,False,131.9,Private,3.6,Completed
+2024-02-20,Consultation,Orthopedics,28,29,True,231.89,Private,,No-Show
+2023-07-03,Procedure,Orthopedics,21,50,False,714.71,Medicare,4.2,Completed
+2024-01-10,Consultation,General Practice,21,40,False,148.53,Self-pay,3.6,Completed
+2023-11-10,Consultation,Cardiology,26,33,True,205.27,Private,,No-Show
+2024-02-29,Consultation,Cardiology,37,40,False,225.12,Self-pay,3.4,Completed
+2024-08-07,Consultation,Dermatology,13,39,False,180.38,Private,4.0,Completed
+2023-04-25,Consultation,General Practice,32,29,False,159.59,Medicare,2.7,Completed
+2024-08-05,Follow-up,General Practice,24,15,True,97.77,Medicaid,,No-Show
+2023-06-13,Consultation,Orthopedics,18,16,False,198.2,Medicare,3.9,Completed
+2023-01-25,Consultation,Orthopedics,5,71,False,219.61,Private,4.2,Completed
+2023-11-23,Follow-up,Dermatology,14,37,False,120.44,Private,4.3,Completed
+2023-08-09,Follow-up,Orthopedics,18,36,False,127.55,Private,,Cancelled
+2023-05-16,Consultation,Mental Health,26,26,False,157.48,Medicare,4.2,Completed
+2023-11-06,Procedure,General Practice,13,60,False,457.08,Self-pay,3.4,Completed
+2024-09-26,Consultation,Cardiology,17,25,False,227.18,Private,3.6,Completed
+2024-03-04,Procedure,Mental Health,22,44,False,402.13,Private,4.5,Completed
+2024-06-14,Procedure,General Practice,26,52,False,405.22,Private,3.2,Completed
+2023-04-20,Follow-up,Dermatology,13,35,False,125.07,Medicare,4.1,Completed
+2023-02-24,Consultation,General Practice,21,45,False,141.46,Medicare,3.3,Completed
+2023-09-04,Procedure,Cardiology,12,48,False,740.43,Private,3.8,Completed
+2024-07-19,Consultation,General Practice,13,31,True,151.48,Medicare,,No-Show
+2024-10-09,Consultation,Orthopedics,12,43,False,223.17,Private,3.9,Completed
+2023-03-16,Follow-up,Dermatology,7,15,False,124.87,Medicare,4.2,Completed
+2023-12-14,Follow-up,General Practice,28,20,False,90.23,Private,3.5,Completed
+2023-10-17,Procedure,General Practice,21,64,False,407.32,Private,3.5,Completed
+2024-06-27,Follow-up,General Practice,24,24,False,82.42,Medicare,3.9,Completed
+2023-05-31,Procedure,General Practice,24,63,False,464.8,Medicare,3.8,Completed
+2023-12-21,Follow-up,Cardiology,19,15,False,141.71,Private,4.7,Completed
+2024-09-12,Follow-up,Mental Health,7,15,False,108.19,Medicare,4.7,Completed
+2023-12-06,Follow-up,General Practice,19,15,True,92.31,Private,,No-Show
+2024-07-24,Procedure,Cardiology,20,41,False,658.72,Private,3.7,Completed
+2024-03-29,Procedure,Cardiology,28,58,False,635.21,Self-pay,4.1,Completed
+2024-03-12,Procedure,General Practice,29,69,False,402.14,Medicaid,3.0,Completed
+2023-07-10,Procedure,General Practice,23,43,False,485.82,Private,2.8,Completed
+2024-12-26,Follow-up,Orthopedics,17,23,False,120.8,Medicaid,,Cancelled
+2023-07-03,Consultation,Orthopedics,5,44,False,252.14,Medicare,3.8,Completed
+2024-11-11,Procedure,Dermatology,13,37,False,468.51,Private,4.4,Completed
+2024-12-24,Consultation,Cardiology,16,31,False,235.56,Private,3.6,Completed
+2024-01-09,Consultation,Orthopedics,10,54,False,195.19,Private,4.7,Completed
+2024-09-26,Follow-up,Dermatology,8,26,False,125.19,Medicare,4.8,Completed
+2024-06-06,Follow-up,Dermatology,11,15,False,105.5,Medicaid,4.5,Completed
+2024-06-24,Follow-up,Mental Health,19,27,False,100.96,Private,4.7,Completed
+2023-02-20,Consultation,General Practice,36,26,False,172.11,Private,3.1,Completed
+2023-04-11,Consultation,Mental Health,5,43,False,169.25,Private,5.0,Completed
+2023-02-21,Consultation,Dermatology,10,26,False,170.76,Private,4.6,Completed
+2023-01-23,Consultation,Dermatology,11,34,False,205.82,Medicaid,3.9,Completed
+2024-09-03,Consultation,Orthopedics,24,28,False,221.05,Private,3.9,Completed
+2023-05-09,Follow-up,Mental Health,13,20,False,84.54,Medicare,,Cancelled
+2023-01-05,Consultation,Cardiology,20,28,False,233.07,Private,3.8,Completed
+2024-11-15,Consultation,Orthopedics,22,32,False,246.09,Medicare,3.3,Completed
+2023-07-24,Consultation,Orthopedics,13,20,False,220.27,Medicare,4.3,Completed
+2024-08-20,Follow-up,Orthopedics,28,25,False,148.16,Medicare,,Cancelled
+2024-12-03,Procedure,Dermatology,14,62,False,579.67,Private,3.2,Completed
+2024-01-18,Consultation,General Practice,21,15,False,151.02,Medicare,3.2,Completed
+2024-11-07,Consultation,General Practice,26,46,True,144.89,Medicare,,No-Show
+2024-12-09,Follow-up,Cardiology,29,17,False,152.72,Medicare,3.4,Completed
+2023-04-17,Consultation,Orthopedics,14,36,False,216.15,Medicare,2.9,Completed
+2023-04-18,Procedure,Orthopedics,25,69,False,585.67,Medicaid,3.6,Completed
+2023-09-28,Procedure,Dermatology,9,63,False,516.66,Private,4.3,Completed
+2024-02-13,Follow-up,Dermatology,8,33,False,128.56,Private,4.1,Completed
+2024-07-29,Procedure,Orthopedics,23,56,False,607.76,Self-pay,4.1,Completed
+2023-05-15,Follow-up,General Practice,21,32,False,86.07,Private,3.9,Completed
+2023-05-22,Follow-up,Orthopedics,24,21,False,122.38,Medicaid,4.1,Completed
+2023-08-11,Consultation,Dermatology,17,41,False,163.78,Medicare,4.6,Completed
+2023-07-18,Consultation,Orthopedics,11,39,False,257.18,Medicaid,4.6,Completed
+2024-11-18,Consultation,Dermatology,14,49,False,191.09,Medicare,3.8,Completed
+2023-10-17,Follow-up,Mental Health,7,28,False,105.82,Medicaid,4.6,Completed
+2024-09-26,Follow-up,Cardiology,22,15,False,154.71,Medicare,4.3,Completed
+2023-02-10,Consultation,Orthopedics,33,27,False,215.03,Private,3.6,Completed
+2023-03-16,Follow-up,Cardiology,17,19,False,155.82,Private,3.6,Completed
+2024-08-09,Consultation,Cardiology,24,25,False,266.4,Private,4.0,Completed
+2023-07-03,Consultation,General Practice,28,22,False,164.1,Private,2.6,Completed
+2023-03-02,Consultation,General Practice,28,15,False,162.72,Self-pay,2.8,Completed
+2024-03-11,Follow-up,General Practice,26,15,False,91.6,Private,3.0,Completed
+2023-04-18,Follow-up,Orthopedics,11,43,False,151.58,Medicare,4.4,Completed
+2023-02-15,Follow-up,General Practice,30,15,False,81.97,Private,3.3,Completed
+2023-10-24,Consultation,Cardiology,17,57,False,251.53,Private,4.4,Completed
+2024-02-07,Follow-up,Cardiology,12,24,False,137.08,Self-pay,3.7,Completed
+2024-01-22,Procedure,Cardiology,28,59,False,689.38,Private,3.3,Completed
+2024-03-04,Consultation,Dermatology,15,16,False,211.28,Medicare,4.4,Completed
+2023-01-18,Follow-up,Cardiology,18,20,False,147.51,Private,3.6,Completed
+2023-08-01,Consultation,General Practice,38,57,False,131.22,Private,2.8,Completed
+2023-09-08,Consultation,Mental Health,5,53,False,172.82,Private,3.8,Completed
+2023-08-03,Follow-up,Dermatology,25,23,False,130.37,Medicare,4.1,Completed
+2024-02-13,Consultation,Orthopedics,10,21,True,234.59,Private,,No-Show
+2023-06-16,Follow-up,Dermatology,16,15,False,128.02,Medicaid,,Cancelled
+2024-04-05,Procedure,General Practice,23,49,False,485.13,Medicare,3.7,Completed
+2024-11-14,Consultation,Dermatology,7,50,False,209.49,Private,4.3,Completed
+2024-04-26,Consultation,General Practice,38,54,False,145.84,Private,2.3,Completed
+2023-10-11,Procedure,Cardiology,34,62,False,670.76,Private,3.3,Completed
+2023-11-14,Follow-up,General Practice,26,16,False,103.26,Medicare,,Cancelled
+2024-03-04,Procedure,Dermatology,17,78,False,613.22,Private,4.0,Completed
+2024-06-12,Consultation,General Practice,28,23,False,136.79,Private,3.4,Completed
+2023-08-09,Follow-up,General Practice,41,20,False,84.57,Private,3.7,Completed
+2023-01-30,Procedure,General Practice,11,65,False,421.69,Private,3.0,Completed
+2024-05-28,Consultation,Orthopedics,21,24,False,243.25,Medicare,3.8,Completed
+2024-04-29,Procedure,General Practice,22,52,False,491.72,Private,3.0,Completed
+2023-03-15,Follow-up,Cardiology,5,15,True,146.44,Private,,No-Show
+2024-04-03,Procedure,General Practice,25,77,False,390.72,Private,3.3,Completed
+2023-02-22,Consultation,Dermatology,29,57,False,177.87,Medicare,3.9,Completed
+2024-04-15,Follow-up,General Practice,22,21,False,103.51,Medicare,2.6,Completed
+2024-06-27,Consultation,Mental Health,18,31,False,154.59,Private,4.2,Completed
+2023-01-12,Procedure,General Practice,37,52,False,389.33,Private,2.6,Completed
+2024-06-14,Consultation,General Practice,27,35,True,143.91,Medicare,,No-Show
+2023-03-29,Consultation,General Practice,28,28,False,167.08,Private,3.7,Completed
+2023-07-13,Procedure,General Practice,14,58,False,441.14,Medicare,3.7,Completed
+2024-05-29,Consultation,Cardiology,14,39,True,210.94,Private,,No-Show
+2023-09-18,Follow-up,General Practice,35,15,True,88.24,Private,,No-Show
+2024-12-16,Consultation,Dermatology,15,32,False,214.72,Private,4.2,Completed
+2024-11-29,Follow-up,Cardiology,22,17,False,140.08,Private,4.1,Completed
+2024-12-23,Consultation,General Practice,29,31,False,150.32,Medicare,3.4,Completed
+2023-03-17,Follow-up,Cardiology,37,15,True,128.12,Private,,No-Show
+2023-05-10,Follow-up,General Practice,24,29,False,88.02,Private,,Cancelled
+2023-05-15,Consultation,General Practice,40,15,False,167.44,Private,2.5,Completed
+2024-03-04,Consultation,General Practice,29,53,False,166.14,Private,2.9,Completed
+2023-11-10,Consultation,General Practice,41,36,False,150.04,Medicare,3.3,Completed
+2024-06-28,Follow-up,General Practice,18,27,False,104.54,Medicare,3.8,Completed
+2023-07-26,Consultation,Mental Health,13,43,False,156.18,Self-pay,4.4,Completed
+2023-05-26,Consultation,Orthopedics,14,26,False,249.59,Private,4.7,Completed
+2024-04-18,Consultation,Mental Health,13,24,False,139.23,Private,4.5,Completed
+2024-03-27,Follow-up,General Practice,37,15,False,89.21,Private,3.0,Completed
+2024-05-20,Follow-up,Dermatology,18,17,False,127.8,Medicaid,3.7,Completed
+2023-08-16,Follow-up,Cardiology,29,28,False,160.22,Private,4.3,Completed
+2024-01-19,Procedure,General Practice,22,52,False,476.0,Private,3.7,Completed
+2024-11-08,Follow-up,Dermatology,8,27,False,121.39,Medicare,5.0,Completed
+2024-03-22,Procedure,General Practice,28,31,True,483.84,Private,,No-Show
+2024-11-12,Follow-up,Cardiology,19,15,False,151.9,Private,3.4,Completed
+2023-11-14,Consultation,Dermatology,13,49,False,175.06,Private,3.7,Completed
+2023-02-02,Procedure,Orthopedics,10,57,False,643.42,Medicare,3.1,Completed
+2024-07-09,Procedure,Cardiology,29,50,False,708.59,Medicare,4.1,Completed
+2023-12-04,Follow-up,Cardiology,17,15,True,146.77,Private,,No-Show
+2023-01-31,Consultation,General Practice,39,15,False,170.68,Medicare,3.1,Completed
+2023-04-12,Consultation,Mental Health,12,22,True,160.73,Private,,No-Show
+2023-08-17,Follow-up,General Practice,33,32,False,84.47,Private,3.1,Completed
+2023-05-19,Follow-up,General Practice,32,15,False,85.49,Medicaid,3.2,Completed
+2024-05-15,Follow-up,General Practice,21,15,False,103.21,Medicare,,Cancelled
+2024-03-22,Consultation,Mental Health,14,15,False,138.12,Medicaid,4.4,Completed
+2023-08-30,Follow-up,Dermatology,30,15,False,128.29,Medicare,4.2,Completed
+2023-03-03,Consultation,Cardiology,22,49,False,202.8,Private,3.8,Completed
+2023-02-27,Consultation,Mental Health,19,42,False,156.73,Private,4.7,Completed
+2024-11-21,Consultation,General Practice,33,19,False,166.78,Private,3.4,Completed
+2023-09-11,Procedure,Dermatology,17,52,True,530.87,Private,,No-Show
+2023-03-21,Follow-up,General Practice,29,19,False,102.54,Private,3.8,Completed
+2024-06-04,Procedure,Cardiology,24,45,False,594.94,Private,4.3,Completed
+2024-09-27,Follow-up,General Practice,34,15,False,93.82,Private,3.3,Completed
+2023-03-30,Procedure,Mental Health,5,58,False,479.58,Medicaid,4.6,Completed
+2024-11-21,Follow-up,Mental Health,13,26,True,110.61,Private,,No-Show
+2024-06-13,Procedure,Orthopedics,16,67,False,570.76,Private,3.4,Completed
+2023-07-04,Procedure,General Practice,24,70,False,420.6,Medicare,3.8,Completed
+2024-07-19,Follow-up,General Practice,38,15,False,97.97,Medicare,2.8,Completed
+2023-11-03,Consultation,Cardiology,14,35,False,267.69,Private,4.5,Completed
+2024-04-09,Follow-up,General Practice,16,16,False,103.27,Medicare,3.5,Completed
+2023-04-04,Consultation,General Practice,34,33,False,168.9,Medicare,2.6,Completed
+2023-06-28,Consultation,Orthopedics,6,32,False,226.16,Medicaid,4.1,Completed
+2024-07-18,Follow-up,Orthopedics,5,15,False,140.15,Private,4.7,Completed
+2024-08-12,Procedure,Mental Health,19,23,False,518.34,Private,4.1,Completed
+2023-01-09,Consultation,Cardiology,21,48,False,259.95,Medicare,3.6,Completed
+2023-06-06,Consultation,General Practice,31,38,False,166.87,Private,2.9,Completed
+2024-03-20,Procedure,Cardiology,16,42,False,740.61,Medicare,4.2,Completed
+2024-10-23,Consultation,General Practice,16,40,False,170.43,Medicare,4.2,Completed
+2024-05-07,Consultation,Orthopedics,8,29,False,198.93,Medicare,3.4,Completed
+2024-05-30,Follow-up,Dermatology,12,15,False,108.31,Self-pay,5.0,Completed
+2023-10-11,Procedure,General Practice,17,50,False,505.13,Medicare,3.5,Completed
+2023-02-09,Follow-up,General Practice,30,26,False,94.76,Medicaid,3.4,Completed
+2024-07-12,Follow-up,Dermatology,11,15,False,104.29,Medicare,4.1,Completed
+2024-08-07,Consultation,Cardiology,21,21,False,234.21,Private,3.9,Completed
+2023-11-21,Consultation,Cardiology,21,48,False,244.23,Medicare,4.0,Completed
+2024-01-05,Procedure,Orthopedics,21,57,False,714.0,Medicare,3.6,Completed
+2023-06-21,Procedure,Orthopedics,21,58,False,710.87,Self-pay,3.7,Completed
+2023-11-28,Consultation,General Practice,25,43,False,132.31,Private,3.8,Completed
+2023-06-27,Consultation,Dermatology,16,26,False,186.36,Private,3.6,Completed
+2023-11-03,Consultation,Mental Health,13,29,False,138.7,Medicaid,4.5,Completed
+2023-04-07,Consultation,General Practice,8,38,False,170.82,Private,,Cancelled
+2024-03-19,Consultation,General Practice,33,16,False,138.03,Medicare,2.8,Completed
+2023-06-30,Consultation,Orthopedics,19,37,False,233.43,Private,,Cancelled
+2024-06-13,Procedure,Orthopedics,22,50,False,663.77,Private,3.6,Completed
+2024-01-15,Consultation,Cardiology,9,45,False,242.81,Private,3.7,Completed
+2024-10-16,Follow-up,Cardiology,17,26,False,145.72,Medicaid,3.9,Completed
+2023-06-12,Follow-up,Orthopedics,9,24,False,146.39,Private,3.9,Completed
+2023-07-19,Procedure,Cardiology,25,40,False,701.58,Medicare,,Cancelled
+2023-06-27,Procedure,General Practice,16,58,False,387.67,Medicare,3.5,Completed
+2024-04-05,Consultation,General Practice,20,20,False,146.88,Medicare,3.5,Completed
+2023-03-20,Consultation,Cardiology,24,34,False,237.27,Private,3.8,Completed
+2024-05-16,Follow-up,Mental Health,6,15,False,93.81,Private,4.2,Completed
+2024-08-21,Consultation,Orthopedics,10,16,False,242.57,Medicaid,4.5,Completed
+2024-05-08,Consultation,Cardiology,27,49,False,221.22,Private,3.7,Completed
+2023-04-10,Consultation,Mental Health,19,39,False,177.97,Private,4.0,Completed
+2023-12-27,Procedure,Cardiology,25,55,False,604.36,Medicaid,4.4,Completed
+2024-01-25,Consultation,Cardiology,26,24,False,252.91,Private,3.7,Completed
+2023-10-13,Follow-up,General Practice,26,15,False,84.62,Private,3.7,Completed
