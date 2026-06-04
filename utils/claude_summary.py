@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 _MODEL      = "claude-sonnet-4-6"
-_MAX_TOKENS = 1500
+_MAX_TOKENS = 2000
 
 
 # ── Public functions ──────────────────────────────────────────────────────────
@@ -104,34 +104,49 @@ def _call_claude(payload: dict, api_key: str) -> str:
 
 def _build_prompt(payload: dict) -> str:
     """Construct the Claude prompt from aggregate payload only."""
-    return f"""You are a senior data analyst writing a concise executive summary for a client deliverable.
+    return f"""You are a senior data analyst and business consultant producing a client-ready analytics report identical in quality to a top consulting firm deliverable.
 
-Below is a dataset profile containing only aggregate statistics — no raw data or individual records.
+The dataset profile below contains only aggregate statistics — no raw data or individual records.
 
 Dataset context:
 {json.dumps(payload, indent=2, default=str)}
 
-Write a professional executive summary in markdown covering exactly these sections:
+Transform this data into a high-quality, actionable report using exactly the following markdown structure.
 
-## 1. Dataset Overview
-What this dataset appears to contain, the domain ({payload.get('domain')}), scope, and time range if available.
+RULES — follow strictly:
+- Never use generic phrases like "this dataset suggests", "further analysis is needed", or "it appears that"
+- Every insight must state the business impact and the action to take
+- Write in a confident, executive tone — the reader is a non-technical decision-maker
+- Only reference numbers that exist in the dataset context above — do not invent figures
+- Keep each section tight and direct — no filler sentences
 
-## 2. Data Quality Notes
-Completeness rate, missing value patterns, duplicate rows, and any concerns the client should be aware of.
+---
 
-## 3. KPI Highlights
-The most important metrics available in this dataset. Reference the kpi_names list and explain why each matters.
+## Executive Summary
+Write 3–4 sentences that sound like a consulting deliverable. Lead with the single most important finding. Communicate what matters most for decision-making, not what the data contains. Close with the highest-priority action.
 
-## 4. Business Insights
-2–3 meaningful patterns or observations you can infer from the aggregate summaries. Do not invent numbers not in the profile.
+## Key Insights
+Provide 3–5 high-impact bullet points. Each bullet must follow this structure: **[Finding]** — why it matters and what to do about it. Focus on risks, opportunities, and anomalies visible in the data.
 
-## 5. Recommended Next Steps
-Concrete, actionable recommendations for the client (data cleanup, dashboarding, deeper analysis, data enrichment).
+## Business Insights
+Rewrite the data patterns as business narratives. Be specific — reference actual column names, top values, and numeric summaries from the profile. Explain what each pattern means commercially and what decision it should drive. Minimum 3 insights.
 
-## 6. Assumptions & Limitations
-What you cannot determine from aggregate statistics alone. Be honest about limitations.
+## KPI Performance
+For each KPI in the kpi_names list, write one sentence: what it measures, what the data indicates about it, and whether it warrants immediate attention or is in good shape.
 
-Tone: professional but accessible. No jargon. Keep each section to 2–4 sentences."""
+## Data Quality Assessment
+State the completeness rate, flag any missing-value columns that could distort analysis, and call out duplicate rows if present. If data quality issues could affect business decisions, say so directly.
+
+## Recommended Actions
+List 3–5 numbered, concrete next steps. Each must be specific enough to assign to a person — no vague recommendations. Prioritise by business impact.
+
+## Assumptions & Limitations
+One short paragraph. Be direct about what cannot be determined from aggregate statistics alone and what additional data would unlock deeper insight.
+
+---
+
+Chart-Level Insights (include only if date_summary or categorical_summary data is present):
+For each major column or time dimension visible in the data, write one sentence describing the trend or distribution in plain business language and what action it suggests."""
 
 
 # ── Admin revision ───────────────────────────────────────────────────────────
@@ -155,7 +170,7 @@ def regenerate_summary(payload: dict, current_summary: str, instruction: str) ->
             + current_summary
         )
 
-    prompt = f"""You are a senior data analyst revising a client-facing executive summary.
+    prompt = f"""You are a senior data analyst and business consultant revising a client-facing analytics report.
 
 Dataset context (aggregate statistics only — no raw data):
 {json.dumps(payload, indent=2, default=str)}
@@ -166,9 +181,13 @@ Current summary:
 Admin revision instruction:
 {instruction}
 
-Rewrite the summary following the instruction exactly. Keep the same markdown section
-structure (##) unless the instruction says otherwise. Do not invent numbers or facts
-not present in the dataset context. Return only the revised summary — no preamble."""
+Rewrite the summary following the instruction exactly. Maintain consulting-firm quality throughout:
+- Every insight must be actionable and business-focused
+- Never use generic phrases like "further analysis is needed" or "this dataset suggests"
+- Keep the same markdown section structure (##) unless the instruction says otherwise
+- Do not invent numbers or facts not present in the dataset context
+
+Return only the revised summary — no preamble."""
 
     try:
         import anthropic
@@ -201,17 +220,18 @@ def generate_kpi_narrative(
         return ""
 
     kpi_lines = "\n".join(f"  {k}: {v}" for k, v in calculated_kpis.items())
-    prompt = f"""You are a senior business analyst interpreting KPI results for a {domain} business.
+    prompt = f"""You are a senior business consultant interpreting KPI results for a {domain} business. Your analysis will appear in a client-facing report.
 
 Calculated KPIs from {profile.get('row_count', 0):,} records:
 {kpi_lines}
 
-Write 3–5 sentences interpreting these results:
-- State whether each key metric is strong, acceptable, or concerning
-- Reference relevant industry benchmarks where you know them
-- End with the single most important recommendation
+Write 4–5 sentences of executive-quality analysis:
+- Open by naming the standout metric — is it a strength or a warning sign?
+- Reference specific industry benchmarks where you know them (e.g. SaaS churn <5%, retail margin >40%)
+- Identify any metric that demands immediate management attention and say why
+- Close with the single highest-priority action the business should take this quarter
 
-Rules: flowing prose only, no bullet points, no "Here is" opener. Be direct and specific."""
+Rules: flowing prose only, no bullet points, no "Here is" or "Based on" opener. Be direct, specific, and confident. Never use the phrase "further analysis is needed"."""
 
     try:
         import anthropic
