@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 _MODEL      = "claude-sonnet-4-6"
-_MAX_TOKENS = 2000
+_MAX_TOKENS = 6000
 
 
 # ── Public functions ──────────────────────────────────────────────────────────
@@ -141,10 +141,13 @@ def _build_prompt(payload: dict) -> str:
 _RULES = """
 RULES — follow strictly:
 - Never use generic phrases like "this dataset suggests", "further analysis is needed", or "it appears that"
-- Every insight must state the business impact and the action to take
-- Write in a confident, executive tone — the reader is a non-technical decision-maker
+- Avoid passive language — every sentence must have a clear subject taking a clear action
+- Every insight must answer two questions: "Why does this matter?" and "What should be done?"
+- Quantify business impact wherever possible — revenue loss, efficiency gap, cost exposure
+- Write in a confident, decisive, executive tone — the reader is a non-technical decision-maker paying for this insight
 - Only reference numbers that exist in the dataset context above — do not invent figures
 - Keep each section tight and direct — no filler sentences
+- End every report with a Callout Insights section (3 single-sentence statements: one on revenue loss or opportunity, one on an operational efficiency gap, one on customer/client experience risk)
 """
 
 _STANDARD_SECTIONS = """
@@ -171,6 +174,11 @@ One short paragraph. What cannot be determined from aggregate stats alone and wh
 
 ## Chart-Level Insights
 For each major column or time dimension in the data, one sentence: the trend or distribution in plain business language and what action it suggests.
+## Callout Insights
+Write exactly 3 single-sentence statements — punchy, specific, and strong enough to use as report preview bullets or marketing copy:
+- Revenue: one sentence on revenue loss or revenue opportunity (include a dollar figure or percentage if the data supports it)
+- Efficiency: one sentence on the most critical operational efficiency gap
+- Experience: one sentence on customer, patient, or client experience risk
 """
 
 
@@ -211,7 +219,14 @@ Flag missing sale_price entries and explain how they distort conversion rate cal
 What cannot be concluded without individual transaction records, buyer data, or market comparables.
 
 ## Chart-Level Insights
-For each distribution or time trend visible in the data, one sentence: what pattern exists, what anomaly stands out, and what action it suggests."""
+For each distribution or time trend visible in the data, one sentence: what pattern exists, what anomaly stands out, and what action it suggests.
+
+## Callout Insights
+Write exactly 3 single-sentence statements — punchy, specific, and strong enough to use as report preview bullets or marketing copy:
+- Revenue: one sentence on revenue loss or revenue opportunity (include a dollar figure or percentage if the data supports it)
+- Efficiency: one sentence on the most critical operational efficiency gap
+- Experience: one sentence on customer, patient, or client experience risk
+"""
 
 
 def _prompt_hospitality(ctx: str, payload: dict) -> str:
@@ -249,7 +264,14 @@ Completeness rate, any missing cost or revenue fields, and how gaps affect profi
 3–5 numbered steps specific to restaurant operations — scheduling, menu engineering, reservation policy, upsell training.
 
 ## Chart-Level Insights
-For each day-of-week, cost trend, or revenue distribution visible in the data, one sentence: pattern, anomaly, and action."""
+For each day-of-week, cost trend, or revenue distribution visible in the data, one sentence: pattern, anomaly, and action.
+
+## Callout Insights
+Write exactly 3 single-sentence statements — punchy, specific, and strong enough to use as report preview bullets or marketing copy:
+- Revenue: one sentence on revenue loss or revenue opportunity (include a dollar figure or percentage if the data supports it)
+- Efficiency: one sentence on the most critical operational efficiency gap
+- Experience: one sentence on customer, patient, or client experience risk
+"""
 
 
 def _prompt_saas(ctx: str, payload: dict) -> str:
@@ -287,7 +309,14 @@ Completeness, missing MRR or churn fields, and how gaps affect cohort and retent
 3–5 numbered steps specific to SaaS operations — churn intervention, pricing strategy, onboarding improvement, expansion plays.
 
 ## Chart-Level Insights
-For each plan distribution, churn trend, or MRR movement visible in the data, one sentence: pattern, anomaly, and action."""
+For each plan distribution, churn trend, or MRR movement visible in the data, one sentence: pattern, anomaly, and action.
+
+## Callout Insights
+Write exactly 3 single-sentence statements — punchy, specific, and strong enough to use as report preview bullets or marketing copy:
+- Revenue: one sentence on revenue loss or revenue opportunity (include a dollar figure or percentage if the data supports it)
+- Efficiency: one sentence on the most critical operational efficiency gap
+- Experience: one sentence on customer, patient, or client experience risk
+"""
 
 
 def _prompt_ecommerce(ctx: str, payload: dict) -> str:
@@ -325,7 +354,14 @@ Completeness, missing price or return fields, and how gaps affect net revenue an
 3–5 numbered steps specific to ecommerce — discount policy, returns reduction, category investment, fulfilment improvement.
 
 ## Chart-Level Insights
-For each category distribution, return trend, or revenue pattern visible in the data, one sentence: pattern, anomaly, and action."""
+For each category distribution, return trend, or revenue pattern visible in the data, one sentence: pattern, anomaly, and action.
+
+## Callout Insights
+Write exactly 3 single-sentence statements — punchy, specific, and strong enough to use as report preview bullets or marketing copy:
+- Revenue: one sentence on revenue loss or revenue opportunity (include a dollar figure or percentage if the data supports it)
+- Efficiency: one sentence on the most critical operational efficiency gap
+- Experience: one sentence on customer, patient, or client experience risk
+"""
 
 
 def _prompt_sales(ctx: str, payload: dict) -> str:
@@ -363,7 +399,14 @@ Completeness, missing deal or rep fields, and how gaps affect performance rankin
 3–5 numbered steps specific to sales operations — quota setting, coaching priorities, discount governance, territory rebalancing.
 
 ## Chart-Level Insights
-For each rep, region, product, or time trend visible in the data, one sentence: pattern, anomaly, and action."""
+For each rep, region, product, or time trend visible in the data, one sentence: pattern, anomaly, and action.
+
+## Callout Insights
+Write exactly 3 single-sentence statements — punchy, specific, and strong enough to use as report preview bullets or marketing copy:
+- Revenue: one sentence on revenue loss or revenue opportunity (include a dollar figure or percentage if the data supports it)
+- Efficiency: one sentence on the most critical operational efficiency gap
+- Experience: one sentence on customer, patient, or client experience risk
+"""
 
 
 def _prompt_hr(ctx: str, payload: dict) -> str:
@@ -401,7 +444,14 @@ Completeness, missing salary or performance fields, and how gaps affect equity a
 3–5 numbered steps specific to HR — compensation review, retention programmes, hiring priorities, performance management.
 
 ## Chart-Level Insights
-For each department, tenure band, or compensation distribution visible in the data, one sentence: pattern, anomaly, and action."""
+For each department, tenure band, or compensation distribution visible in the data, one sentence: pattern, anomaly, and action.
+
+## Callout Insights
+Write exactly 3 single-sentence statements — punchy, specific, and strong enough to use as report preview bullets or marketing copy:
+- Revenue: one sentence on revenue loss or revenue opportunity (include a dollar figure or percentage if the data supports it)
+- Efficiency: one sentence on the most critical operational efficiency gap
+- Experience: one sentence on customer, patient, or client experience risk
+"""
 
 
 def _prompt_healthcare(ctx: str, payload: dict) -> str:
@@ -439,7 +489,14 @@ Completeness, missing billing or satisfaction fields, and how gaps affect revenu
 3–5 numbered steps specific to clinical operations — no-show reduction, scheduling optimisation, wait time reduction, billing improvement.
 
 ## Chart-Level Insights
-For each department, appointment type, or time trend visible in the data, one sentence: pattern, anomaly, and action."""
+For each department, appointment type, or time trend visible in the data, one sentence: pattern, anomaly, and action.
+
+## Callout Insights
+Write exactly 3 single-sentence statements — punchy, specific, and strong enough to use as report preview bullets or marketing copy:
+- Revenue: one sentence on revenue loss or revenue opportunity (include a dollar figure or percentage if the data supports it)
+- Efficiency: one sentence on the most critical operational efficiency gap
+- Experience: one sentence on customer, patient, or client experience risk
+"""
 
 
 def _prompt_marketing(ctx: str, payload: dict) -> str:
@@ -477,7 +534,14 @@ Completeness, missing attribution or conversion fields, and how gaps affect ROI 
 3–5 numbered steps specific to marketing operations — budget reallocation, channel optimisation, creative testing, audience refinement.
 
 ## Chart-Level Insights
-For each channel, campaign, or conversion trend visible in the data, one sentence: pattern, anomaly, and action."""
+For each channel, campaign, or conversion trend visible in the data, one sentence: pattern, anomaly, and action.
+
+## Callout Insights
+Write exactly 3 single-sentence statements — punchy, specific, and strong enough to use as report preview bullets or marketing copy:
+- Revenue: one sentence on revenue loss or revenue opportunity (include a dollar figure or percentage if the data supports it)
+- Efficiency: one sentence on the most critical operational efficiency gap
+- Experience: one sentence on customer, patient, or client experience risk
+"""
 
 
 def _prompt_retail(ctx: str, payload: dict) -> str:
@@ -515,7 +579,14 @@ Completeness, missing cost or stock fields, and how gaps affect turnover and mar
 3–5 numbered steps specific to retail operations — reorder point adjustment, supplier diversification, markdown strategy, category rationalisation.
 
 ## Chart-Level Insights
-For each category, stock level, or turnover trend visible in the data, one sentence: pattern, anomaly, and action."""
+For each category, stock level, or turnover trend visible in the data, one sentence: pattern, anomaly, and action.
+
+## Callout Insights
+Write exactly 3 single-sentence statements — punchy, specific, and strong enough to use as report preview bullets or marketing copy:
+- Revenue: one sentence on revenue loss or revenue opportunity (include a dollar figure or percentage if the data supports it)
+- Efficiency: one sentence on the most critical operational efficiency gap
+- Experience: one sentence on customer, patient, or client experience risk
+"""
 
 
 def _prompt_general(ctx: str, payload: dict) -> str:
@@ -548,7 +619,14 @@ Completeness rate, missing-value columns, duplicate rows. State directly if any 
 One short paragraph. What cannot be determined from aggregate stats alone and what additional data would help.
 
 ## Chart-Level Insights
-For each major column or time dimension in the data, one sentence: trend or distribution in plain business language and the action it suggests."""
+For each major column or time dimension in the data, one sentence: trend or distribution in plain business language and the action it suggests.
+
+## Callout Insights
+Write exactly 3 single-sentence statements — punchy, specific, and strong enough to use as report preview bullets or marketing copy:
+- Revenue: one sentence on revenue loss or revenue opportunity (include a dollar figure or percentage if the data supports it)
+- Efficiency: one sentence on the most critical operational efficiency gap
+- Experience: one sentence on customer, patient, or client experience risk
+"""
 
 
 _DOMAIN_PROMPTS = {
