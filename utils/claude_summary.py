@@ -66,11 +66,37 @@ def generate_executive_summary(payload: dict) -> str:
     Falls back to a structured template if ANTHROPIC_API_KEY is not set.
     """
     api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
-
     if api_key:
         return _call_claude(payload, api_key)
-    else:
-        return _template_summary(payload)
+    return _template_summary(payload)
+
+
+def stream_executive_summary(payload: dict):
+    """
+    Stream the executive summary token-by-token.
+    Yields text chunks as Claude generates them.
+    Falls back to yielding the full template at once if no API key.
+    """
+    api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
+    if not api_key:
+        yield _template_summary(payload)
+        return
+
+    try:
+        import anthropic
+        client = anthropic.Anthropic(api_key=api_key)
+        with client.messages.stream(
+            model=_MODEL,
+            max_tokens=_MAX_TOKENS,
+            messages=[{"role": "user", "content": _build_prompt(payload)}],
+        ) as stream:
+            for text in stream.text_stream:
+                yield text
+    except ImportError:
+        yield _template_summary(payload)
+    except Exception as e:
+        yield f"**[Claude API error: {e}]**\n\n"
+        yield _template_summary(payload)
 
 
 # ── Claude integration ────────────────────────────────────────────────────────

@@ -12,7 +12,7 @@ from utils               import drive_client as dc
 from utils.profiler        import profile_dataframe
 from utils.kpi_detector    import detect_business_domain, recommend_kpis, calculate_available_kpis, get_kpi_status
 from utils.chart_generator import generate_dashboard_charts
-from utils.claude_summary  import build_safe_summary_payload, generate_executive_summary, generate_kpi_narrative
+from utils.claude_summary  import build_safe_summary_payload, generate_executive_summary, generate_kpi_narrative, stream_executive_summary
 from utils import storage
 
 
@@ -299,17 +299,10 @@ with tabs[5]:
     st.subheader("Executive Summary")
     if st.session_state.summary is None:
         if st.button("Generate Executive Summary", type="primary"):
-            _prog = st.progress(0, text="Preparing dataset profile…")
             payload = build_safe_summary_payload(prof, dataset_type, kpis, pii_report)
-            _prog.progress(20, text="Sending to Claude AI…")
-            _msg = st.info(
-                "Claude is writing your consulting-quality report. "
-                "This takes 30–60 seconds for large datasets — please wait."
-            )
-            st.session_state.summary = generate_executive_summary(payload)
-            _prog.progress(100, text="Report complete.")
-            _prog.empty()
-            _msg.empty()
+            st.caption("Claude is writing your report — text will appear below as it generates.")
+            full = st.write_stream(stream_executive_summary(payload))
+            st.session_state.summary = full
             st.rerun()
     if st.session_state.summary:
         st.markdown(st.session_state.summary)
