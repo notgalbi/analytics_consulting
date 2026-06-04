@@ -66,18 +66,19 @@ def save_processed_output(
 
     # metadata.json — lightweight index entry
     metadata = {
-        "dashboard_id":    dashboard_id,
-        "created_at":      datetime.now(timezone.utc).isoformat(),
-        "delivery_status": "Needs Review",
-        "review_notes":    "",
-        "domain":          extra.get("domain", "general"),
-        "filename":        extra.get("metadata", {}).get("filename", "Unknown"),
-        "row_count":       profile.get("row_count"),
-        "col_count":       profile.get("col_count"),
-        "pii_risk_level":  extra.get("pii_report", {}).get("risk_level", "none"),
-        "pii_column_count":extra.get("pii_report", {}).get("total_pii_columns", 0),
-        "file_metadata":   extra.get("metadata", {}),
-        "pii_report":      extra.get("pii_report", {}),
+        "dashboard_id":          dashboard_id,
+        "created_at":            datetime.now(timezone.utc).isoformat(),
+        "delivery_status":       "Needs Review",
+        "review_notes":          "",
+        "domain":                extra.get("domain", "general"),
+        "filename":              extra.get("metadata", {}).get("filename", "Unknown"),
+        "row_count":             profile.get("row_count"),
+        "col_count":             profile.get("col_count"),
+        "pii_risk_level":        extra.get("pii_report", {}).get("risk_level", "none"),
+        "pii_column_count":      extra.get("pii_report", {}).get("total_pii_columns", 0),
+        "file_metadata":         extra.get("metadata", {}),
+        "pii_report":            extra.get("pii_report", {}),
+        "client_drive_folder_id": extra.get("client_drive_folder_id"),
     }
     _write_json(out_dir / "metadata.json", metadata)
 

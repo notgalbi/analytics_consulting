@@ -11,6 +11,7 @@ import streamlit as st
 import plotly.io as pio
 import pandas as pd
 from utils import storage
+from utils import drive_client as dc
 from utils.claude_summary import build_safe_summary_payload, regenerate_summary, generate_kpi_narrative
 from utils.kpi_detector import get_kpi_status
 from utils.pdf_generator import generate_pdf
@@ -422,3 +423,36 @@ with tabs[5]:
         st.markdown("#### Client Dashboard Link")
         st.info("Share the **Client Dashboard** page with this ID — clients only see the summary, approved charts, and KPIs.")
         st.code(f"?dashboard_id={selected_id}", language=None)
+
+    # ── Google Drive PDF upload ───────────────────────────────────────────────
+    client_folder_id = (
+        meta.get("client_drive_folder_id")
+        or data.get("client_drive_folder_id")
+    )
+    if client_folder_id and dc.is_configured():
+        st.divider()
+        st.markdown("#### Upload Report to Client's Google Drive")
+        st.caption(
+            "This will generate the PDF report and upload it directly to the "
+            "client's shared Drive folder."
+        )
+        pdf_filename = f"{meta.get('filename', selected_id).rsplit('.', 1)[0]}_report.pdf"
+        st.code(f"Destination: {pdf_filename}", language=None)
+
+        if st.button("☁ Upload PDF to Client Drive", key="btn_drive_upload"):
+            with st.spinner("Generating PDF and uploading to Drive…"):
+                try:
+                    svc       = dc.get_service()
+                    pdf_bytes = generate_pdf(data)
+                    dc.upload_bytes(
+                        svc,
+                        client_folder_id,
+                        pdf_filename,
+                        pdf_bytes,
+                        mime_type="application/pdf",
+                    )
+                    st.success(
+                        f"PDF uploaded to the client's Drive folder as **{pdf_filename}**."
+                    )
+                except Exception as _e:
+                    st.error(f"Upload failed: {_e}")

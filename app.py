@@ -6,8 +6,9 @@ Handles file upload, the full analysis pipeline, and dashboard saving.
 import streamlit as st
 from pathlib import Path
 
-from utils.data_loader     import load_file
+from utils.data_loader     import load_file, load_from_bytes
 from utils.pii_detector    import sanitize_dataframe, generate_pii_report
+from utils               import drive_client as dc
 from utils.profiler        import profile_dataframe
 from utils.kpi_detector    import detect_business_domain, recommend_kpis, calculate_available_kpis, get_kpi_status
 from utils.chart_generator import generate_dashboard_charts
@@ -35,32 +36,96 @@ with st.sidebar:
 # ── Session state init ────────────────────────────────────────────────────────
 for key in ("df", "metadata", "profile_data", "pii", "sanitized_df",
             "dataset_type", "kpis", "figures", "summary", "dashboard_id",
-            "kpi_narrative"):
+            "kpi_narrative", "drive_content", "drive_filename",
+            "client_drive_folder_id"):
     if key not in st.session_state:
         st.session_state[key] = None
 
 
-# ── Upload ────────────────────────────────────────────────────────────────────
+# ── Step 1: File source ───────────────────────────────────────────────────────
 st.header("Step 1 — Upload your data file")
+
+# ── Google Drive import (only shown when Drive is configured) ─────────────────
+if dc.is_configured():
+    with st.expander("📁 Import from a client's Google Drive folder", expanded=False):
+        st.caption(
+            "Paste the URL of the Drive folder the client shared with your service account. "
+            "The app will list all CSV/Excel files so you can select one."
+        )
+        folder_url = st.text_input(
+            "Drive folder URL",
+            placeholder="https://drive.google.com/drive/folders/...",
+            key="drive_folder_url_input",
+        )
+        if folder_url:
+            folder_id = dc.folder_id_from_url(folder_url)
+            if not folder_id:
+                st.warning("Could not extract a folder ID from that URL.")
+            else:
+                try:
+                    _svc = dc.get_service()
+                    _files = dc.list_files(_svc, folder_id)
+                    _data_files = [
+                        f for f in _files
+                        if f["name"].lower().endswith((".csv", ".xlsx", ".xls"))
+                    ]
+                    if not _data_files:
+                        st.info("No CSV or Excel files found in that folder.")
+                    else:
+                        _sel_name = st.selectbox(
+                            "Select file to load",
+                            [f["name"] for f in _data_files],
+                            key="drive_file_sel",
+                        )
+                        if st.button("⬇ Load from Drive", key="btn_load_drive"):
+                            _sel = next(f for f in _data_files if f["name"] == _sel_name)
+                            with st.spinner(f"Downloading {_sel_name} from Drive…"):
+                                _content = dc.download_bytes(_svc, _sel["id"])
+                            st.session_state.drive_content          = _content
+                            st.session_state.drive_filename         = _sel_name
+                            st.session_state.client_drive_folder_id = folder_id
+                            st.rerun()
+                except Exception as _e:
+                    st.error(f"Drive error: {_e}")
+
+    if st.session_state.drive_content is not None:
+        st.success(f"Drive file loaded: **{st.session_state.drive_filename}**")
+        if st.button("✖ Clear Drive file", key="btn_clear_drive"):
+            for _k in ("drive_content", "drive_filename", "client_drive_folder_id"):
+                st.session_state[_k] = None
+            st.rerun()
+
 uploaded_file = st.file_uploader(
-    "Drag & drop or browse",
+    "Or drag & drop / browse from your computer",
     type=["csv", "xlsx", "xls"],
     help="Max size: 200 MB. PII columns will be detected and masked.",
 )
 
-if uploaded_file is None:
+# Determine active file source
+_drive_active = st.session_state.drive_content is not None
+
+if not _drive_active and uploaded_file is None:
     st.info("Upload a CSV or Excel file to get started.")
     st.stop()
 
-# Load once per upload (cache by filename + size)
-file_key = f"{uploaded_file.name}_{uploaded_file.size}"
+# Load once per file (keyed by name+size to avoid re-processing on rerun)
+if _drive_active:
+    file_key = f"drive_{st.session_state.drive_filename}_{len(st.session_state.drive_content)}"
+else:
+    file_key = f"{uploaded_file.name}_{uploaded_file.size}"
+
 if st.session_state.get("_file_key") != file_key:
     with st.spinner("Reading file…"):
         try:
-            df, metadata = load_file(uploaded_file)
+            if _drive_active:
+                df, metadata = load_from_bytes(
+                    st.session_state.drive_content,
+                    st.session_state.drive_filename,
+                )
+            else:
+                df, metadata = load_file(uploaded_file)
             st.session_state.df       = df
             st.session_state.metadata = metadata
-            # Reset downstream state
             for key in ("profile_data", "pii", "sanitized_df", "dataset_type",
                         "kpis", "figures", "summary", "dashboard_id"):
                 st.session_state[key] = None
@@ -246,12 +311,13 @@ else:
                     charts_metadata={"titles": list(figures.keys())},
                     summary=st.session_state.summary,
                     extra={
-                        "metadata":    metadata,
-                        "pii_report":  pii_report,
-                        "domain":      dataset_type,
-                        "figures":     {t: __import__("plotly.io", fromlist=["to_json"]).to_json(f)
-                                        for t, f in figures.items()},
-                        "sanitized_csv": sanitized_df.to_csv(index=False),
+                        "metadata":              metadata,
+                        "pii_report":            pii_report,
+                        "domain":                dataset_type,
+                        "figures":               {t: __import__("plotly.io", fromlist=["to_json"]).to_json(f)
+                                                  for t, f in figures.items()},
+                        "sanitized_csv":         sanitized_df.to_csv(index=False),
+                        "client_drive_folder_id": st.session_state.client_drive_folder_id,
                     },
                 )
                 st.session_state.dashboard_id = did
