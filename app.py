@@ -98,7 +98,7 @@ if dc.is_configured():
 uploaded_file = st.file_uploader(
     "Or drag & drop / browse from your computer",
     type=["csv", "xlsx", "xls"],
-    help="Max size: 200 MB. PII columns will be detected and masked.",
+    help="Max size: 1 GB. PII columns will be detected and masked.",
 )
 
 # Determine active file source
