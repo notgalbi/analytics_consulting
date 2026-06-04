@@ -250,31 +250,48 @@ def _charts_section(pdf: FPDF, charts: dict):
         return
 
     charts_added = 0
+    img_w = CONTENT_W - 6   # conservative width to avoid margin errors
+    img_x = MARGIN + 3
+
     for title, spec in charts.items():
         img_bytes = _fig_to_png(spec)
         if img_bytes is None:
             continue
 
-        _maybe_new_page(pdf, needed=110)
+        _maybe_new_page(pdf, needed=115)
         if charts_added == 0:
             _section_header(pdf, "Data Visualisations")
 
         # Chart title
         pdf.set_font("Helvetica", "B", 10)
         pdf.set_text_color(*DARK)
+        pdf.set_x(MARGIN)
         pdf.cell(0, 7, _safe(title), ln=True)
 
-        # Light border box around chart
-        chart_h = 85
+        chart_h = 88
+        y_before = pdf.get_y()
+
+        # Border box
         pdf.set_draw_color(*BORDER)
         pdf.set_line_width(0.3)
-        y_before = pdf.get_y()
         pdf.rect(MARGIN, y_before, CONTENT_W, chart_h, "D")
 
-        # Embed chart image
-        pdf.image(io.BytesIO(img_bytes), x=MARGIN + 1, y=y_before + 1,
-                  w=CONTENT_W - 2, h=chart_h - 2)
-        pdf.set_y(y_before + chart_h + 5)
+        # Embed chart — explicit x/y/w to avoid fpdf2 margin check errors
+        try:
+            pdf.image(
+                io.BytesIO(img_bytes),
+                x=img_x,
+                y=y_before + 2,
+                w=img_w,
+                h=chart_h - 4,
+            )
+        except Exception:
+            pdf.set_xy(MARGIN + 2, y_before + 35)
+            pdf.set_font("Helvetica", "I", 9)
+            pdf.set_text_color(*MUTED)
+            pdf.cell(0, 6, "[Chart could not be rendered]", ln=True)
+
+        pdf.set_y(y_before + chart_h + 6)
         charts_added += 1
 
 
@@ -433,11 +450,14 @@ def _maybe_new_page(pdf: FPDF, needed: float = 40):
 def _render_markdown(pdf: FPDF, text: str):
     """
     Lightweight markdown -> fpdf renderer.
-    Handles: ## / # headings, --- dividers, bullet lists, body paragraphs.
-    Strips inline ** bold ** and ` code ` markers.
-    All text is passed through _safe() before rendering.
+    Handles: ## / # headings, --- dividers, bullet lists, numbered lists,
+    markdown tables (| rows), body paragraphs.
+    Strips inline ** bold **, ` code `, and emoji markers.
     """
-    for line in text.split("\n"):
+    lines = text.split("\n")
+    i = 0
+    while i < len(lines):
+        line     = lines[i]
         stripped = line.strip()
         _maybe_new_page(pdf, needed=12)
 
@@ -445,6 +465,7 @@ def _render_markdown(pdf: FPDF, text: str):
             pdf.ln(2)
             pdf.set_font("Helvetica", "B", 11)
             pdf.set_text_color(*ACCENT)
+            pdf.set_x(MARGIN)
             pdf.cell(0, 7, _safe(_strip_inline(stripped[3:])), ln=True)
             pdf.set_text_color(*DARK)
 
@@ -452,8 +473,16 @@ def _render_markdown(pdf: FPDF, text: str):
             pdf.ln(3)
             pdf.set_font("Helvetica", "B", 13)
             pdf.set_text_color(*NAVY)
+            pdf.set_x(MARGIN)
             pdf.cell(0, 8, _safe(_strip_inline(stripped[2:])), ln=True)
             pdf.set_text_color(*DARK)
+
+        elif stripped.startswith("### "):
+            pdf.ln(1)
+            pdf.set_font("Helvetica", "B", 10)
+            pdf.set_text_color(*DARK)
+            pdf.set_x(MARGIN)
+            pdf.cell(0, 6, _safe(_strip_inline(stripped[4:])), ln=True)
 
         elif stripped == "---":
             pdf.set_draw_color(*BORDER)
@@ -461,7 +490,25 @@ def _render_markdown(pdf: FPDF, text: str):
             pdf.line(MARGIN, pdf.get_y() + 2, PAGE_W - MARGIN, pdf.get_y() + 2)
             pdf.ln(6)
 
-        elif stripped.startswith(("- ", "* ", "- ")):
+        elif stripped.startswith("|"):
+            # Markdown table row — skip separator rows (|---|) and render data rows
+            if re.match(r"^\|[-| :]+\|$", stripped):
+                i += 1
+                continue
+            cells = [c.strip() for c in stripped.strip("|").split("|")]
+            if cells:
+                col_w = CONTENT_W / max(len(cells), 1)
+                pdf.set_font("Helvetica", "", 8.5)
+                pdf.set_text_color(*DARK)
+                pdf.set_x(MARGIN)
+                for ci, cell in enumerate(cells):
+                    clean = _safe(_strip_inline(cell))[:40]
+                    shade = (i % 2 == 0)
+                    pdf.set_fill_color(*(LIGHT if shade else WHITE))
+                    pdf.cell(col_w, 6, f" {clean}", fill=True, border="B")
+                pdf.ln()
+
+        elif stripped.startswith(("- ", "* ")):
             pdf.set_font("Helvetica", "", 9.5)
             pdf.set_text_color(*DARK)
             clean = _safe(_strip_inline(stripped[2:]))
@@ -470,7 +517,7 @@ def _render_markdown(pdf: FPDF, text: str):
             pdf.set_x(MARGIN + 5)
             pdf.multi_cell(CONTENT_W - 5, 5.5, clean)
 
-        elif stripped and stripped[0].isdigit() and "." in stripped[:3]:
+        elif stripped and stripped[0].isdigit() and len(stripped) > 2 and stripped[1] in ".)" :
             pdf.set_font("Helvetica", "", 9.5)
             pdf.set_text_color(*DARK)
             clean = _safe(_strip_inline(stripped))
@@ -484,8 +531,11 @@ def _render_markdown(pdf: FPDF, text: str):
             pdf.set_font("Helvetica", "", 9.5)
             pdf.set_text_color(*DARK)
             clean = _safe(_strip_inline(stripped))
-            pdf.multi_cell(0, 5.5, clean)
+            pdf.set_x(MARGIN)
+            pdf.multi_cell(CONTENT_W, 5.5, clean)
             pdf.ln(1)
+
+        i += 1
 
 
 def _strip_inline(text: str) -> str:
@@ -527,25 +577,19 @@ def _fmt(val) -> str:
 
 
 def _safe(text: str) -> str:
-    """
-    Replace Unicode characters outside latin-1 with ASCII equivalents.
-    Required because fpdf2's built-in Helvetica uses latin-1 encoding.
-    """
+    """Replace Unicode/emoji outside latin-1 with ASCII equivalents."""
     _MAP = {
-        "—": "-",    # em dash
-        "–": "-",    # en dash
-        "‘": "'",    # left single quote
-        "’": "'",    # right single quote
-        "“": '"',    # left double quote
-        "”": '"',    # right double quote
-        "…": "...",  # ellipsis
-        "•": "-",    # bullet
-        "·": "-",    # middle dot
-        " ": " ",    # non-breaking space
-        "→": "->",   # right arrow
-        "←": "<-",   # left arrow
+        "—": "-", "–": "-",
+        "‘": "'", "’": "'",
+        "“": '"', "”": '"',
+        "…": "...", "•": "-", "·": "-",
+        " ": " ", "→": "->", "←": "<-",
+        "✅": "[OK]", "❌": "[X]", "⚠": "[!]",
+        "🔴": "[HIGH]", "🟡": "[MED]", "🟢": "[LOW]",
+        "✓": "OK", "✗": "X",
+        "≥": ">=", "≤": "<=", "≠": "!=",
+        "°": "deg", "×": "x", "÷": "/",
     }
     for char, rep in _MAP.items():
         text = text.replace(char, rep)
-    # Final fallback: drop anything still outside latin-1
     return text.encode("latin-1", errors="replace").decode("latin-1")
