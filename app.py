@@ -150,22 +150,37 @@ with tabs[0]:
 
 # ── Run pipeline (lazy, cached in session) ────────────────────────────────────
 if st.session_state.profile_data is None:
-    with st.spinner("Profiling data…"):
-        sanitized_df, sensitive_cols, pii_warning = sanitize_dataframe(df)
-        domain = detect_business_domain(df)
-        calculated_kpis = calculate_available_kpis(df, domain)
+    progress = st.progress(0, text="Starting analysis…")
 
-        st.session_state.profile_data  = profile_dataframe(df)
-        st.session_state.pii           = generate_pii_report(df)
-        st.session_state.sanitized_df  = sanitized_df
-        st.session_state.pii_warning   = pii_warning
-        st.session_state.dataset_type  = domain
-        st.session_state.kpis          = recommend_kpis(df, domain)
-        st.session_state.calc_kpis     = calculated_kpis
-        st.session_state.figures       = generate_dashboard_charts(sanitized_df, domain)
-        st.session_state.kpi_narrative = generate_kpi_narrative(
-            domain, calculated_kpis, st.session_state.profile_data
-        )
+    progress.progress(10, text="Scanning for sensitive data…")
+    sanitized_df, sensitive_cols, pii_warning = sanitize_dataframe(df)
+    pii_report_temp = generate_pii_report(df)
+
+    progress.progress(25, text="Profiling data quality…")
+    profile_temp = profile_dataframe(df)
+
+    progress.progress(40, text="Detecting business domain and KPIs…")
+    domain = detect_business_domain(df)
+    calculated_kpis = calculate_available_kpis(df, domain)
+
+    progress.progress(55, text="Generating charts…")
+    figures_temp = generate_dashboard_charts(sanitized_df, domain)
+
+    progress.progress(70, text="Running AI KPI analysis…")
+    narrative_temp = generate_kpi_narrative(domain, calculated_kpis, profile_temp)
+
+    progress.progress(100, text="Analysis complete.")
+    progress.empty()
+
+    st.session_state.profile_data  = profile_temp
+    st.session_state.pii           = pii_report_temp
+    st.session_state.sanitized_df  = sanitized_df
+    st.session_state.pii_warning   = pii_warning
+    st.session_state.dataset_type  = domain
+    st.session_state.kpis          = recommend_kpis(df, domain)
+    st.session_state.calc_kpis     = calculated_kpis
+    st.session_state.figures       = figures_temp
+    st.session_state.kpi_narrative = narrative_temp
 
 prof         = st.session_state.profile_data
 pii_report   = st.session_state.pii
@@ -284,9 +299,18 @@ with tabs[5]:
     st.subheader("Executive Summary")
     if st.session_state.summary is None:
         if st.button("Generate Executive Summary", type="primary"):
-            with st.spinner("Generating summary…"):
-                payload = build_safe_summary_payload(prof, dataset_type, kpis, pii_report)
-                st.session_state.summary = generate_executive_summary(payload)
+            _prog = st.progress(0, text="Preparing dataset profile…")
+            payload = build_safe_summary_payload(prof, dataset_type, kpis, pii_report)
+            _prog.progress(20, text="Sending to Claude AI…")
+            _msg = st.info(
+                "Claude is writing your consulting-quality report. "
+                "This takes 30–60 seconds for large datasets — please wait."
+            )
+            st.session_state.summary = generate_executive_summary(payload)
+            _prog.progress(100, text="Report complete.")
+            _prog.empty()
+            _msg.empty()
+            st.rerun()
     if st.session_state.summary:
         st.markdown(st.session_state.summary)
 
