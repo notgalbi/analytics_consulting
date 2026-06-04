@@ -191,6 +191,17 @@ def update_summary(dashboard_id: str, summary: str) -> bool:
     return True
 
 
+def update_kpi_narrative(dashboard_id: str, narrative: str) -> bool:
+    """Persist a Claude-generated KPI narrative inside kpis.json."""
+    path = _OUTPUTS_DIR / dashboard_id / "kpis.json"
+    if not path.parent.exists():
+        return False
+    kpis = _read_json(path)
+    kpis["narrative"] = narrative
+    _write_json(path, kpis)
+    return True
+
+
 def update_approved_charts(dashboard_id: str, approved_charts: list[str]) -> bool:
     """
     Persist the admin-selected chart titles to metadata.json.

@@ -9,9 +9,9 @@ from pathlib import Path
 from utils.data_loader     import load_file
 from utils.pii_detector    import sanitize_dataframe, generate_pii_report
 from utils.profiler        import profile_dataframe
-from utils.kpi_detector    import detect_business_domain, recommend_kpis, calculate_available_kpis
+from utils.kpi_detector    import detect_business_domain, recommend_kpis, calculate_available_kpis, get_kpi_status
 from utils.chart_generator import generate_dashboard_charts
-from utils.claude_summary  import build_safe_summary_payload, generate_executive_summary
+from utils.claude_summary  import build_safe_summary_payload, generate_executive_summary, generate_kpi_narrative
 from utils import storage
 
 
@@ -34,7 +34,8 @@ with st.sidebar:
 
 # ── Session state init ────────────────────────────────────────────────────────
 for key in ("df", "metadata", "profile_data", "pii", "sanitized_df",
-            "dataset_type", "kpis", "figures", "summary", "dashboard_id"):
+            "dataset_type", "kpis", "figures", "summary", "dashboard_id",
+            "kpi_narrative"):
     if key not in st.session_state:
         st.session_state[key] = None
 
@@ -89,14 +90,17 @@ if st.session_state.profile_data is None:
         domain = detect_business_domain(df)
         calculated_kpis = calculate_available_kpis(df, domain)
 
-        st.session_state.profile_data = profile_dataframe(df)
-        st.session_state.pii          = generate_pii_report(df)
-        st.session_state.sanitized_df = sanitized_df
-        st.session_state.pii_warning  = pii_warning
-        st.session_state.dataset_type = domain
-        st.session_state.kpis         = recommend_kpis(df, domain)
-        st.session_state.calc_kpis    = calculated_kpis
-        st.session_state.figures      = generate_dashboard_charts(sanitized_df, domain)
+        st.session_state.profile_data  = profile_dataframe(df)
+        st.session_state.pii           = generate_pii_report(df)
+        st.session_state.sanitized_df  = sanitized_df
+        st.session_state.pii_warning   = pii_warning
+        st.session_state.dataset_type  = domain
+        st.session_state.kpis          = recommend_kpis(df, domain)
+        st.session_state.calc_kpis     = calculated_kpis
+        st.session_state.figures       = generate_dashboard_charts(sanitized_df, domain)
+        st.session_state.kpi_narrative = generate_kpi_narrative(
+            domain, calculated_kpis, st.session_state.profile_data
+        )
 
 prof         = st.session_state.profile_data
 pii_report   = st.session_state.pii
@@ -130,10 +134,20 @@ with tabs[2]:
     st.subheader("Data Quality Report")
 
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Rows",        f"{prof['row_count']:,}")
-    col2.metric("Columns",     prof["col_count"])
-    col3.metric("Duplicates",  prof["duplicate_report"]["duplicate_rows"])
+    col1.metric("Rows",         f"{prof['row_count']:,}")
+    col2.metric("Columns",      prof["col_count"])
+    col3.metric("Duplicates",   prof["duplicate_report"]["duplicate_rows"])
     col4.metric("Completeness", f"{prof['completeness_pct']}%")
+
+    # Validation warnings
+    validation_warnings = prof.get("validation_warnings", [])
+    if validation_warnings:
+        st.divider()
+        st.markdown("#### ⚠️ Data Validation Warnings")
+        sev_icon = {"high": "🔴", "medium": "🟡", "low": "🔵"}
+        for w in validation_warnings:
+            icon = sev_icon.get(w["severity"], "⚪")
+            st.warning(f"{icon} **{w['column']}** — {w['issue']}: {w['detail']}")
 
     st.divider()
 
@@ -173,10 +187,18 @@ with tabs[3]:
     st.subheader(f"Detected Domain: **{dataset_type.title()}**")
 
     if calc_kpis:
-        st.markdown("#### Calculated KPIs (from your data)")
+        st.markdown("#### Calculated KPIs")
         cols = st.columns(min(len(calc_kpis), 3))
         for i, (name, value) in enumerate(calc_kpis.items()):
-            cols[i % 3].metric(name, value)
+            emoji, bench_note = get_kpi_status(dataset_type, name, value)
+            label = f"{emoji} {name}" if emoji else name
+            cols[i % 3].metric(label, value, help=bench_note or None)
+
+        narrative = st.session_state.kpi_narrative
+        if narrative:
+            st.divider()
+            st.markdown("#### 🤖 AI Analysis")
+            st.markdown(narrative)
         st.divider()
 
     st.markdown("#### All Recommended KPIs")
@@ -219,7 +241,8 @@ else:
                 storage.save_processed_output(
                     dashboard_id=did,
                     profile=prof,
-                    kpis={"recommended": kpis, "calculated": calc_kpis},
+                    kpis={"recommended": kpis, "calculated": calc_kpis,
+                          "narrative": st.session_state.kpi_narrative or ""},
                     charts_metadata={"titles": list(figures.keys())},
                     summary=st.session_state.summary,
                     extra={

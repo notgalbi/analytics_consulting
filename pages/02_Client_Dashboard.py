@@ -10,6 +10,7 @@ import streamlit as st
 import plotly.io as pio
 from utils import storage
 from utils.chart_generator import generate_kpi_cards
+from utils.kpi_detector import get_kpi_status
 
 st.set_page_config(
     page_title="Analytics Dashboard",
@@ -79,18 +80,24 @@ st.info(
 st.divider()
 
 # ── KPI cards ─────────────────────────────────────────────────────────────────
-kpis_data   = data.get("kpis", {})
-calculated  = kpis_data.get("calculated", {})
+kpis_data  = data.get("kpis", {})
+calculated = kpis_data.get("calculated", {})
+domain     = data.get("domain", "general")
+narrative  = kpis_data.get("narrative", "")
 
 if calculated:
     st.subheader("Key Performance Indicators")
-    kpi_fig = generate_kpi_cards(None, calculated)
-    if kpi_fig:
-        st.plotly_chart(kpi_fig, use_container_width=True)
-    else:
-        cols = st.columns(min(len(calculated), 4))
-        for i, (name, val) in enumerate(list(calculated.items())[:4]):
-            cols[i % 4].metric(name, val)
+    cols = st.columns(min(len(calculated), 3))
+    for i, (name, val) in enumerate(calculated.items()):
+        emoji, bench_note = get_kpi_status(domain, name, val)
+        label = f"{emoji} {name}" if emoji else name
+        cols[i % 3].metric(label, val, help=bench_note or None)
+
+    if narrative:
+        st.divider()
+        st.markdown("#### Analysis")
+        st.markdown(narrative)
+
     st.divider()
 
 # ── Data quality snapshot (safe summary only) ─────────────────────────────────

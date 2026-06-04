@@ -21,15 +21,16 @@ def profile_dataframe(df: pd.DataFrame) -> dict:
     Safe to pass directly to Claude — contains only aggregates, no raw rows.
     """
     return {
-        "row_count":           len(df),
-        "col_count":           len(df.columns),
-        "completeness_pct":    _completeness(df),
-        "column_summary":      get_column_summary(df),
-        "missing_values":      get_missing_value_report(df),
-        "duplicate_report":    get_duplicate_report(df),
-        "numeric_summary":     get_numeric_summary(df),
-        "categorical_summary": get_categorical_summary(df),
-        "date_summary":        get_date_summary(df),
+        "row_count":            len(df),
+        "col_count":            len(df.columns),
+        "completeness_pct":     _completeness(df),
+        "column_summary":       get_column_summary(df),
+        "missing_values":       get_missing_value_report(df),
+        "duplicate_report":     get_duplicate_report(df),
+        "numeric_summary":      get_numeric_summary(df),
+        "categorical_summary":  get_categorical_summary(df),
+        "date_summary":         get_date_summary(df),
+        "validation_warnings":  validate_dataframe(df),
     }
 
 
@@ -137,6 +138,83 @@ def get_date_summary(df: pd.DataFrame) -> dict[str, dict]:
             "span_days": (s.max() - s.min()).days,
         }
     return result
+
+
+def validate_dataframe(df: pd.DataFrame) -> list[dict]:
+    """
+    Check for common data quality issues beyond completeness.
+    Returns a list of {column, issue, severity, detail} dicts.
+    severity: "high" | "medium" | "low"
+    """
+    import re
+    warnings: list[dict] = []
+
+    _POSITIVE_KEYWORDS = (
+        "revenue", "price", "amount", "billing", "cost",
+        "salary", "mrr", "arr", "spend", "quantity", "units", "sqft",
+        "covers", "avg_check",
+    )
+    _PCT_KEYWORDS   = ("_pct", "_percent", "pct_", "percent_")
+    _RATING_KEYWORDS = ("satisfaction", "nps", "rating", "score", "performance")
+
+    for col in df.select_dtypes(include="number").columns:
+        col_l = col.lower()
+        s     = df[col].dropna()
+        if s.empty:
+            continue
+
+        if any(kw in col_l for kw in _POSITIVE_KEYWORDS) and (s < 0).sum() > 0:
+            warnings.append({
+                "column":   col, "issue": "Negative values", "severity": "high",
+                "detail":   f"{int((s < 0).sum())} negative value(s) in a column expected to be positive",
+            })
+
+        if any(kw in col_l for kw in _PCT_KEYWORDS) and (s.max() > 100 or s.min() < 0):
+            warnings.append({
+                "column":   col, "issue": "Percentage out of range", "severity": "medium",
+                "detail":   f"Values range {s.min():.1f}–{s.max():.1f}; expected 0–100",
+            })
+
+        if any(kw in col_l for kw in _RATING_KEYWORDS) and (s.max() > 10 or s.min() < 0):
+            warnings.append({
+                "column":   col, "issue": "Score out of expected range", "severity": "medium",
+                "detail":   f"Values range {s.min():.1f}–{s.max():.1f}; expected 0–10",
+            })
+
+        q1, q3 = s.quantile(0.25), s.quantile(0.75)
+        iqr = q3 - q1
+        if iqr > 0:
+            extreme = int(((s < q1 - 3 * iqr) | (s > q3 + 3 * iqr)).sum())
+            if extreme > 0 and extreme / len(s) > 0.01:
+                warnings.append({
+                    "column":   col, "issue": "Extreme outliers", "severity": "low",
+                    "detail":   f"{extreme} value(s) more than 3×IQR from the quartiles",
+                })
+
+    for col in df.columns:
+        if not any(kw in col.lower() for kw in ["date", "month", "time", "dt", "created", "updated"]):
+            continue
+        try:
+            parsed = pd.to_datetime(df[col], errors="coerce")
+            valid  = parsed.dropna()
+            if valid.empty:
+                continue
+            future = int((valid > pd.Timestamp.now()).sum())
+            if future > 0:
+                warnings.append({
+                    "column":   col, "issue": "Future dates", "severity": "medium",
+                    "detail":   f"{future} record(s) have dates in the future",
+                })
+            unparseable = int(parsed.isna().sum() - df[col].isna().sum())
+            if unparseable > 0:
+                warnings.append({
+                    "column":   col, "issue": "Unparseable dates", "severity": "low",
+                    "detail":   f"{unparseable} value(s) could not be parsed as dates",
+                })
+        except Exception:
+            pass
+
+    return warnings
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────

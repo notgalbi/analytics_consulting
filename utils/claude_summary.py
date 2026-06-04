@@ -186,6 +186,46 @@ not present in the dataset context. Return only the revised summary — no pream
         )
 
 
+def generate_kpi_narrative(
+    domain: str,
+    calculated_kpis: dict[str, str],
+    profile: dict,
+) -> str:
+    """
+    Generate a 3–5 sentence AI interpretation of the calculated KPIs.
+    Returns empty string gracefully when ANTHROPIC_API_KEY is not set.
+    Only aggregate stats and formatted KPI values are sent — no raw data.
+    """
+    api_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
+    if not api_key or not calculated_kpis:
+        return ""
+
+    kpi_lines = "\n".join(f"  {k}: {v}" for k, v in calculated_kpis.items())
+    prompt = f"""You are a senior business analyst interpreting KPI results for a {domain} business.
+
+Calculated KPIs from {profile.get('row_count', 0):,} records:
+{kpi_lines}
+
+Write 3–5 sentences interpreting these results:
+- State whether each key metric is strong, acceptable, or concerning
+- Reference relevant industry benchmarks where you know them
+- End with the single most important recommendation
+
+Rules: flowing prose only, no bullet points, no "Here is" opener. Be direct and specific."""
+
+    try:
+        import anthropic
+        client  = anthropic.Anthropic(api_key=api_key)
+        message = client.messages.create(
+            model=_MODEL,
+            max_tokens=350,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        return message.content[0].text
+    except Exception:
+        return ""
+
+
 # ── Template fallback ─────────────────────────────────────────────────────────
 
 def _template_summary(payload: dict) -> str:

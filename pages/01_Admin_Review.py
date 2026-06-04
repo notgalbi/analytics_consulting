@@ -11,7 +11,8 @@ import streamlit as st
 import plotly.io as pio
 import pandas as pd
 from utils import storage
-from utils.claude_summary import build_safe_summary_payload, regenerate_summary
+from utils.claude_summary import build_safe_summary_payload, regenerate_summary, generate_kpi_narrative
+from utils.kpi_detector import get_kpi_status
 from utils.pdf_generator import generate_pdf
 
 st.set_page_config(
@@ -210,6 +211,15 @@ with tabs[1]:
     dup = profile.get("duplicate_report", {})
     q4.metric("Duplicates",   dup.get("duplicate_rows", 0))
 
+    validation_warnings = profile.get("validation_warnings", [])
+    if validation_warnings:
+        st.divider()
+        st.markdown("#### ⚠️ Data Validation Warnings")
+        sev_icon = {"high": "🔴", "medium": "🟡", "low": "🔵"}
+        for w in validation_warnings:
+            icon = sev_icon.get(w["severity"], "⚪")
+            st.warning(f"{icon} **{w['column']}** — {w['issue']}: {w['detail']}")
+
     missing = profile.get("missing_values", {})
     if missing:
         st.markdown("#### Missing Values")
@@ -269,18 +279,51 @@ with tabs[2]:
 # Tab 4 — KPIs (read-only)
 # ══════════════════════════════════════════════════════════════════════════════
 with tabs[3]:
-    kpis_data   = data.get("kpis", {})
-    calculated  = kpis_data.get("calculated", {})
-    recommended = kpis_data.get("recommended", [])
+    kpis_data  = data.get("kpis", {})
+    calculated = kpis_data.get("calculated", {})
+    recommended= kpis_data.get("recommended", [])
+    narrative  = kpis_data.get("narrative", "")
+    domain     = data.get("domain", "general")
 
     if calculated:
         st.subheader("Calculated KPIs")
         cols = st.columns(min(len(calculated), 3))
         for i, (name, val) in enumerate(calculated.items()):
-            cols[i % 3].metric(name, val)
+            emoji, bench_note = get_kpi_status(domain, name, val)
+            label = f"{emoji} {name}" if emoji else name
+            cols[i % 3].metric(label, val, help=bench_note or None)
         st.divider()
 
+    # ── AI KPI Analysis ───────────────────────────────────────────────────────
+    st.subheader("🤖 AI KPI Analysis")
+    if narrative:
+        st.markdown(narrative)
+        col_regen, _ = st.columns([1, 3])
+        with col_regen:
+            if st.button("🔄 Regenerate", key="regen_narrative"):
+                with st.spinner("Claude is analysing KPIs…"):
+                    new = generate_kpi_narrative(domain, calculated, profile)
+                    if new:
+                        storage.update_kpi_narrative(selected_id, new)
+                        st.success("Updated.")
+                        st.rerun()
+                    else:
+                        st.warning("Add ANTHROPIC_API_KEY to .env to enable AI analysis.")
+    else:
+        col_gen, _ = st.columns([1, 3])
+        with col_gen:
+            if st.button("🤖 Generate AI Analysis", key="gen_narrative"):
+                with st.spinner("Claude is analysing KPIs…"):
+                    new = generate_kpi_narrative(domain, calculated, profile)
+                    if new:
+                        storage.update_kpi_narrative(selected_id, new)
+                        st.success("Generated.")
+                        st.rerun()
+                    else:
+                        st.warning("Add ANTHROPIC_API_KEY to .env to enable AI analysis.")
+
     if recommended:
+        st.divider()
         st.subheader("Recommended KPIs")
         for i, kpi in enumerate(recommended, 1):
             st.markdown(f"**{i}. {kpi['name']}** — {kpi['description']}")

@@ -8,6 +8,7 @@ Public API:
 """
 from __future__ import annotations
 
+import re
 import pandas as pd
 
 
@@ -241,6 +242,61 @@ _COLUMN_ALIASES: dict[str, list[str]] = {
     "duration_mins":         ["duration_mins", "duration", "appointment_duration", "session_length"],
 }
 
+# ── KPI benchmarks ─────────────────────────────────────────────────────────────
+# direction "higher" = higher is better; "lower" = lower is better.
+# good = green threshold; warn = yellow threshold; beyond warn = red.
+_KPI_BENCHMARKS: dict[str, dict[str, dict]] = {
+    "marketing": {
+        "CTR":             {"direction": "higher", "good": 3.0,  "warn": 1.0,  "note": "Industry avg 2–5%"},
+        "ROAS":            {"direction": "higher", "good": 4.0,  "warn": 2.0,  "note": "Target >4x"},
+        "Conversion Rate": {"direction": "higher", "good": 5.0,  "warn": 2.0,  "note": "Target >5%"},
+        "CPC":             {"direction": "lower",  "good": 2.0,  "warn": 5.0,  "note": "Lower is more efficient"},
+    },
+    "sales": {
+        "MoM Revenue Growth": {"direction": "higher", "good": 5.0,  "warn": 0.0,  "note": "Target >5% MoM"},
+        "Avg Discount":        {"direction": "lower",  "good": 10.0, "warn": 20.0, "note": "Keep below 20%"},
+    },
+    "saas": {
+        "Churn Rate":     {"direction": "lower",  "good": 2.0,  "warn": 5.0,  "note": "Target <2% monthly"},
+        "Avg NPS Score":  {"direction": "higher", "good": 7.0,  "warn": 5.0,  "note": "Promoters: 9–10, Passives: 7–8"},
+        "MoM MRR Growth": {"direction": "higher", "good": 10.0, "warn": 0.0,  "note": "Strong SaaS: >10% MoM"},
+    },
+    "ecommerce": {
+        "Return Rate":        {"direction": "lower",  "good": 10.0, "warn": 20.0, "note": "Target <10%"},
+        "Avg Discount":       {"direction": "lower",  "good": 15.0, "warn": 25.0, "note": "Keep below 25%"},
+        "Avg Days to Ship":   {"direction": "lower",  "good": 3.0,  "warn": 7.0,  "note": "Target <3 days"},
+        "MoM Revenue Growth": {"direction": "higher", "good": 5.0,  "warn": 0.0,  "note": "Target >5% MoM"},
+    },
+    "retail": {
+        "Avg Gross Margin":   {"direction": "higher", "good": 45.0, "warn": 30.0, "note": "Target 40–60%"},
+        "Stockout Rate":      {"direction": "lower",  "good": 5.0,  "warn": 10.0, "note": "Target <5%"},
+        "Inventory Turnover": {"direction": "higher", "good": 0.5,  "warn": 0.2,  "note": "Monthly: >0.5x healthy"},
+    },
+    "hr": {
+        "Attrition Rate":  {"direction": "lower",  "good": 10.0, "warn": 20.0, "note": "Target <10% annually"},
+        "Avg Performance": {"direction": "higher", "good": 3.5,  "warn": 2.5,  "note": "Target >3.5 / 5"},
+        "Remote %":        {"direction": "higher", "good": 30.0, "warn": 10.0, "note": "30–50% common benchmark"},
+    },
+    "real_estate": {
+        "Avg Days on Market": {"direction": "lower",  "good": 30.0, "warn": 60.0, "note": "Hot market <30 days"},
+        "List-to-Sale Ratio": {"direction": "higher", "good": 97.0, "warn": 93.0, "note": "Target >97%"},
+        "Sale Rate":          {"direction": "higher", "good": 85.0, "warn": 70.0, "note": "Target >85%"},
+    },
+    "hospitality": {
+        "Food Cost %":        {"direction": "lower",  "good": 32.0, "warn": 38.0, "note": "Target 28–35%"},
+        "Labor Cost %":       {"direction": "lower",  "good": 32.0, "warn": 38.0, "note": "Target 25–35%"},
+        "Prime Cost %":       {"direction": "lower",  "good": 60.0, "warn": 70.0, "note": "Target <65%; >70% is critical"},
+        "No-Show Rate":       {"direction": "lower",  "good": 5.0,  "warn": 10.0, "note": "Target <5%"},
+        "MoM Revenue Growth": {"direction": "higher", "good": 5.0,  "warn": 0.0,  "note": "Target >5% MoM"},
+    },
+    "healthcare": {
+        "No-Show Rate":         {"direction": "lower",  "good": 8.0,  "warn": 15.0, "note": "Target <8%"},
+        "Patient Satisfaction": {"direction": "higher", "good": 4.0,  "warn": 3.5,  "note": "Target >4.0 / 5"},
+        "Avg Wait Time":        {"direction": "lower",  "good": 15.0, "warn": 30.0, "note": "Target <15 min"},
+        "Completion Rate":      {"direction": "higher", "good": 90.0, "warn": 80.0, "note": "Target >90%"},
+    },
+}
+
 
 # ── Public functions ──────────────────────────────────────────────────────────
 
@@ -297,6 +353,43 @@ def calculate_available_kpis(df: pd.DataFrame, domain: str) -> dict[str, str]:
         results.update(calc_fn(df, resolved))
 
     return results
+
+
+def get_kpi_status(domain: str, name: str, value: str) -> tuple[str, str]:
+    """
+    Return (status_emoji, benchmark_note) for a calculated KPI.
+    Returns ("", "") when no benchmark is defined for this domain/KPI.
+    """
+    bench = _KPI_BENCHMARKS.get(domain, {}).get(name)
+    if not bench:
+        return "", ""
+    val = _parse_kpi_float(value)
+    if val is None:
+        return "", ""
+    direction = bench["direction"]
+    good, warn, note = bench["good"], bench["warn"], bench["note"]
+    if direction == "higher":
+        emoji = "🟢" if val >= good else ("🟡" if val >= warn else "🔴")
+    else:
+        emoji = "🟢" if val <= good else ("🟡" if val <= warn else "🔴")
+    return emoji, note
+
+
+def _parse_kpi_float(value: str) -> float | None:
+    """
+    Extract the leading numeric value from a formatted KPI string.
+    Returns None for currency values (starts with $) — benchmarks
+    don't apply to absolute dollar amounts.
+    """
+    if not isinstance(value, str):
+        return None
+    v = value.strip()
+    if v.startswith("$"):
+        return None
+    if " / " in v:          # e.g. "3.80 / 5" — take numerator
+        v = v.split(" / ")[0]
+    m = re.search(r"([+-]?\d+(?:\.\d+)?)", v)
+    return float(m.group(1)) if m else None
 
 
 # ── Domain calculators ────────────────────────────────────────────────────────
