@@ -45,6 +45,21 @@ for key in ("df", "metadata", "profile_data", "pii", "sanitized_df",
 # ── Step 1: File source ───────────────────────────────────────────────────────
 st.header("Step 1 — Upload your data file")
 
+# ── Sample dataset loader ─────────────────────────────────────────────────────
+_sample_dir = Path(__file__).parent / "sample_data"
+_sample_files = sorted(p.name for p in _sample_dir.glob("*.csv")) if _sample_dir.exists() else []
+
+if _sample_files:
+    with st.expander("🗂 Load a sample dataset (demo)", expanded=False):
+        _sel_sample = st.selectbox("Choose a sample file", ["— select —"] + _sample_files, key="sample_sel")
+        if _sel_sample != "— select —":
+            if st.button("⚡ Load sample", key="btn_load_sample"):
+                _content = (_sample_dir / _sel_sample).read_bytes()
+                st.session_state.drive_content          = _content
+                st.session_state.drive_filename         = _sel_sample
+                st.session_state.client_drive_folder_id = None
+                st.rerun()
+
 # ── Google Drive import (only shown when Drive is configured) ─────────────────
 if dc.is_configured():
     with st.expander("📁 Import from a client's Google Drive folder", expanded=False):
