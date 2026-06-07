@@ -432,15 +432,15 @@ def _impact_real_estate(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFind
     total_listings = _parse_kpi(calc_kpis.get("Total Listings", ""))
     sale_rate      = _parse_kpi(calc_kpis.get("Sale Rate", ""))
 
-    if dom is not None and dom > 45 and avg_sale_price and total_listings:
-        carrying_cost = (dom - 45) * total_listings * avg_sale_price * 0.0003
-        assumption = "Carrying cost at 0.03% per day per listing above 45-day benchmark"
+    if dom is not None and dom > 30 and avg_sale_price and total_listings:
+        carrying_cost = (dom - 30) * total_listings * avg_sale_price * 0.0003
+        assumption = "Carrying cost at 0.03% per day per listing above 30-day hot-market benchmark"
         assumptions.append(assumption)
         findings.append(_finding(
             title=f"Avg DOM {dom:.0f} Days — Seller Carrying Cost",
             category="Revenue at Risk",
             amount=carrying_cost,
-            description=f"Properties averaging {dom:.0f} days on market incur {dom - 45:.0f} extra days of carrying cost and signal pricing or marketing execution problems.",
+            description=f"Properties averaging {dom:.0f} days on market incur {dom - 30:.0f} extra days of carrying cost above the 30-day hot-market benchmark, signalling pricing or marketing execution gaps.",
             assumption=assumption,
             confidence=0.65,
             priority="High" if dom > 60 else "Medium",

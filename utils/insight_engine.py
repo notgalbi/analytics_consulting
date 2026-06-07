@@ -209,7 +209,7 @@ _BENCHMARKS: dict[str, dict] = {
     "hr":           {"Attrition Rate": (10, "lower"), "Avg Performance": (3.5, "higher")},
     "hospitality":  {"Food Cost %": (30, "lower"), "Labor Cost %": (32, "lower"), "Prime Cost %": (65, "lower"), "No-Show Rate": (5, "lower")},
     "restaurant":   {"Food Cost %": (30, "lower"), "Labor Cost %": (32, "lower"), "Prime Cost %": (65, "lower"), "No-Show Rate": (5, "lower")},
-    "real_estate":  {"Avg Days on Market": (45, "lower"), "List-to-Sale Ratio": (95, "higher"), "Sale Rate": (80, "higher")},
+    "real_estate":  {"Avg Days on Market": (30, "lower"), "List-to-Sale Ratio": (97, "higher"), "Sale Rate": (85, "higher")},
     "operations":   {},
     "sales":        {"MoM Revenue Growth": (0, "higher"), "Avg Discount": (15, "lower")},
     "finance":      {"Margin": (5, "higher")},
