@@ -36,7 +36,10 @@ def generate_dashboard_charts(
     figures: dict[str, go.Figure] = {}
 
     date_cols = _detect_date_columns(df)
-    num_cols  = [c for c in df.select_dtypes(include="number").columns if not _is_id_col(c)]
+    _raw_num  = [c for c in df.select_dtypes(include="number").columns if not _is_id_col(c)]
+    # Promote revenue/billing/amount columns to front so charts default to the right metric
+    primary   = _pick_primary_metric(_raw_num)
+    num_cols  = ([primary] + [c for c in _raw_num if c != primary]) if primary else _raw_num
     # Exclude date-like columns from categorical to avoid date bars / box plots
     cat_cols  = [
         c for c in df.select_dtypes(include=["object", "category", "string"]).columns
@@ -170,7 +173,12 @@ def generate_time_series_chart(
     if tmp.empty:
         return None
 
-    tmp = tmp.groupby(date_col)[numeric_cols[:3]].sum().reset_index()
+    # Aggregate to monthly on large datasets to avoid noise
+    if len(tmp) > 500:
+        tmp["_period"] = tmp[date_col].dt.to_period("M").dt.to_timestamp()
+        tmp = tmp.groupby("_period")[numeric_cols[:3]].sum().reset_index().rename(columns={"_period": date_col})
+    else:
+        tmp = tmp.groupby(date_col)[numeric_cols[:3]].sum().reset_index()
 
     fig = px.line(
         tmp,
@@ -380,6 +388,16 @@ def _histogram(df: pd.DataFrame, col: str) -> go.Figure | None:
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
+
+def _pick_primary_metric(num_cols: list[str]) -> str | None:
+    """Return the most business-relevant numeric column to use as the primary chart metric."""
+    revenue_kws = ["revenue", "sales", "amount", "billing", "mrr", "arr", "income", "price", "spend"]
+    for kw in revenue_kws:
+        for col in num_cols:
+            if kw in col.lower():
+                return col
+    return num_cols[0] if num_cols else None
+
 
 def _detect_date_columns(df: pd.DataFrame) -> list[str]:
     """Return column names that are or look like dates."""
