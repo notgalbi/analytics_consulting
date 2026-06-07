@@ -416,8 +416,15 @@ def _calc_marketing(df: pd.DataFrame, r: dict) -> dict:
             out["ROAS"] = f"{df[r['revenue']].sum() / total_spend:.2f}x"
     if r.get("conversions") and r.get("clicks"):
         total_clicks = df[r["clicks"]].sum()
+        total_conversions = df[r["conversions"]].sum()
         if total_clicks > 0:
-            out["Conversion Rate"] = f"{df[r['conversions']].sum() / total_clicks * 100:.2f}%"
+            out["Conversion Rate"] = f"{total_conversions / total_clicks * 100:.2f}%"
+        out["Total Conversions"] = f"{int(total_conversions):,}"
+    if r.get("spend") and r.get("impressions"):
+        total_impr = df[r["impressions"]].sum()
+        total_spend = df[r["spend"]].sum()
+        if total_impr > 0:
+            out["CPM"] = _fmt_currency(total_spend / total_impr * 1000)
     return out
 
 
