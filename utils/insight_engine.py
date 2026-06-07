@@ -106,11 +106,23 @@ def generate_insights(
     seen_titles = {i.title for i in insights}
     for v in violations:
         if v["name"] not in seen_titles and len(insights) < 7:
+            direction = v.get("direction", "higher")
+            if direction == "lower":
+                perf_label = "Exceeds Benchmark"
+                finding_text = (
+                    f"{v['name']} is {v['value']}, which exceeds the industry benchmark — "
+                    f"higher values mean worse performance here. {v['note']}"
+                )
+            else:
+                perf_label = "Below Benchmark"
+                finding_text = (
+                    f"{v['name']} is {v['value']}, which is below the industry benchmark. {v['note']}"
+                )
             insights.append(Insight(
-                title=f"{v['name']} Below Benchmark",
+                title=f"{v['name']} {perf_label}",
                 priority="Medium" if v["severity"] == "medium" else "High",
                 category=_kpi_category(domain, v["name"]),
-                finding=f"{v['name']} is {v['value']}, which is below the industry benchmark. {v['note']}",
+                finding=finding_text,
                 so_what=f"Benchmark violations in {v['name']} indicate underperformance relative to peers and acceptable operating standards.",
                 business_impact=f"Continued underperformance in {v['name']} will compound over time into larger operational and financial gaps.",
                 financial_impact="Not quantified",
