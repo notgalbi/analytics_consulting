@@ -22,6 +22,7 @@ class ImpactFinding:
     assumption: str
     confidence: float    # 0.0–1.0
     priority: str        # "High" | "Medium" | "Low"
+    source_kpi: str = ""  # KPI name this finding is derived from, used for insight dedup
 
 
 @dataclass
@@ -126,6 +127,7 @@ def _finding(
     assumption: str,
     confidence: float = 0.7,
     priority: str = "Medium",
+    source_kpi: str = "",
 ) -> ImpactFinding:
     return ImpactFinding(
         title=title,
@@ -136,6 +138,7 @@ def _finding(
         assumption=assumption,
         confidence=confidence,
         priority=priority,
+        source_kpi=source_kpi,
     )
 
 
@@ -189,6 +192,7 @@ def _impact_healthcare(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFindi
             assumption=assumption,
             confidence=0.75,
             priority="High" if no_show_rate > 15 else "Medium",
+            source_kpi="No-Show Rate",
         ))
 
     if wait_time is not None and wait_time > 30:
@@ -200,6 +204,7 @@ def _impact_healthcare(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFindi
             assumption="Patient retention impact not quantifiable without longitudinal tracking data",
             confidence=0.6,
             priority="Medium",
+            source_kpi="Avg Wait Time",
         ))
 
     return findings, assumptions
@@ -227,6 +232,7 @@ def _impact_hospitality(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFind
             assumption=assumption,
             confidence=0.8,
             priority="High" if food_cost_pct > 38 else "Medium",
+            source_kpi="Food Cost %",
         ))
 
     if no_show_rate is not None and no_show_rate > 5 and avg_check and avg_daily_covers and row_count:
@@ -243,6 +249,7 @@ def _impact_hospitality(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFind
             assumption=assumption,
             confidence=0.65,
             priority="High" if no_show_rate > 10 else "Medium",
+            source_kpi="No-Show Rate",
         ))
 
     return findings, assumptions
@@ -269,6 +276,7 @@ def _impact_marketing(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFindin
                 assumption=assumption,
                 confidence=0.7,
                 priority="High" if roas < 2.0 else "Medium",
+                source_kpi="ROAS",
             ))
         elif roas < target_roas:
             opportunity = (target_roas - roas) * total_spend
@@ -282,6 +290,7 @@ def _impact_marketing(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFindin
                 assumption=assumption,
                 confidence=0.6,
                 priority="Medium",
+                source_kpi="ROAS",
             ))
 
     if conversion_rate is not None and conversion_rate < 5.0 and total_spend:
@@ -300,6 +309,7 @@ def _impact_marketing(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFindin
                 assumption=assumption,
                 confidence=0.6,
                 priority="High" if conversion_rate < 2.0 else "Medium",
+                source_kpi="Conversion Rate",
             ))
 
     return findings, assumptions
@@ -325,6 +335,7 @@ def _impact_saas(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFinding], l
             assumption=assumption,
             confidence=0.8,
             priority="High" if churn_rate > 5 else "Medium",
+            source_kpi="Churn Rate",
         ))
 
     if nps is not None and nps < 5:
@@ -336,6 +347,7 @@ def _impact_saas(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFinding], l
             assumption="Revenue impact not quantifiable without expansion/contraction MRR data",
             confidence=0.65,
             priority="High" if nps < 3 else "Medium",
+            source_kpi="Avg NPS Score",
         ))
 
     return findings, assumptions
@@ -360,6 +372,7 @@ def _impact_sales(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFinding], 
             assumption=assumption,
             confidence=0.75,
             priority="High" if avg_discount > 25 else "Medium",
+            source_kpi="Avg Discount",
         ))
 
     if mom_growth is not None and mom_growth < 0:
@@ -371,6 +384,7 @@ def _impact_sales(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFinding], 
             assumption="Run-rate impact depends on trajectory — requires multi-month trend analysis",
             confidence=0.8,
             priority="High",
+            source_kpi="MoM Revenue Growth",
         ))
 
     return findings, assumptions
@@ -395,6 +409,7 @@ def _impact_retail(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFinding],
             assumption=assumption,
             confidence=0.7,
             priority="High" if stockout_rate > 10 else "Medium",
+            source_kpi="Stockout Rate",
         ))
 
     if avg_margin is not None and avg_margin < 30:
@@ -406,6 +421,7 @@ def _impact_retail(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFinding],
             assumption="Full dollar impact requires product-level P&L not available in this dataset",
             confidence=0.7,
             priority="High",
+            source_kpi="Avg Gross Margin",
         ))
 
     return findings, assumptions
@@ -430,6 +446,7 @@ def _impact_ecommerce(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFindin
             assumption=assumption,
             confidence=0.75,
             priority="High" if return_rate > 20 else "Medium",
+            source_kpi="Return Rate",
         ))
 
     if avg_days_ship is not None and avg_days_ship > 3 and total_revenue:
@@ -445,6 +462,7 @@ def _impact_ecommerce(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFindin
             assumption=assumption,
             confidence=0.65,
             priority="High" if avg_days_ship > 7 else "Medium",
+            source_kpi="Avg Days to Ship",
         ))
 
     return findings, assumptions
@@ -470,6 +488,7 @@ def _impact_real_estate(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFind
             assumption=assumption,
             confidence=0.65,
             priority="High" if dom > 60 else "Medium",
+            source_kpi="Avg Days on Market",
         ))
 
     if sale_rate is not None and sale_rate < 75 and avg_sale_price and total_listings:
@@ -484,6 +503,7 @@ def _impact_real_estate(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFind
             assumption=assumption,
             confidence=0.6,
             priority="High" if sale_rate < 60 else "Medium",
+            source_kpi="Sale Rate",
         ))
 
     return findings, assumptions
@@ -510,6 +530,7 @@ def _impact_hr(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFinding], lis
             assumption=assumption,
             confidence=0.75,
             priority="High" if attrition_rate > 20 else "Medium",
+            source_kpi="Attrition Rate",
         ))
 
     return findings, assumptions
@@ -533,6 +554,7 @@ def _impact_operations(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFindi
                 assumption="Dollar impact requires per-ticket revenue or SLA penalty contract data",
                 confidence=0.7,
                 priority="High" if backlog_pct > 40 else "Medium",
+                source_kpi="Open Tickets",
             ))
 
     if avg_resolution is not None and avg_resolution > 48:
@@ -544,6 +566,7 @@ def _impact_operations(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFindi
             assumption="Penalty amounts not calculable without contract terms data",
             confidence=0.65,
             priority="High" if avg_resolution > 96 else "Medium",
+            source_kpi="Avg Resolution Time",
         ))
 
     return findings, assumptions

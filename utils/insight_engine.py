@@ -47,6 +47,13 @@ def generate_insights(
     """
     insights: list[Insight] = []
 
+    # KPIs covered by financial findings that will actually become insights (quantified OR High priority).
+    # Medium-priority unquantified findings don't block operational insights — they won't become insights either.
+    fin_kpi_coverage: set[str] = {
+        f.source_kpi for f in financial_impact.findings
+        if f.source_kpi and ((f.amount is not None and f.amount > 0) or f.priority == "High")
+    }
+
     # 1. Financial impact findings → insights
     for f in financial_impact.findings:
         if f.amount is not None and f.amount > 0:
@@ -81,10 +88,16 @@ def generate_insights(
             ))
 
     # 2. Operational impact findings → insights (High + Medium)
+    ops_kpi_coverage: set[str] = set()
     for op in operational_impact.findings:
         if op.severity in ("High", "Medium"):
+            # Skip if financial engine already quantified this same KPI
+            if op.metric_name and op.metric_name in fin_kpi_coverage:
+                continue
             cat = _ops_category(op.category)
             priority = "High" if op.severity == "High" else "Medium"
+            if op.metric_name:
+                ops_kpi_coverage.add(op.metric_name)
             insights.append(Insight(
                 title=op.title,
                 priority=priority,
@@ -105,8 +118,9 @@ def generate_insights(
     # 3. KPI benchmark violations not already captured
     violations = _find_benchmark_violations(domain, calc_kpis)
     seen_titles = {i.title for i in insights}
+    all_kpi_coverage = fin_kpi_coverage | ops_kpi_coverage
     for v in violations:
-        if v["name"] not in seen_titles and len(insights) < 7:
+        if v["name"] not in seen_titles and v["name"] not in all_kpi_coverage and len(insights) < 7:
             direction = v.get("direction", "higher")
             if direction == "lower":
                 perf_label = "Exceeds Benchmark"
