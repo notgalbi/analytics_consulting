@@ -255,30 +255,52 @@ def _impact_marketing(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFindin
     total_spend     = _parse_kpi(calc_kpis.get("Total Spend", ""))
     conversion_rate = _parse_kpi(calc_kpis.get("Conversion Rate", ""))
 
-    if roas is not None and roas < 4.0 and total_spend:
-        opportunity = (4.0 - roas) * total_spend
-        assumption = f"4x ROAS as industry target; current ROAS {roas:.2f}x"
-        assumptions.append(assumption)
-        findings.append(_finding(
-            title=f"ROAS {roas:.2f}x Below 4x Target",
-            category="Revenue Opportunity",
-            amount=opportunity,
-            description=f"Every $1 in spend generates ${roas:.2f} in revenue vs the $4.00 target — closing this gap is pure revenue expansion at the same budget level.",
-            assumption=assumption,
-            confidence=0.7,
-            priority="High" if roas < 2.0 else "Medium",
-        ))
+    if roas is not None and total_spend:
+        target_roas = 5.5
+        if roas < 4.0:
+            opportunity = (4.0 - roas) * total_spend
+            assumption = f"4x ROAS as minimum viable target; current ROAS {roas:.2f}x"
+            assumptions.append(assumption)
+            findings.append(_finding(
+                title=f"ROAS {roas:.2f}x Below 4x Target",
+                category="Revenue Opportunity",
+                amount=opportunity,
+                description=f"Every $1 in spend generates ${roas:.2f} in revenue vs the $4.00 target — closing this gap is pure revenue expansion at the same budget level.",
+                assumption=assumption,
+                confidence=0.7,
+                priority="High" if roas < 2.0 else "Medium",
+            ))
+        elif roas < target_roas:
+            opportunity = (target_roas - roas) * total_spend
+            assumption = f"5.5x ROAS as optimisation target; current ROAS {roas:.2f}x"
+            assumptions.append(assumption)
+            findings.append(_finding(
+                title=f"ROAS {roas:.2f}x — Optimisation Opportunity to {target_roas}x",
+                category="Revenue Opportunity",
+                amount=opportunity,
+                description=f"ROAS of {roas:.2f}x exceeds the 4x floor but sits below the {target_roas}x top-quartile target. Budget reallocation from low-converting campaign-days to top-performers closes this gap.",
+                assumption=assumption,
+                confidence=0.6,
+                priority="Medium",
+            ))
 
-    if conversion_rate is not None and conversion_rate < 2.0:
-        findings.append(_finding(
-            title=f"Conversion Rate {conversion_rate:.2f}% Below 2% Benchmark",
-            category="Revenue Opportunity",
-            amount=None,
-            description=f"Conversion rate of {conversion_rate:.2f}% indicates funnel leakage costing attributable revenue on every campaign impression.",
-            assumption="Dollar impact requires total traffic volume and AOV — not available in current dataset",
-            confidence=0.65,
-            priority="Medium",
-        ))
+    if conversion_rate is not None and conversion_rate < 5.0 and total_spend:
+        total_revenue = _parse_kpi(calc_kpis.get("Total Revenue", ""))
+        if total_revenue:
+            revenue_per_pct_point = total_revenue / conversion_rate
+            gap = 5.0 - conversion_rate
+            opportunity = gap * revenue_per_pct_point * 0.5
+            assumption = f"5% conversion rate as top-performer target; each point worth ~${revenue_per_pct_point:,.0f} in revenue"
+            assumptions.append(assumption)
+            findings.append(_finding(
+                title=f"Conversion Rate {conversion_rate:.1f}% Below 5% Top-Performer Benchmark",
+                category="Revenue Opportunity",
+                amount=opportunity,
+                description=f"Conversion rate of {conversion_rate:.1f}% leaves revenue on the table. Top-performing campaigns achieve 5%+. Closing half the gap through landing page and audience optimisation recovers material revenue.",
+                assumption=assumption,
+                confidence=0.6,
+                priority="High" if conversion_rate < 2.0 else "Medium",
+            ))
 
     return findings, assumptions
 

@@ -202,7 +202,7 @@ def _parse_kpi(value: str) -> float | None:
 
 _BENCHMARKS: dict[str, dict] = {
     "healthcare":   {"No-Show Rate": (8, "lower"), "Avg Wait Time": (15, "lower"), "Patient Satisfaction": (4.0, "higher"), "Completion Rate": (90, "higher")},
-    "marketing":    {"ROAS": (4.0, "higher"), "CTR": (2.0, "higher"), "Conversion Rate": (2.0, "higher")},
+    "marketing":    {"ROAS": (5.5, "higher"), "CTR": (3.0, "higher"), "Conversion Rate": (5.0, "higher")},
     "saas":         {"Churn Rate": (2.0, "lower"), "Avg NPS Score": (7.0, "higher"), "MoM MRR Growth": (5.0, "higher")},
     "ecommerce":    {"Return Rate": (10, "lower"), "Avg Days to Ship": (3, "lower"), "MoM Revenue Growth": (0, "higher")},
     "retail":       {"Stockout Rate": (5, "lower"), "Avg Gross Margin": (30, "higher")},
