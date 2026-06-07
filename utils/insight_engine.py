@@ -80,13 +80,14 @@ def generate_insights(
                 supporting_evidence=[f.assumption],
             ))
 
-    # 2. Operational impact findings → insights
+    # 2. Operational impact findings → insights (High + Medium)
     for op in operational_impact.findings:
-        if op.severity == "High":
+        if op.severity in ("High", "Medium"):
             cat = _ops_category(op.category)
+            priority = "High" if op.severity == "High" else "Medium"
             insights.append(Insight(
                 title=op.title,
-                priority="High",
+                priority=priority,
                 category=cat,
                 finding=op.finding,
                 so_what=op.impact,
@@ -210,7 +211,7 @@ _BENCHMARKS: dict[str, dict] = {
     "hospitality":  {"Food Cost %": (30, "lower"), "Labor Cost %": (32, "lower"), "Prime Cost %": (65, "lower"), "No-Show Rate": (5, "lower")},
     "restaurant":   {"Food Cost %": (30, "lower"), "Labor Cost %": (32, "lower"), "Prime Cost %": (65, "lower"), "No-Show Rate": (5, "lower")},
     "real_estate":  {"Avg Days on Market": (30, "lower"), "List-to-Sale Ratio": (97, "higher"), "Sale Rate": (85, "higher")},
-    "operations":   {},
+    "operations":   {"Avg Response Time": (8, "lower"), "Avg Resolution Time": (48, "lower")},
     "sales":        {"MoM Revenue Growth": (0, "higher"), "Avg Discount": (15, "lower")},
     "finance":      {"Margin": (5, "higher")},
 }
