@@ -84,12 +84,17 @@ profile = data.get("profile", {})
 pii_rpt = meta.get("pii_report", {})
 status  = data.get("delivery_status", "Needs Review")
 
-c1, c2, c3, c4, c5 = st.columns(5)
+qa_score     = data.get("qa_score")
+qa_readiness = data.get("qa_readiness", "—")
+
+c1, c2, c3, c4, c5, c6 = st.columns(6)
 c1.metric("File",       meta.get("filename", "—"))
 c2.metric("Domain",     data.get("domain", "—").title())
 c3.metric("Rows",       f"{profile.get('row_count', 0):,}")
 c4.metric("PII Risk",   pii_rpt.get("risk_level", "none").upper())
 c5.metric("Status",     status)
+c6.metric("QA Score",   f"{qa_score:.0f}/100" if qa_score is not None else "—",
+          help=qa_readiness)
 
 st.divider()
 
@@ -117,7 +122,7 @@ with col_pdf:
 st.divider()
 
 # ── Tabs ──────────────────────────────────────────────────────────────────────
-tabs = st.tabs(["📝 Summary", "📋 Profile", "🔒 PII", "🎯 KPIs", "📊 Charts", "✅ Delivery"])
+tabs = st.tabs(["📝 Summary", "📋 Profile", "🔒 PII", "🎯 KPIs", "📊 Charts", "🔍 QA Report", "✅ Delivery"])
 
 # ══════════════════════════════════════════════════════════════════════════════
 # Tab 1 — Summary (edit + Claude revision)
@@ -382,9 +387,65 @@ with tabs[4]:
                 st.error("Save failed.")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Tab 6 — Delivery
+# Tab 6 — QA Report
 # ══════════════════════════════════════════════════════════════════════════════
 with tabs[5]:
+    st.subheader("QA Report")
+
+    if qa_score is None:
+        st.info("QA score not available for this dashboard. Re-run analysis to generate a score.")
+    else:
+        readiness_color = {
+            "Ready to Deliver": "green",
+            "Needs Minor Review": "orange",
+            "Needs Major Review": "red",
+        }.get(qa_readiness, "gray")
+
+        st.markdown(
+            f"### Overall Score: **{qa_score:.0f} / 100** — "
+            f"<span style='color:{readiness_color}; font-weight:bold'>{qa_readiness}</span>",
+            unsafe_allow_html=True,
+        )
+        st.divider()
+
+        qa_data = data.get("qa_result_detail", {})
+
+        if qa_data:
+            sub1, sub2, sub3, sub4 = st.columns(4)
+            sub1.metric("Insight Quality",  f"{qa_data.get('insight_quality_score', 0):.0f}/25")
+            sub2.metric("Chart Quality",    f"{qa_data.get('chart_quality_score', 0):.0f}/25")
+            sub3.metric("KPI Relevance",    f"{qa_data.get('kpi_relevance_score', 0):.0f}/25")
+            sub4.metric("Completeness",     f"{qa_data.get('completeness_score', 0):.0f}/25")
+            st.divider()
+
+            if qa_data.get("strengths"):
+                st.markdown("#### Strengths")
+                for s in qa_data["strengths"]:
+                    st.markdown(f"✅ {s}")
+
+            if qa_data.get("issues"):
+                st.divider()
+                st.markdown("#### Issues")
+                sev_icon = {"blocking": "🚫", "warning": "⚠️", "suggestion": "💡"}
+                for issue in qa_data["issues"]:
+                    icon = sev_icon.get(issue.get("severity", ""), "⚪")
+                    st.markdown(
+                        f"{icon} **[{issue.get('severity', '').upper()}]** "
+                        f"*{issue.get('category', '')}* — {issue.get('description', '')}"
+                    )
+
+            if qa_data.get("recommendations"):
+                st.divider()
+                st.markdown("#### Recommendations Before Delivery")
+                for r in qa_data["recommendations"]:
+                    st.markdown(f"→ {r}")
+        else:
+            st.info("Detailed QA breakdown not available — re-run analysis with the new pipeline version.")
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Tab 7 — Delivery
+# ══════════════════════════════════════════════════════════════════════════════
+with tabs[6]:
     st.subheader("Delivery Status")
 
     current_status = data.get("delivery_status", "Needs Review")

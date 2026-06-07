@@ -1,0 +1,152 @@
+global_rules:
+  max_charts: 8
+  min_chart_score: 60
+  max_categories: 15
+  min_rows_for_chart: 10
+  max_cardinality_for_bar: 50
+  max_cardinality_for_color: 8
+  missing_value_threshold: 0.30
+
+scoring:
+  business_relevance:
+    max: 40
+    description: "Does this chart answer a named business question?"
+    criteria:
+      - "Answers a domain-specific business question: +30"
+      - "Contains a revenue, cost, or KPI metric: +20"
+      - "Shows trend or category comparison useful for decisions: +10"
+      - "Generic distribution with no clear business hook: +10"
+  executive_usefulness:
+    max: 20
+    criteria:
+      - "Time series line chart showing trends: +20"
+      - "Bar chart comparing categories by value: +20"
+      - "Box plot showing distribution variance: +15"
+      - "Scatter showing correlation: +15"
+      - "Histogram showing distribution shape only: +10"
+  readability:
+    max: 20
+    criteria:
+      - "Fewer than 8 categories or series: +15"
+      - "8-15 categories or series: +10"
+      - "More than 15 categories (grouped as Other): +5"
+  data_quality:
+    max: 20
+    criteria:
+      - "Less than 10% missing values in plotted columns: +15"
+      - "10-30% missing values: +10"
+      - "More than 30% missing (chart should be skipped): 0"
+
+chart_type_rules:
+  time_series:
+    use_when: "Showing how a metric changes over time"
+    business_questions:
+      - "How has revenue trended?"
+      - "Is volume growing or declining?"
+      - "What is the seasonal pattern?"
+    require:
+      - "Date or time column"
+      - "At least 2 distinct time periods"
+      - "Numeric metric to plot"
+    aggregation:
+      day: "Date range < 30 days"
+      week: "Date range 30-90 days"
+      month: "Date range > 90 days"
+    max_series: 3
+    prefer_when:
+      - "Dataset has a date column"
+      - "Domain is sales, marketing, saas, ecommerce, hospitality"
+
+  bar_horizontal:
+    use_when: "Comparing a numeric metric across categories"
+    business_questions:
+      - "Which category is top performer?"
+      - "What is the breakdown by segment?"
+      - "Which team or product drives the most volume?"
+    require:
+      - "Categorical column with <= 15 unique values"
+      - "Numeric column to aggregate"
+    top_n: 15
+    aggregation: "sum"
+    prefer_when:
+      - "Long category labels"
+      - "More than 5 categories"
+
+  scatter:
+    use_when: "Showing correlation or relationship between two metrics"
+    business_questions:
+      - "Is there a relationship between X and Y?"
+      - "Do higher values of A correlate with higher values of B?"
+    require:
+      - "Two numeric columns with meaningful units"
+      - "At least 20 data points"
+    avoid_when:
+      - "Columns are ID fields or codes"
+      - "One column has very low variance"
+
+  box:
+    use_when: "Showing how a metric is distributed across categories"
+    business_questions:
+      - "How consistent is performance across departments?"
+      - "What is the spread of values by segment?"
+    require:
+      - "Categorical column with <= 8 unique values"
+      - "Numeric column"
+    prefer_when:
+      - "High variance in numeric column"
+      - "Comparing 3-8 groups"
+
+  histogram:
+    use_when: "Showing the frequency distribution of a single metric"
+    business_questions:
+      - "What is the typical range of values?"
+      - "Is the distribution normal, skewed, or bimodal?"
+    require:
+      - "Numeric column"
+      - "At least 30 data points"
+    avoid_when:
+      - "Column has fewer than 10 distinct values"
+      - "Column is binary or ordinal"
+
+skip_columns:
+  id_patterns:
+    - "_id"
+    - "_key"
+    - "index"
+    - "_code"
+    - "_num"
+  pii_keywords:
+    - "email"
+    - "phone"
+    - "mobile"
+    - "name"
+    - "address"
+    - "ssn"
+    - "dob"
+    - "birth"
+    - "account_number"
+    - "credit_card"
+  meaningless_patterns:
+    - "row_number"
+    - "sequence"
+    - "record_id"
+
+quality_gates:
+  reject_chart_if:
+    - "Score < 60"
+    - "Plotted column has > 30% missing values"
+    - "Column is in PII skip list"
+    - "Column cardinality > 50 for bar or box charts"
+    - "Fewer than 10 data points"
+    - "Column appears to be a system ID or code"
+
+  warn_chart_if:
+    - "Score 60-70"
+    - "Missing values between 10-30%"
+    - "Cardinality between 15-50 (top-N applied)"
+
+  auto_include_in_pdf:
+    - "Score >= 70"
+
+  auto_include_in_dashboard:
+    - "Score >= 60"

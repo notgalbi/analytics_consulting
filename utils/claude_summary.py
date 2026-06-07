@@ -28,12 +28,13 @@ def build_safe_summary_payload(
     domain: str,
     kpis: list[dict],
     pii_report: dict,
+    calc_kpis: dict | None = None,
 ) -> dict:
     """
     Construct a payload from safe aggregate data only.
     Nothing here contains raw rows or PII values.
     """
-    return {
+    payload = {
         "domain":           domain,
         "row_count":        profile.get("row_count"),
         "col_count":        profile.get("col_count"),
@@ -58,6 +59,9 @@ def build_safe_summary_payload(
         "pii_types_found":  pii_report.get("pii_types_found", []),
         "pii_column_count": pii_report.get("total_pii_columns", 0),
     }
+    if calc_kpis:
+        payload["calculated_kpis"] = calc_kpis
+    return payload
 
 
 def generate_executive_summary(payload: dict) -> str:

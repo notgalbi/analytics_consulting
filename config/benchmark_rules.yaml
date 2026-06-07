@@ -1,0 +1,274 @@
+benchmarks:
+  healthcare:
+    no_show_rate:
+      direction: lower
+      good: 8.0
+      warn: 15.0
+      critical: 25.0
+      unit: "%"
+      note: "Industry average 10-12%. Best practices < 5%."
+    avg_wait_time:
+      direction: lower
+      good: 15.0
+      warn: 30.0
+      critical: 45.0
+      unit: "minutes"
+      note: "Patient satisfaction drops sharply above 20 minutes."
+    patient_satisfaction:
+      direction: higher
+      good: 4.0
+      warn: 3.5
+      critical: 3.0
+      unit: "/5"
+      note: "HCAHPS national average ~3.9. Top-quartile > 4.3."
+    completion_rate:
+      direction: higher
+      good: 92.0
+      warn: 80.0
+      critical: 70.0
+      unit: "%"
+      note: "High-performing practices complete 93-96% of scheduled appointments."
+    avg_billing_per_appt:
+      direction: higher
+      good: null
+      warn: null
+      critical: null
+      unit: "$"
+      note: "Varies by specialty. Primary care $150-$300. Specialist $300-$800+."
+
+  marketing:
+    ctr:
+      direction: higher
+      good: 3.0
+      warn: 1.0
+      critical: 0.3
+      unit: "%"
+      note: "Search avg 2-5%. Display avg 0.05-0.1%. Social 0.5-1%."
+    roas:
+      direction: higher
+      good: 4.0
+      warn: 2.0
+      critical: 1.0
+      unit: "x"
+      note: "Target > 4x. Below 2x is unsustainable for most businesses."
+    conversion_rate:
+      direction: higher
+      good: 5.0
+      warn: 2.0
+      critical: 0.5
+      unit: "%"
+      note: "E-commerce avg 1-3%. Top performers 5%+."
+    cpc:
+      direction: lower
+      good: 2.0
+      warn: 5.0
+      critical: 10.0
+      unit: "$"
+      note: "Lower is more efficient. Benchmarks vary by industry and platform."
+    cpa:
+      direction: lower
+      good: null
+      warn: null
+      critical: null
+      unit: "$"
+      note: "CPA should not exceed 33% of customer lifetime value."
+
+  sales:
+    mom_revenue_growth:
+      direction: higher
+      good: 5.0
+      warn: 0.0
+      critical: -5.0
+      unit: "%"
+      note: "Target > 5% MoM. Negative growth requires immediate review."
+    avg_discount:
+      direction: lower
+      good: 10.0
+      warn: 20.0
+      critical: 30.0
+      unit: "%"
+      note: "Best-in-class < 8%. > 20% signals pricing discipline breakdown."
+
+  saas:
+    churn_rate:
+      direction: lower
+      good: 2.0
+      warn: 5.0
+      critical: 8.0
+      unit: "%"
+      note: "Target < 2% monthly. > 5% is structurally problematic."
+    avg_nps_score:
+      direction: higher
+      good: 7.0
+      warn: 5.0
+      critical: 3.0
+      unit: ""
+      note: "Promoters: 9-10. Passives: 7-8. Detractors: 1-6."
+    mom_mrr_growth:
+      direction: higher
+      good: 10.0
+      warn: 0.0
+      critical: -5.0
+      unit: "%"
+      note: "Strong SaaS: > 10% MoM. Flat = risk. Negative = crisis."
+
+  ecommerce:
+    return_rate:
+      direction: lower
+      good: 10.0
+      warn: 20.0
+      critical: 30.0
+      unit: "%"
+      note: "Fashion 20-30%. Electronics 8-10%. Cross-category avg < 15%."
+    avg_discount:
+      direction: lower
+      good: 15.0
+      warn: 25.0
+      critical: 35.0
+      unit: "%"
+      note: "Keep below 25%. Excessive discounting erodes brand and margin."
+    avg_days_to_ship:
+      direction: lower
+      good: 3.0
+      warn: 7.0
+      critical: 14.0
+      unit: "days"
+      note: "Customer expectation: 2-3 days. > 7 days damages satisfaction."
+    mom_revenue_growth:
+      direction: higher
+      good: 5.0
+      warn: 0.0
+      critical: -5.0
+      unit: "%"
+      note: "Healthy e-commerce grows 5-15% monthly."
+
+  retail:
+    avg_gross_margin:
+      direction: higher
+      good: 45.0
+      warn: 30.0
+      critical: 20.0
+      unit: "%"
+      note: "Varies by category. Grocery 25-30%. Fashion 50-60%. Electronics 15-25%."
+    stockout_rate:
+      direction: lower
+      good: 5.0
+      warn: 10.0
+      critical: 20.0
+      unit: "%"
+      note: "Target < 5%. > 10% means active revenue loss on stockout SKUs."
+    inventory_turnover:
+      direction: higher
+      good: 0.5
+      warn: 0.2
+      critical: 0.1
+      unit: "x"
+      note: "Monthly: > 0.5x healthy. < 0.2x signals slow-moving inventory."
+
+  hr:
+    attrition_rate:
+      direction: lower
+      good: 10.0
+      warn: 20.0
+      critical: 30.0
+      unit: "%"
+      note: "US average 13%. Top employers < 8%. > 20% is unsustainable."
+    avg_performance:
+      direction: higher
+      good: 3.5
+      warn: 2.5
+      critical: 2.0
+      unit: "/5"
+      note: "Target > 3.5. Below 3.0 signals systemic performance management gap."
+    remote_pct:
+      direction: higher
+      good: 30.0
+      warn: 10.0
+      critical: 0.0
+      unit: "%"
+      note: "30-50% remote common post-2020. Used as engagement indicator."
+
+  real_estate:
+    avg_days_on_market:
+      direction: lower
+      good: 30.0
+      warn: 60.0
+      critical: 90.0
+      unit: "days"
+      note: "Hot market < 30 days. Competitive 30-60. Slow > 60."
+    list_to_sale_ratio:
+      direction: higher
+      good: 97.0
+      warn: 93.0
+      critical: 90.0
+      unit: "%"
+      note: "Strong market > 100%. Competitive 97-100%. < 93% signals over-pricing."
+    sale_rate:
+      direction: higher
+      good: 85.0
+      warn: 70.0
+      critical: 55.0
+      unit: "%"
+      note: "Target > 85%. Below 70% signals pricing or marketing problems."
+
+  hospitality:
+    food_cost_pct:
+      direction: lower
+      good: 32.0
+      warn: 38.0
+      critical: 42.0
+      unit: "%"
+      note: "Full-service target 28-35%. Fast casual 25-30%. > 38% is critical."
+    labor_cost_pct:
+      direction: lower
+      good: 32.0
+      warn: 38.0
+      critical: 42.0
+      unit: "%"
+      note: "Full-service target 30-35%. QSR 25-30%. > 40% means likely loss."
+    prime_cost_pct:
+      direction: lower
+      good: 60.0
+      warn: 70.0
+      critical: 75.0
+      unit: "%"
+      note: "Target < 65%. > 70% leaves < 30% for all other costs. > 75% = loss."
+    no_show_rate:
+      direction: lower
+      good: 5.0
+      warn: 10.0
+      critical: 15.0
+      unit: "%"
+      note: "Best practice with deposit policy: < 3%. Industry avg 5-8%."
+    mom_revenue_growth:
+      direction: higher
+      good: 5.0
+      warn: 0.0
+      critical: -5.0
+      unit: "%"
+      note: "Target > 5% MoM growth. Flat or declining requires investigation."
+
+  operations:
+    avg_response_time:
+      direction: lower
+      good: 4.0
+      warn: 24.0
+      critical: 48.0
+      unit: "hours"
+      note: "B2B support: < 4h. Enterprise: < 1h. Consumer: < 24h."
+    avg_resolution_time:
+      direction: lower
+      good: 24.0
+      warn: 48.0
+      critical: 96.0
+      unit: "hours"
+      note: "Standard SLA: 24-48h. Priority tickets: < 4h. > 96h = breach risk."
+
+  finance:
+    margin:
+      direction: higher
+      good: 10.0
+      warn: 5.0
+      critical: 0.0
+      unit: "%"
+      note: "Varies by industry. Software 20-30%. Retail 2-10%. Services 10-20%."

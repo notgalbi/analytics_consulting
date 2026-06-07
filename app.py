@@ -6,14 +6,21 @@ Handles file upload, the full analysis pipeline, and dashboard saving.
 import streamlit as st
 from pathlib import Path
 
-from utils.data_loader     import load_file, load_from_bytes
-from utils.pii_detector    import sanitize_dataframe, generate_pii_report
-from utils               import drive_client as dc
-from utils.profiler        import profile_dataframe
-from utils.kpi_detector    import detect_business_domain, recommend_kpis, calculate_available_kpis, get_kpi_status
-from utils.chart_generator import generate_dashboard_charts
-from utils.claude_summary  import build_safe_summary_payload, generate_executive_summary, generate_kpi_narrative, stream_executive_summary
-from utils import storage
+from utils.data_loader              import load_file, load_from_bytes
+from utils.pii_detector             import sanitize_dataframe, generate_pii_report
+from utils                          import drive_client as dc
+from utils.profiler                 import profile_dataframe
+from utils.kpi_detector             import detect_business_domain, recommend_kpis, calculate_available_kpis, get_kpi_status
+from utils.chart_generator          import generate_dashboard_charts
+from utils.chart_intelligence       import score_and_select_charts
+from utils.semantic_layer           import get_industry_context
+from utils.financial_impact_engine  import estimate_financial_impact
+from utils.operational_impact_engine import estimate_operational_impact
+from utils.insight_engine           import generate_insights
+from utils.recommendation_engine    import generate_recommendations
+from utils.qa_validator             import validate_report
+from utils.claude_summary           import build_safe_summary_payload, generate_executive_summary, generate_kpi_narrative, stream_executive_summary
+from utils                          import storage
 
 
 st.set_page_config(
@@ -37,7 +44,9 @@ with st.sidebar:
 for key in ("df", "metadata", "profile_data", "pii", "sanitized_df",
             "dataset_type", "kpis", "figures", "summary", "dashboard_id",
             "kpi_narrative", "drive_content", "drive_filename",
-            "client_drive_folder_id"):
+            "client_drive_folder_id", "industry_context", "calc_kpis",
+            "chart_specs", "financial_impact", "operational_impact",
+            "insights", "recommendations", "qa_result"):
     if key not in st.session_state:
         st.session_state[key] = None
 
@@ -142,7 +151,10 @@ if st.session_state.get("_file_key") != file_key:
             st.session_state.df       = df
             st.session_state.metadata = metadata
             for key in ("profile_data", "pii", "sanitized_df", "dataset_type",
-                        "kpis", "figures", "summary", "dashboard_id"):
+                        "kpis", "figures", "summary", "dashboard_id",
+                        "industry_context", "calc_kpis", "chart_specs",
+                        "financial_impact", "operational_impact",
+                        "insights", "recommendations", "qa_result"):
                 st.session_state[key] = None
             st.session_state._file_key = file_key
         except (ValueError, RuntimeError) as e:
@@ -155,7 +167,8 @@ metadata = st.session_state.metadata
 st.success(f"Loaded **{metadata['filename']}** — {metadata['row_count']:,} rows × {metadata['col_count']} columns")
 
 # ── Tabs ──────────────────────────────────────────────────────────────────────
-tabs = st.tabs(["👀 Preview", "🔒 PII Report", "📋 Data Quality", "🎯 KPIs", "📊 Charts", "📝 Summary"])
+tabs = st.tabs(["👀 Preview", "🔒 PII Report", "📋 Data Quality", "🎯 KPIs",
+                "📊 Charts", "💡 Insights", "💰 Impact", "📝 Summary"])
 
 # ── Tab 1: Preview ────────────────────────────────────────────────────────────
 with tabs[0]:
@@ -174,37 +187,81 @@ if st.session_state.profile_data is None:
     progress.progress(25, text="Profiling data quality…")
     profile_temp = profile_dataframe(df)
 
-    progress.progress(40, text="Detecting business domain and KPIs…")
+    progress.progress(40, text="Detecting business domain…")
     domain = detect_business_domain(df)
+
+    progress.progress(45, text="Loading industry context…")
+    industry_context_temp = get_industry_context(domain)
+
+    progress.progress(55, text="Computing KPIs…")
     calculated_kpis = calculate_available_kpis(df, domain)
 
-    progress.progress(55, text="Generating charts…")
-    figures_temp = generate_dashboard_charts(sanitized_df, domain)
+    progress.progress(65, text="Generating and scoring charts…")
+    chart_specs_temp, figures_temp = score_and_select_charts(sanitized_df, domain)
 
-    progress.progress(70, text="Running AI KPI analysis…")
+    progress.progress(72, text="Estimating financial impact…")
+    financial_impact_temp = estimate_financial_impact(domain, calculated_kpis, profile_temp)
+
+    progress.progress(78, text="Estimating operational impact…")
+    operational_impact_temp = estimate_operational_impact(domain, calculated_kpis, profile_temp)
+
+    progress.progress(84, text="Generating insights…")
+    insights_temp = generate_insights(
+        domain, calculated_kpis, profile_temp,
+        financial_impact_temp, operational_impact_temp,
+    )
+
+    progress.progress(88, text="Building recommendations…")
+    recommendations_temp = generate_recommendations(insights_temp, domain)
+
+    progress.progress(93, text="Running AI KPI analysis…")
     narrative_temp = generate_kpi_narrative(domain, calculated_kpis, profile_temp)
+
+    progress.progress(97, text="Running QA validation…")
+    qa_result_temp = validate_report(
+        insights_temp,
+        figures_temp,
+        calculated_kpis,
+        "",  # summary not generated yet
+        financial_impact_temp,
+        operational_impact_temp,
+    )
 
     progress.progress(100, text="Analysis complete.")
     progress.empty()
 
-    st.session_state.profile_data  = profile_temp
-    st.session_state.pii           = pii_report_temp
-    st.session_state.sanitized_df  = sanitized_df
-    st.session_state.pii_warning   = pii_warning
-    st.session_state.dataset_type  = domain
-    st.session_state.kpis          = recommend_kpis(df, domain)
-    st.session_state.calc_kpis     = calculated_kpis
-    st.session_state.figures       = figures_temp
-    st.session_state.kpi_narrative = narrative_temp
+    st.session_state.profile_data        = profile_temp
+    st.session_state.pii                 = pii_report_temp
+    st.session_state.sanitized_df        = sanitized_df
+    st.session_state.pii_warning         = pii_warning
+    st.session_state.dataset_type        = domain
+    st.session_state.industry_context    = industry_context_temp
+    st.session_state.kpis                = recommend_kpis(df, domain)
+    st.session_state.calc_kpis           = calculated_kpis
+    st.session_state.chart_specs         = chart_specs_temp
+    st.session_state.figures             = figures_temp
+    st.session_state.financial_impact    = financial_impact_temp
+    st.session_state.operational_impact  = operational_impact_temp
+    st.session_state.insights            = insights_temp
+    st.session_state.recommendations     = recommendations_temp
+    st.session_state.kpi_narrative       = narrative_temp
+    st.session_state.qa_result           = qa_result_temp
 
-prof         = st.session_state.profile_data
-pii_report   = st.session_state.pii
-pii_warning  = st.session_state.pii_warning
-sanitized_df = st.session_state.sanitized_df
-dataset_type = st.session_state.dataset_type
-kpis         = st.session_state.kpis
-calc_kpis    = st.session_state.calc_kpis
-figures      = st.session_state.figures
+prof               = st.session_state.profile_data
+pii_report         = st.session_state.pii
+pii_warning        = st.session_state.pii_warning
+sanitized_df       = st.session_state.sanitized_df
+dataset_type       = st.session_state.dataset_type
+industry_context   = st.session_state.industry_context
+kpis               = st.session_state.kpis
+calc_kpis          = st.session_state.calc_kpis
+chart_specs        = st.session_state.chart_specs
+figures            = st.session_state.figures
+financial_impact   = st.session_state.financial_impact
+operational_impact = st.session_state.operational_impact
+insights           = st.session_state.insights
+recommendations    = st.session_state.recommendations
+qa_result          = st.session_state.qa_result
 
 # ── Tab 2: PII Report ─────────────────────────────────────────────────────────
 with tabs[1]:
@@ -234,7 +291,6 @@ with tabs[2]:
     col3.metric("Duplicates",   prof["duplicate_report"]["duplicate_rows"])
     col4.metric("Completeness", f"{prof['completeness_pct']}%")
 
-    # Validation warnings
     validation_warnings = prof.get("validation_warnings", [])
     if validation_warnings:
         st.divider()
@@ -246,7 +302,6 @@ with tabs[2]:
 
     st.divider()
 
-    # Missing values table
     st.markdown("#### Missing Values by Column")
     missing_rows = [
         {"Column": col, **vals}
@@ -259,14 +314,12 @@ with tabs[2]:
     else:
         st.success("No missing values found.")
 
-    # Numeric summaries
     if prof.get("numeric_summary"):
         st.markdown("#### Numeric Column Summaries")
         import pandas as pd
         num_df = pd.DataFrame(prof["numeric_summary"]).T.reset_index().rename(columns={"index": "Column"})
         st.dataframe(num_df, use_container_width=True)
 
-    # Categorical summaries
     if prof.get("categorical_summary"):
         st.markdown("#### Categorical Column Summaries")
         for col, stats in prof["categorical_summary"].items():
@@ -280,6 +333,11 @@ with tabs[2]:
 # ── Tab 4: KPIs ───────────────────────────────────────────────────────────────
 with tabs[3]:
     st.subheader(f"Detected Domain: **{dataset_type.title()}**")
+
+    if industry_context:
+        obj = industry_context.get("executive_objectives", [])
+        if obj:
+            st.caption("Executive objectives: " + " · ".join(obj[:3]))
 
     if calc_kpis:
         st.markdown("#### Calculated KPIs")
@@ -305,19 +363,155 @@ with tabs[4]:
     st.subheader("Auto-generated Charts")
     if not figures:
         st.info("No charts could be generated from this dataset.")
-    for title, fig in figures.items():
-        st.markdown(f"#### {title}")
-        st.plotly_chart(fig, use_container_width=True)
+    else:
+        if chart_specs:
+            st.caption(
+                f"{len(chart_specs)} chart(s) selected from scoring "
+                f"(min score 60, max 8). "
+                f"{sum(1 for s in chart_specs if s.include_in_pdf)} qualify for PDF export."
+            )
+        for title, fig in figures.items():
+            spec = next((s for s in (chart_specs or []) if s.title == title), None)
+            if spec:
+                st.markdown(
+                    f"#### {title}  "
+                    f"<span style='font-size:0.8em; color:gray'>Score: {spec.score} · {spec.chart_type}</span>",
+                    unsafe_allow_html=True,
+                )
+                st.caption(f"_{spec.business_question}_")
+            else:
+                st.markdown(f"#### {title}")
+            st.plotly_chart(fig, use_container_width=True)
 
-# ── Tab 6: Summary ────────────────────────────────────────────────────────────
+# ── Tab 6: Insights ───────────────────────────────────────────────────────────
 with tabs[5]:
+    st.subheader("Business Insights")
+    if not insights:
+        st.info("No insights generated. Ensure domain KPIs are present in the dataset.")
+    else:
+        priority_colors = {"High": "🔴", "Medium": "🟡", "Low": "🟢"}
+        for insight in insights:
+            icon = priority_colors.get(insight.priority, "⚪")
+            with st.expander(f"{icon} **{insight.title}** — {insight.category}", expanded=insight.priority == "High"):
+                col_a, col_b = st.columns([3, 2])
+                with col_a:
+                    st.markdown(f"**Finding:** {insight.finding}")
+                    st.markdown(f"**Why it matters:** {insight.so_what}")
+                    st.markdown(f"**Business impact:** {insight.business_impact}")
+                with col_b:
+                    st.metric("Financial Impact", insight.financial_impact)
+                    st.metric("Priority", f"{icon} {insight.priority}")
+                    st.caption(f"Confidence: {int(insight.confidence_score * 100)}%")
+                st.divider()
+                st.markdown(f"**Recommended Action:** {insight.recommended_action}")
+                st.markdown(f"**Expected Outcome:** {insight.expected_outcome}")
+                if insight.supporting_evidence:
+                    st.caption("Supporting evidence: " + " · ".join(insight.supporting_evidence[:3]))
+
+    if recommendations:
+        st.divider()
+        st.subheader("Top Recommendations")
+        priority_rank = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3}
+        for i, rec in enumerate(recommendations, 1):
+            icon = {"Critical": "🚨", "High": "🔴", "Medium": "🟡", "Low": "🟢"}.get(rec.priority, "⚪")
+            st.markdown(f"**{i}. {icon} {rec.action}**")
+            r1, r2, r3 = st.columns(3)
+            r1.caption(f"Owner: {rec.owner}")
+            r2.caption(f"Timeline: {rec.timeline}")
+            r3.caption(f"Benefit: {rec.estimated_benefit}")
+            st.caption(f"Expected outcome: {rec.expected_outcome}")
+            st.markdown("---")
+
+# ── Tab 7: Impact ─────────────────────────────────────────────────────────────
+with tabs[6]:
+    st.subheader("Financial & Operational Impact")
+
+    if financial_impact and financial_impact.has_quantifiable_impact:
+        st.markdown("### 💰 Financial Impact")
+        fi_col1, fi_col2, fi_col3 = st.columns(3)
+        fi_col1.metric(
+            "Revenue at Risk",
+            f"${financial_impact.total_revenue_at_risk:,.0f}" if financial_impact.total_revenue_at_risk else "—",
+        )
+        fi_col2.metric(
+            "Revenue Opportunity",
+            f"${financial_impact.total_revenue_opportunity:,.0f}" if financial_impact.total_revenue_opportunity else "—",
+        )
+        fi_col3.metric(
+            "Cost Savings",
+            f"${financial_impact.total_cost_savings:,.0f}" if financial_impact.total_cost_savings else "—",
+        )
+        st.caption(financial_impact.summary_statement)
+
+        if financial_impact.findings:
+            st.markdown("#### Impact Breakdown")
+            for finding in financial_impact.findings:
+                cat_icon = {"Revenue at Risk": "🔴", "Revenue Opportunity": "🟢",
+                            "Cost Savings": "🔵", "Capacity Recovery": "🟡"}.get(finding.category, "⚪")
+                with st.expander(f"{cat_icon} {finding.title} — {finding.amount_formatted}"):
+                    st.markdown(finding.description)
+                    st.caption(f"Assumption: {finding.assumption}")
+                    st.caption(f"Confidence: {int(finding.confidence * 100)}% · Priority: {finding.priority}")
+    elif financial_impact:
+        st.info(financial_impact.summary_statement or "Financial impact could not be quantified for this dataset.")
+    else:
+        st.info("Financial impact analysis not available.")
+
+    st.divider()
+
+    if operational_impact and operational_impact.findings:
+        st.markdown("### ⚙️ Operational Impact")
+        op_cols = st.columns(3)
+        if operational_impact.capacity_utilization_pct is not None:
+            op_cols[0].metric("Capacity Utilization", f"{operational_impact.capacity_utilization_pct:.0f}%")
+        if operational_impact.throughput_gap_description:
+            op_cols[1].metric("Throughput Gap", operational_impact.throughput_gap_description)
+        if operational_impact.backlog_risk_level:
+            op_cols[2].metric("Backlog Risk", operational_impact.backlog_risk_level)
+
+        st.caption(operational_impact.summary_statement)
+
+        for finding in operational_impact.findings:
+            sev_icon = {"High": "🔴", "Medium": "🟡", "Low": "🟢"}.get(finding.severity, "⚪")
+            with st.expander(f"{sev_icon} {finding.title} [{finding.category}]"):
+                st.markdown(f"**Finding:** {finding.finding}")
+                st.markdown(f"**Impact:** {finding.impact}")
+                st.markdown(f"**Recommendation:** {finding.recommendation}")
+                if finding.metric_name and finding.metric_value:
+                    cols2 = st.columns(2)
+                    cols2[0].caption(f"Metric: {finding.metric_name} = {finding.metric_value}")
+                    if finding.benchmark:
+                        cols2[1].caption(f"Benchmark: {finding.benchmark}")
+    elif operational_impact:
+        st.info(operational_impact.summary_statement or "No operational issues detected.")
+    else:
+        st.info("Operational impact analysis not available.")
+
+# ── Tab 8: Summary ────────────────────────────────────────────────────────────
+with tabs[7]:
     st.subheader("Executive Summary")
+
+    if qa_result:
+        qa_color = {"Ready to Deliver": "green", "Needs Minor Review": "orange", "Needs Major Review": "red"}.get(
+            qa_result.delivery_readiness, "gray"
+        )
+        st.markdown(
+            f"**QA Score:** {qa_result.overall_score:.0f}/100 — "
+            f"<span style='color:{qa_color}'>{qa_result.delivery_readiness}</span>",
+            unsafe_allow_html=True,
+        )
+
     if st.session_state.summary is None:
         if st.button("Generate Executive Summary", type="primary"):
-            payload = build_safe_summary_payload(prof, dataset_type, kpis, pii_report)
+            payload = build_safe_summary_payload(prof, dataset_type, kpis, pii_report, calc_kpis)
             st.caption("Claude is writing your report — text will appear below as it generates.")
             full = st.write_stream(stream_executive_summary(payload))
             st.session_state.summary = full
+            # Re-run QA now that summary exists
+            st.session_state.qa_result = validate_report(
+                insights, figures, calc_kpis, full,
+                financial_impact, operational_impact,
+            )
             st.rerun()
     if st.session_state.summary:
         st.markdown(st.session_state.summary)
@@ -350,6 +544,20 @@ else:
                                                   for t, f in figures.items()},
                         "sanitized_csv":         sanitized_df.to_csv(index=False),
                         "client_drive_folder_id": st.session_state.client_drive_folder_id,
+                        "qa_score":              qa_result.overall_score if qa_result else None,
+                        "qa_readiness":          qa_result.delivery_readiness if qa_result else None,
+                        "qa_result_detail": {
+                            "insight_quality_score": qa_result.insight_quality_score,
+                            "chart_quality_score":   qa_result.chart_quality_score,
+                            "kpi_relevance_score":   qa_result.kpi_relevance_score,
+                            "completeness_score":    qa_result.completeness_score,
+                            "strengths":             qa_result.strengths,
+                            "issues": [
+                                {"severity": i.severity, "category": i.category, "description": i.description}
+                                for i in qa_result.issues
+                            ],
+                            "recommendations":       qa_result.recommendations,
+                        } if qa_result else None,
                     },
                 )
                 st.session_state.dashboard_id = did

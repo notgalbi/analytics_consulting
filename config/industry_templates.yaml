@@ -1,0 +1,979 @@
+healthcare:
+  display_name: "Healthcare & Medical Practice"
+  executive_objectives:
+    - "Maximize appointment capacity utilization and minimize unused slots"
+    - "Reduce no-show and late cancellation rates to below 8%"
+    - "Achieve patient satisfaction scores above 4.0/5 consistently"
+    - "Optimize billing collections and reduce write-offs"
+    - "Maintain average wait times below 15 minutes"
+  critical_kpis:
+    - name: "No-Show Rate"
+      target: "< 8%"
+      benchmark: "Industry average 10-12%. Best-in-class practices achieve < 5%."
+    - name: "Avg Wait Time"
+      target: "< 15 minutes"
+      benchmark: "Patient satisfaction drops significantly above 20 minutes."
+    - name: "Patient Satisfaction"
+      target: "> 4.0 / 5"
+      benchmark: "HCAHPS national average ~3.9. Top-quartile facilities > 4.3."
+    - name: "Completion Rate"
+      target: "> 92%"
+      benchmark: "High-performing practices complete 93-96% of scheduled appointments."
+    - name: "Avg Billing per Appt"
+      target: "Varies by specialty"
+      benchmark: "Primary care $150-$300. Specialists $300-$800+ depending on procedure."
+  value_drivers:
+    - "Appointment slot utilization and fill rate"
+    - "Revenue per completed visit"
+    - "Patient retention and return rate"
+    - "Same-day cancellation backfill rate"
+    - "Payer mix and collections efficiency"
+  risk_indicators:
+    - "No-show rate exceeding 15%"
+    - "Wait times consistently above 30 minutes"
+    - "Patient satisfaction below 3.5 / 5"
+    - "Significant billing variation across similar procedures"
+    - "High cancellation rate in specific departments"
+  common_report_sections:
+    - "Appointment Volume and Utilization"
+    - "No-Show and Cancellation Analysis"
+    - "Wait Time Performance by Department"
+    - "Patient Satisfaction Benchmarks"
+    - "Revenue and Billing Summary"
+  recommended_actions:
+    - "Implement automated SMS and email reminders 48h and 24h before appointments"
+    - "Create a same-day waitlist protocol to backfill cancellations"
+    - "Review scheduling templates for high no-show departments"
+    - "Add post-visit satisfaction surveys with 48-hour follow-up"
+    - "Establish monthly department performance reviews against KPI targets"
+  financial_levers:
+    - "No-show reduction: each 1% improvement recovers ~1% of billed revenue"
+    - "Wait time reduction drives patient satisfaction and return visit rate"
+    - "Billing capture rate: reduced write-offs improve net revenue per visit"
+
+sales:
+  display_name: "Sales & Revenue"
+  executive_objectives:
+    - "Grow total revenue month over month at target rate"
+    - "Increase average order value through upsell and cross-sell"
+    - "Maintain discount discipline and protect gross margin"
+    - "Maximize pipeline conversion and reduce sales cycle length"
+    - "Expand revenue across key regions and product categories"
+  critical_kpis:
+    - name: "Total Revenue"
+      target: "Defined by business targets"
+      benchmark: "Compare vs prior period and plan."
+    - name: "MoM Revenue Growth"
+      target: "> 5%"
+      benchmark: "High-growth companies target 10%+ monthly."
+    - name: "Avg Order Value"
+      target: "Defined by segment"
+      benchmark: "Benchmark against prior quarter average."
+    - name: "Avg Discount"
+      target: "< 10%"
+      benchmark: "Best-in-class sales orgs maintain < 8% average discount."
+    - name: "Units Sold"
+      target: "Defined by targets"
+      benchmark: "Compare vs prior period trends."
+  value_drivers:
+    - "Revenue growth rate and trajectory"
+    - "Average order and deal value"
+    - "Discount rate and pricing discipline"
+    - "Product and category mix"
+    - "Regional and channel performance"
+  risk_indicators:
+    - "Month-over-month revenue decline"
+    - "Average discount above 20%"
+    - "Revenue concentration in single product or region"
+    - "Negative order volume trend"
+  common_report_sections:
+    - "Revenue Summary and Trends"
+    - "Product and Category Performance"
+    - "Regional Breakdown"
+    - "Discount Analysis"
+    - "Growth Rate Analysis"
+  recommended_actions:
+    - "Implement tiered discount approval matrix to protect margin"
+    - "Launch cross-sell and upsell training to increase average order value"
+    - "Conduct pipeline review to identify revenue acceleration opportunities"
+    - "Build regional performance dashboards for sales leadership"
+  financial_levers:
+    - "1% reduction in avg discount = 1% gross margin recovery on total revenue"
+    - "10% increase in AOV = equivalent impact to 10% increase in order volume"
+
+marketing:
+  display_name: "Marketing & Digital Advertising"
+  executive_objectives:
+    - "Achieve ROAS above 4x across all paid media channels"
+    - "Drive conversion rate above 2% on all campaigns"
+    - "Reduce cost per acquisition to below category benchmarks"
+    - "Maximize revenue attributed to marketing investment"
+    - "Optimize channel mix for best-performing traffic sources"
+  critical_kpis:
+    - name: "ROAS"
+      target: "> 4x"
+      benchmark: "E-commerce benchmark 4x; B2B 3x minimum. < 2x is unsustainable."
+    - name: "CTR"
+      target: "> 2%"
+      benchmark: "Display average 0.05-0.1%. Search 2-5%. Social 0.5-1%."
+    - name: "Conversion Rate"
+      target: "> 2%"
+      benchmark: "E-commerce average 1-3%. Top performers 5%+."
+    - name: "CPC"
+      target: "Varies by platform"
+      benchmark: "Google Search avg $2-$4. Social $0.50-$3. Lower is better."
+    - name: "CPA"
+      target: "Below LTV/3"
+      benchmark: "CPA should not exceed 33% of customer lifetime value."
+  value_drivers:
+    - "Return on ad spend by channel"
+    - "Conversion funnel efficiency"
+    - "Audience targeting precision"
+    - "Creative performance and relevance score"
+    - "Attribution accuracy and channel mix"
+  risk_indicators:
+    - "ROAS below 2x on any significant channel"
+    - "Conversion rate below 0.5%"
+    - "CPA exceeding product margin"
+    - "Declining CTR on key campaigns"
+  common_report_sections:
+    - "Campaign Performance Overview"
+    - "Channel ROAS Breakdown"
+    - "Conversion Funnel Analysis"
+    - "Spend Efficiency Metrics"
+    - "Platform Comparison"
+  recommended_actions:
+    - "Pause campaigns with ROAS < 2x and reallocate budget to top performers"
+    - "A/B test top creatives across best-performing audiences"
+    - "Build attribution model to understand true channel contribution"
+    - "Review landing page conversion rates and run UX improvement tests"
+  financial_levers:
+    - "Improving ROAS from 2x to 4x doubles revenue at same budget"
+    - "1% conversion rate improvement doubles revenue without increasing traffic"
+
+ecommerce:
+  display_name: "E-commerce & Online Retail"
+  executive_objectives:
+    - "Grow revenue month over month with declining CAC"
+    - "Reduce return rate below 10% through quality and accuracy improvements"
+    - "Achieve fulfillment times below 3 days consistently"
+    - "Increase average order value through bundling and cross-sell"
+    - "Maximize repeat purchase rate and customer lifetime value"
+  critical_kpis:
+    - name: "Total Revenue"
+      target: "Defined by targets"
+      benchmark: "Compare MoM and YoY."
+    - name: "Return Rate"
+      target: "< 10%"
+      benchmark: "Fashion 20-30%. Electronics 8-10%. Average 10-15%."
+    - name: "Avg Days to Ship"
+      target: "< 3 days"
+      benchmark: "Amazon Prime standard: 2 days. Customer expectation: 3-5 days."
+    - name: "Avg Order Value"
+      target: "Benchmark by category"
+      benchmark: "Compare vs category average and prior periods."
+    - name: "MoM Revenue Growth"
+      target: "> 5%"
+      benchmark: "Healthy e-commerce grows 5-15% monthly."
+  value_drivers:
+    - "Conversion rate and cart abandonment"
+    - "Average order value and basket size"
+    - "Return rate and net revenue retention"
+    - "Fulfillment speed and delivery reliability"
+    - "Repeat purchase rate and retention"
+  risk_indicators:
+    - "Return rate above 20%"
+    - "Shipping time exceeding 7 days"
+    - "Declining average order value"
+    - "Month-over-month revenue decline"
+  common_report_sections:
+    - "Revenue and Order Volume Trends"
+    - "Return Rate Analysis"
+    - "Fulfillment Performance"
+    - "Product Category Performance"
+    - "Discount and Margin Analysis"
+  recommended_actions:
+    - "Audit return reasons to identify top SKUs driving returns"
+    - "Optimize fulfillment workflow to reduce days-to-ship"
+    - "Implement cross-sell recommendations at checkout"
+    - "Review discount strategy to protect margin"
+  financial_levers:
+    - "Each 1% reduction in return rate improves net revenue by ~0.7%"
+    - "1-day reduction in shipping time improves repeat purchase intent significantly"
+
+saas:
+  display_name: "SaaS & Subscription Software"
+  executive_objectives:
+    - "Reduce monthly churn below 2% to achieve compounding MRR growth"
+    - "Grow MRR month over month at or above plan"
+    - "Achieve NPS above 7 to unlock organic referral growth"
+    - "Increase average contract value through expansion revenue"
+    - "Improve product adoption metrics to reduce churn risk"
+  critical_kpis:
+    - name: "Total MRR"
+      target: "Defined by targets"
+      benchmark: "MoM growth target 5-15% for growth-stage SaaS."
+    - name: "Churn Rate"
+      target: "< 2% monthly"
+      benchmark: "Best-in-class SaaS < 1%. > 5% is structurally problematic."
+    - name: "Avg NPS Score"
+      target: "> 7"
+      benchmark: "Promoters: 9-10. Passives: 7-8. Detractors: 1-6. Industry avg 31."
+    - name: "MoM MRR Growth"
+      target: "> 5%"
+      benchmark: "Strong SaaS: > 10% MoM. Healthy: 5-10%. Flat = risk."
+    - name: "Revenue per Seat"
+      target: "Benchmark by plan"
+      benchmark: "Compare vs pricing tier expectations."
+  value_drivers:
+    - "Monthly recurring revenue and ARR"
+    - "Net revenue retention (expansion vs contraction)"
+    - "Customer acquisition and onboarding efficiency"
+    - "Product engagement and feature adoption"
+    - "Expansion revenue per account"
+  risk_indicators:
+    - "Monthly churn rate exceeding 5%"
+    - "NPS below 5"
+    - "Negative MoM MRR growth"
+    - "High concentration in single plan tier"
+  common_report_sections:
+    - "MRR and ARR Summary"
+    - "Churn Analysis"
+    - "NPS and Satisfaction"
+    - "Plan and Seat Distribution"
+    - "Growth Rate Trends"
+  recommended_actions:
+    - "Implement customer health scoring to identify churn risk 60 days in advance"
+    - "Launch proactive success outreach for accounts below 50% feature adoption"
+    - "Run NPS follow-up interviews with detractors to identify top product gaps"
+    - "Build expansion playbook to increase seats and plan upgrades"
+  financial_levers:
+    - "Reducing churn by 1% monthly preserves 12%+ of ARR annually"
+    - "Improving NPS unlocks referral growth channel reducing CAC"
+
+finance:
+  display_name: "Finance & Accounting"
+  executive_objectives:
+    - "Achieve target net margin and protect against margin compression"
+    - "Maintain positive cash flow and adequate runway"
+    - "Control operating expense growth relative to revenue growth"
+    - "Minimize budget variance and improve forecast accuracy"
+    - "Optimize working capital and accounts receivable cycles"
+  critical_kpis:
+    - name: "Net Profit"
+      target: "Positive and growing"
+      benchmark: "Varies by industry. Track trend direction."
+    - name: "Margin"
+      target: "> 10%"
+      benchmark: "Software 20-30%. Retail 2-10%. Services 10-20%."
+    - name: "Total Revenue"
+      target: "Defined by plan"
+      benchmark: "Compare vs forecast and prior period."
+    - name: "Budget Variance"
+      target: "< 5%"
+      benchmark: "Best-in-class finance teams forecast within 3% of actuals."
+  value_drivers:
+    - "Revenue growth relative to expense growth"
+    - "Gross and net margin trajectories"
+    - "Cash flow and working capital efficiency"
+    - "Budget accuracy and variance management"
+  risk_indicators:
+    - "Negative net margin"
+    - "Revenue declining while expenses grow"
+    - "Budget variance above 10%"
+    - "Cash burn rate exceeding income"
+  common_report_sections:
+    - "Revenue vs Expense Summary"
+    - "Profitability Analysis"
+    - "Budget vs Actuals"
+    - "Cash Flow Overview"
+  recommended_actions:
+    - "Conduct line-by-line cost review for controllable expense reduction"
+    - "Improve forecasting process to reduce budget variance"
+    - "Accelerate accounts receivable collections"
+  financial_levers:
+    - "Each 1% expense reduction improves net margin by 1% of revenue"
+    - "Faster AR collection improves cash position and reduces financing cost"
+
+operations:
+  display_name: "Operations & Service Delivery"
+  executive_objectives:
+    - "Reduce ticket backlog to below 15% of total volume"
+    - "Achieve average response time below 4 hours"
+    - "Maintain resolution time below 24 hours for standard tickets"
+    - "Improve SLA compliance rate to above 95%"
+    - "Increase team throughput without proportional headcount growth"
+  critical_kpis:
+    - name: "Avg Response Time"
+      target: "< 4 hours"
+      benchmark: "B2B support standard: < 4h. Enterprise: < 1h. Consumer: < 24h."
+    - name: "Avg Resolution Time"
+      target: "< 24 hours"
+      benchmark: "Standard SLA: 24-48h. Priority tickets: < 4h."
+    - name: "Open Tickets"
+      target: "< 15% of monthly volume"
+      benchmark: "Backlog above 30% signals capacity constraint."
+    - name: "Resolution Rate"
+      target: "> 85%"
+      benchmark: "High-performing ops teams close 90%+ of tickets within SLA."
+  value_drivers:
+    - "First contact resolution rate"
+    - "SLA compliance and breach rate"
+    - "Team capacity and throughput per agent"
+    - "Ticket deflection through self-service"
+  risk_indicators:
+    - "Open ticket backlog above 40% of volume"
+    - "Resolution time exceeding 96 hours on standard tickets"
+    - "Response time exceeding 24 hours"
+    - "Growing backlog trend over 3+ periods"
+  common_report_sections:
+    - "Ticket Volume and Backlog"
+    - "Response and Resolution Times"
+    - "Team Performance Breakdown"
+    - "SLA Compliance Report"
+  recommended_actions:
+    - "Conduct triage review of aged open tickets and escalate appropriately"
+    - "Map ticket types to resolution time to identify process bottlenecks"
+    - "Assess whether team capacity increase is needed for sustained backlog"
+  financial_levers:
+    - "SLA compliance protects contract renewal revenue"
+    - "Backlog reduction reduces escalation costs and overtime"
+
+hr:
+  display_name: "Human Resources & Workforce"
+  executive_objectives:
+    - "Reduce voluntary attrition below 10% annually"
+    - "Improve average performance scores above 3.5/5"
+    - "Increase average tenure and reduce early departures"
+    - "Ensure equitable compensation and reduce pay gap risk"
+    - "Improve employee engagement and retention in key roles"
+  critical_kpis:
+    - name: "Attrition Rate"
+      target: "< 10%"
+      benchmark: "US average 13%. Top employers < 8%. Tech < 15% is acceptable."
+    - name: "Avg Performance"
+      target: "> 3.5 / 5"
+      benchmark: "Target > 3.5. Below 3.0 signals a systemic performance management gap."
+    - name: "Avg Tenure"
+      target: "> 3 years"
+      benchmark: "Average US tenure 4.1 years. < 2 years signals retention problem."
+    - name: "Headcount"
+      target: "As planned"
+      benchmark: "Compare vs headcount plan and capacity requirements."
+  value_drivers:
+    - "Employee retention and institutional knowledge retention"
+    - "Workforce productivity and performance distribution"
+    - "Compensation competitiveness and equity"
+    - "Diversity and inclusion metrics"
+    - "Learning and development investment"
+  risk_indicators:
+    - "Attrition above 20% annually"
+    - "Average tenure below 1.5 years"
+    - "Performance below 3.0/5 across departments"
+    - "Significant salary variance for equivalent roles"
+  common_report_sections:
+    - "Headcount and Department Breakdown"
+    - "Attrition Analysis"
+    - "Performance Distribution"
+    - "Compensation Overview"
+    - "Tenure and Retention Metrics"
+  recommended_actions:
+    - "Conduct stay interviews with employees in high-attrition departments"
+    - "Build structured performance improvement plans for below-target performers"
+    - "Review compensation bands for equity and market competitiveness"
+    - "Implement structured onboarding for all new hires"
+  financial_levers:
+    - "Each 1% attrition reduction saves approximately 50% of one salary in replacement costs"
+    - "Performance improvement programs yield 5-15% productivity gains"
+
+hospitality:
+  display_name: "Hospitality & Food Service"
+  executive_objectives:
+    - "Maintain prime cost below 65% of revenue"
+    - "Achieve food cost below 30% through menu engineering and waste control"
+    - "Reduce no-show rate below 5% with deposit policy"
+    - "Grow average check size through upsell programs"
+    - "Increase average daily covers through marketing and reservation fill"
+  critical_kpis:
+    - name: "Food Cost %"
+      target: "28–32%"
+      benchmark: "Full-service restaurant target 28-35%. Fast casual 25-30%."
+    - name: "Labor Cost %"
+      target: "25–35%"
+      benchmark: "Full-service target 30-35%. QSR 25-30%. > 38% is critical."
+    - name: "Prime Cost %"
+      target: "< 65%"
+      benchmark: "Industry standard < 65%. > 70% means near-zero operating profit."
+    - name: "No-Show Rate"
+      target: "< 5%"
+      benchmark: "Best-in-class restaurants achieve < 3% with deposit policies."
+    - name: "Avg Check Size"
+      target: "Defined by segment"
+      benchmark: "Compare vs menu pricing expectations and prior periods."
+  value_drivers:
+    - "Prime cost control (food + labor)"
+    - "Average check size and covers per day"
+    - "Reservation fill rate and no-show reduction"
+    - "Menu mix and high-margin item promotion"
+    - "Revenue per available seat hour (RevPASH)"
+  risk_indicators:
+    - "Prime cost above 70%"
+    - "Food cost above 38%"
+    - "Labor cost above 40%"
+    - "No-show rate above 10%"
+    - "Revenue declining while covers remain flat"
+  common_report_sections:
+    - "Revenue and Cover Trends"
+    - "Food and Labor Cost Analysis"
+    - "Prime Cost Breakdown"
+    - "No-Show Impact Analysis"
+    - "Check Size and Upsell Performance"
+  recommended_actions:
+    - "Conduct full menu engineering review to identify high-margin items for promotion"
+    - "Implement credit card hold policy for reservation no-show reduction"
+    - "Build volume-based labor scheduling templates"
+    - "Launch daily food cost reporting with waste tracking"
+  financial_levers:
+    - "Each 1% food cost reduction = 1% of total revenue added to gross profit"
+    - "Each 1% no-show reduction recovers ~1% of projected cover revenue"
+
+restaurant:
+  display_name: "Restaurant Operations"
+  executive_objectives:
+    - "Maintain prime cost below 65% of revenue"
+    - "Achieve food cost below 30% through waste and portioning controls"
+    - "Reduce no-show rate with reservation confirmation protocols"
+    - "Grow average check size through upsell and menu engineering"
+    - "Maximize revenue per table and per service period"
+  critical_kpis:
+    - name: "Food Cost %"
+      target: "28–32%"
+      benchmark: "Full-service target 28-35%. > 38% is operationally critical."
+    - name: "Labor Cost %"
+      target: "25–35%"
+      benchmark: "Full-service 30-35%. QSR 25-30%."
+    - name: "Prime Cost %"
+      target: "< 65%"
+      benchmark: "< 65% required for sustainable profitability."
+    - name: "No-Show Rate"
+      target: "< 5%"
+      benchmark: "Best practice with deposit policy: < 3%."
+    - name: "Avg Check Size"
+      target: "Segment-defined"
+      benchmark: "Compare vs menu and prior periods."
+  value_drivers:
+    - "Prime cost management"
+    - "Cover volume and table turns"
+    - "Average check size"
+    - "Reservation fill rate"
+  risk_indicators:
+    - "Prime cost above 70%"
+    - "Food cost above 38%"
+    - "No-show rate above 10%"
+  common_report_sections:
+    - "Revenue and Cover Summary"
+    - "Cost Analysis"
+    - "No-Show Impact"
+    - "Check Size Performance"
+  recommended_actions:
+    - "Menu engineering review focused on high-margin items"
+    - "Implement credit card hold for reservations"
+    - "Build cover-volume-based scheduling templates"
+  financial_levers:
+    - "1% food cost reduction = 1% of revenue to gross profit"
+
+hotel:
+  display_name: "Hotel & Accommodation"
+  executive_objectives:
+    - "Maximize occupancy rate above 70%"
+    - "Grow RevPAR (Revenue per Available Room)"
+    - "Achieve ADR growth above inflation"
+    - "Minimize cancellation and no-show rates"
+    - "Optimize F&B and ancillary revenue per guest"
+  critical_kpis:
+    - name: "Occupancy Rate"
+      target: "> 70%"
+      benchmark: "Luxury hotels target 65-75%. Budget 75-85%."
+    - name: "ADR"
+      target: "Market benchmark"
+      benchmark: "Compare vs comp set and prior year."
+    - name: "RevPAR"
+      target: "Above comp set"
+      benchmark: "RevPAR = Occupancy x ADR. Track YoY growth."
+  value_drivers:
+    - "Occupancy and ADR optimization"
+    - "Ancillary revenue per guest"
+    - "Direct booking vs OTA mix"
+    - "Loyalty program engagement"
+  risk_indicators:
+    - "Occupancy below 50%"
+    - "ADR declining YoY"
+    - "High OTA dependency (> 40% of bookings)"
+  common_report_sections:
+    - "Occupancy and Revenue Overview"
+    - "ADR and RevPAR Trends"
+    - "Booking Channel Analysis"
+    - "Ancillary Revenue Performance"
+  recommended_actions:
+    - "Review rate strategy for low-occupancy periods"
+    - "Build direct booking incentive program"
+  financial_levers:
+    - "1% occupancy improvement at avg ADR = material RevPAR lift"
+
+casino:
+  display_name: "Casino & Gaming"
+  executive_objectives:
+    - "Maximize gaming revenue and hold percentage"
+    - "Optimize floor layout and game mix"
+    - "Grow non-gaming revenue (F&B, hotel, entertainment)"
+    - "Improve player retention and loyalty program engagement"
+    - "Manage operating expenses vs gaming win"
+  critical_kpis:
+    - name: "Gaming Win"
+      target: "Defined by targets"
+      benchmark: "Compare vs prior period and floor capacity."
+    - name: "Hold Percentage"
+      target: "By game type"
+      benchmark: "Slots 8-10%. Table games 2-5%."
+    - name: "Revenue per Visitor"
+      target: "Segment-defined"
+      benchmark: "Compare vs player tier benchmarks."
+  value_drivers:
+    - "Gaming floor utilization and revenue per square foot"
+    - "Player visits and time on device"
+    - "Non-gaming revenue contribution"
+    - "Loyalty tier progression"
+  risk_indicators:
+    - "Declining gaming win trend"
+    - "Hold percentage below game-type minimum"
+    - "Player visitation frequency declining"
+  common_report_sections:
+    - "Gaming Revenue Summary"
+    - "Game Type Performance"
+    - "Non-Gaming Revenue"
+    - "Player Segment Analysis"
+  recommended_actions:
+    - "Review game mix and floor layout for underperforming sections"
+    - "Launch targeted player re-engagement campaign for lapsed visitors"
+  financial_levers:
+    - "Floor optimization can lift revenue per sq ft 5-15%"
+
+real_estate:
+  display_name: "Real Estate & Property Sales"
+  executive_objectives:
+    - "Maximize total sales volume and agent transaction count"
+    - "Reduce average days on market below 45 days"
+    - "Achieve list-to-sale ratio above 97%"
+    - "Grow listing pipeline across all neighborhoods and property types"
+    - "Maintain sale rate above 85% of listed properties"
+  critical_kpis:
+    - name: "Avg Days on Market"
+      target: "< 45 days"
+      benchmark: "Hot market < 30 days. Competitive market 30-60 days."
+    - name: "List-to-Sale Ratio"
+      target: "> 97%"
+      benchmark: "Strong market > 100%. Competitive buyer market 95-100%."
+    - name: "Sale Rate"
+      target: "> 85%"
+      benchmark: "Target > 85%. Below 70% signals systematic listing or pricing issues."
+    - name: "Avg Sale Price"
+      target: "Above market comps"
+      benchmark: "Compare vs MLS averages by neighborhood and property type."
+    - name: "Total Sales Volume"
+      target: "Defined by production targets"
+      benchmark: "Compare vs prior year and brokerage goals."
+  value_drivers:
+    - "Listing volume and conversion rate"
+    - "Agent productivity per listing"
+    - "Pricing accuracy and list-to-sale ratio"
+    - "Average days on market and velocity"
+    - "Neighborhood and property type diversification"
+  risk_indicators:
+    - "Sale rate below 70%"
+    - "Average DOM exceeding 90 days"
+    - "Volume concentration in single agent or neighborhood"
+    - "List-to-sale ratio below 93%"
+  common_report_sections:
+    - "Sales Volume and Transaction Count"
+    - "Days on Market Analysis"
+    - "Pricing and List-to-Sale Analysis"
+    - "Agent Performance Breakdown"
+    - "Property Type and Neighborhood Mix"
+  recommended_actions:
+    - "Implement DOM intervention protocol at day 40 for any active listing"
+    - "Build agent-specific scorecards using DOM and list-to-sale ratio"
+    - "Develop separate pricing strategy for each property type"
+    - "Review unsold listing pipeline for repricing or re-marketing opportunities"
+  financial_levers:
+    - "Each 1-day reduction in DOM reduces seller carrying cost and improves satisfaction"
+    - "5% improvement in sale rate at avg sale price = material volume increase"
+
+manufacturing:
+  display_name: "Manufacturing & Production"
+  executive_objectives:
+    - "Maximize production throughput and minimize downtime"
+    - "Reduce defect rate and rework costs below target"
+    - "Optimize capacity utilization across production lines"
+    - "Improve on-time delivery rate to above 95%"
+    - "Control cost per unit and maintain production efficiency"
+  critical_kpis:
+    - name: "On-Time Delivery Rate"
+      target: "> 95%"
+      benchmark: "World-class manufacturing > 98%. Average 85-90%."
+    - name: "Defect Rate"
+      target: "< 1%"
+      benchmark: "Six Sigma target < 0.00034%. Lean target < 1%."
+    - name: "Capacity Utilization"
+      target: "75–85%"
+      benchmark: "Optimal range 75-85%. Below 60% signals overcapacity."
+  value_drivers:
+    - "Production throughput and cycle time"
+    - "Quality and defect prevention"
+    - "Machine uptime and OEE"
+    - "On-time delivery and schedule adherence"
+  risk_indicators:
+    - "On-time delivery below 85%"
+    - "Defect rate above 3%"
+    - "Capacity utilization below 60% or above 90%"
+  common_report_sections:
+    - "Production Volume and Throughput"
+    - "Quality and Defect Analysis"
+    - "Capacity Utilization"
+    - "On-Time Delivery Performance"
+  recommended_actions:
+    - "Implement root cause analysis for top defect categories"
+    - "Review scheduling process for on-time delivery misses"
+  financial_levers:
+    - "1% defect reduction saves rework cost + material waste"
+    - "Capacity optimization reduces overtime and facility cost"
+
+logistics:
+  display_name: "Logistics & Supply Chain"
+  executive_objectives:
+    - "Achieve on-time delivery above 95%"
+    - "Reduce average delivery time and transit variability"
+    - "Minimize cost per shipment without service degradation"
+    - "Optimize carrier mix and route efficiency"
+    - "Reduce damage and loss rates to below 0.5%"
+  critical_kpis:
+    - name: "On-Time Delivery Rate"
+      target: "> 95%"
+      benchmark: "Industry standard > 95%. Top 3PL providers > 98%."
+    - name: "Cost per Shipment"
+      target: "Below benchmark"
+      benchmark: "Compare vs carrier contracts and market rates."
+    - name: "Transit Time"
+      target: "As contracted"
+      benchmark: "Compare vs customer SLA commitments."
+  value_drivers:
+    - "On-time delivery performance"
+    - "Cost per shipment and carrier efficiency"
+    - "Damage and loss prevention"
+    - "Routing optimization"
+  risk_indicators:
+    - "On-time delivery below 90%"
+    - "Cost per shipment growing without volume increase"
+    - "Damage rate above 1%"
+  common_report_sections:
+    - "Delivery Performance Overview"
+    - "Transit Time Analysis"
+    - "Cost per Shipment Trends"
+    - "Carrier Performance Breakdown"
+  recommended_actions:
+    - "Audit carrier performance and renegotiate underperforming contracts"
+    - "Review routing logic for efficiency improvement opportunities"
+  financial_levers:
+    - "5% improvement in cost per shipment compounds across total volume"
+
+education:
+  display_name: "Education & Training"
+  executive_objectives:
+    - "Maximize student enrollment and retention"
+    - "Achieve completion and graduation rates above target"
+    - "Improve student satisfaction and Net Promoter Score"
+    - "Optimize class utilization and instructor capacity"
+    - "Grow revenue per student and program profitability"
+  critical_kpis:
+    - name: "Enrollment Rate"
+      target: "At or above target"
+      benchmark: "Compare vs prior year and enrollment plan."
+    - name: "Completion Rate"
+      target: "> 85%"
+      benchmark: "Top institutions > 90%. National average varies by program."
+    - name: "Student Satisfaction"
+      target: "> 4.0 / 5"
+      benchmark: "Top programs > 4.3. Below 3.5 requires curriculum review."
+  value_drivers:
+    - "Enrollment volume and revenue per student"
+    - "Completion and graduation rates"
+    - "Student satisfaction and referral rate"
+    - "Instructor utilization and class fill rates"
+  risk_indicators:
+    - "Enrollment declining YoY"
+    - "Completion rate below 70%"
+    - "Satisfaction below 3.5"
+  common_report_sections:
+    - "Enrollment and Retention Overview"
+    - "Completion Rate Analysis"
+    - "Student Satisfaction Report"
+    - "Program Performance Breakdown"
+  recommended_actions:
+    - "Implement early intervention for at-risk students"
+    - "Conduct satisfaction survey with systematic follow-up"
+  financial_levers:
+    - "1% retention improvement = 1% revenue increase on current enrollment base"
+
+insurance:
+  display_name: "Insurance"
+  executive_objectives:
+    - "Achieve combined ratio below 100%"
+    - "Grow premium written while managing loss ratio"
+    - "Reduce claims processing time and improve customer satisfaction"
+    - "Maintain adequate reserves and solvency ratios"
+    - "Expand policy retention and reduce lapse rate"
+  critical_kpis:
+    - name: "Loss Ratio"
+      target: "< 65%"
+      benchmark: "Target < 65%. > 100% means more paid in claims than premiums earned."
+    - name: "Combined Ratio"
+      target: "< 100%"
+      benchmark: "Below 100% = underwriting profit. Above = loss."
+    - name: "Claims Processing Time"
+      target: "< 30 days"
+      benchmark: "Industry standard 30 days. Best-in-class 15 days."
+  value_drivers:
+    - "Premium growth and renewal retention"
+    - "Loss ratio management"
+    - "Claims efficiency and fraud prevention"
+    - "Customer satisfaction and retention"
+  risk_indicators:
+    - "Loss ratio above 80%"
+    - "Combined ratio above 110%"
+    - "Claims volume growing faster than premium"
+  common_report_sections:
+    - "Premium and Policy Summary"
+    - "Loss Ratio Analysis"
+    - "Claims Performance"
+    - "Retention and Lapse Rates"
+  recommended_actions:
+    - "Review underwriting guidelines for high-loss segments"
+    - "Accelerate claims processing to improve satisfaction"
+  financial_levers:
+    - "Each 1% loss ratio improvement = direct bottom-line improvement"
+
+telecom:
+  display_name: "Telecommunications"
+  executive_objectives:
+    - "Reduce customer churn below 1.5% monthly"
+    - "Grow ARPU through value-added services"
+    - "Achieve network uptime above 99.9%"
+    - "Improve customer satisfaction and NPS"
+    - "Expand subscriber base while controlling CAC"
+  critical_kpis:
+    - name: "Monthly Churn"
+      target: "< 1.5%"
+      benchmark: "Wireless industry average 1.5-2%. Cable < 1% target."
+    - name: "ARPU"
+      target: "Growing YoY"
+      benchmark: "Compare vs market and prior year."
+    - name: "Network Uptime"
+      target: "> 99.9%"
+      benchmark: "Carrier SLA standard 99.9% = < 9h downtime/year."
+  value_drivers:
+    - "Subscriber growth and ARPU"
+    - "Churn reduction and retention"
+    - "Network quality and uptime"
+    - "Bundle attach rate"
+  risk_indicators:
+    - "Monthly churn above 3%"
+    - "ARPU declining YoY"
+    - "Network complaints increasing"
+  common_report_sections:
+    - "Subscriber and Revenue Summary"
+    - "Churn Analysis"
+    - "ARPU Trends"
+    - "Network Performance"
+  recommended_actions:
+    - "Launch proactive retention for high-churn customer segments"
+    - "Develop ARPU growth program through bundle and value-add sales"
+  financial_levers:
+    - "Each 0.5% churn reduction preserves significant recurring revenue"
+
+utilities:
+  display_name: "Utilities & Energy"
+  executive_objectives:
+    - "Maximize system reliability and minimize outage duration"
+    - "Achieve regulatory compliance on all reporting requirements"
+    - "Control operating cost per customer or unit delivered"
+    - "Reduce service restoration time"
+    - "Improve customer satisfaction on service interactions"
+  critical_kpis:
+    - name: "System Reliability"
+      target: "> 99.9% uptime"
+      benchmark: "SAIDI/SAIFI regulatory benchmarks vary by jurisdiction."
+    - name: "Outage Duration"
+      target: "< 1 hour average"
+      benchmark: "Best-in-class utilities < 60 min average restoration."
+    - name: "Cost per Customer"
+      target: "At or below budget"
+      benchmark: "Compare vs regulatory allowed cost and prior year."
+  value_drivers:
+    - "Grid reliability and uptime"
+    - "Operating cost efficiency"
+    - "Customer satisfaction on service"
+    - "Compliance and regulatory adherence"
+  risk_indicators:
+    - "Outage frequency above benchmark"
+    - "Cost per customer growing above inflation"
+    - "Compliance violations or near-misses"
+  common_report_sections:
+    - "Reliability and Outage Summary"
+    - "Cost Efficiency Analysis"
+    - "Customer Impact Report"
+    - "Compliance Overview"
+  recommended_actions:
+    - "Review infrastructure maintenance schedule for high-failure areas"
+    - "Audit cost-per-customer drivers for reduction opportunities"
+  financial_levers:
+    - "Outage reduction protects regulatory standing and avoids penalties"
+
+nonprofit:
+  display_name: "Nonprofit & Social Impact"
+  executive_objectives:
+    - "Maximize mission delivery per dollar of funding raised"
+    - "Grow donor retention and recurring giving"
+    - "Reduce cost per program outcome"
+    - "Achieve impact metrics aligned with donor expectations"
+    - "Maintain program expense ratio above 75% of total spend"
+  critical_kpis:
+    - name: "Donor Retention Rate"
+      target: "> 60%"
+      benchmark: "Sector average 45%. Best-in-class > 70%."
+    - name: "Program Expense Ratio"
+      target: "> 75%"
+      benchmark: "Charity watchdogs rate > 75% program spend favorably."
+    - name: "Cost per Outcome"
+      target: "Defined by program"
+      benchmark: "Compare vs prior year and peer organizations."
+  value_drivers:
+    - "Donor acquisition and retention"
+    - "Program efficiency and impact per dollar"
+    - "Volunteer engagement and capacity"
+    - "Recurring giving and major donor cultivation"
+  risk_indicators:
+    - "Donor retention below 40%"
+    - "Program expense ratio below 65%"
+    - "Declining grant revenue"
+  common_report_sections:
+    - "Fundraising Performance"
+    - "Program Delivery Summary"
+    - "Donor Retention Analysis"
+    - "Cost Per Outcome Metrics"
+  recommended_actions:
+    - "Implement stewardship program for lapsed donors"
+    - "Review overhead structure to improve program expense ratio"
+  financial_levers:
+    - "10% donor retention improvement compounds giving over 3-5 years"
+
+government:
+  display_name: "Government & Public Sector"
+  executive_objectives:
+    - "Deliver services within budget and on schedule"
+    - "Achieve citizen satisfaction targets on key services"
+    - "Maximize compliance with regulatory and reporting requirements"
+    - "Reduce cost per service transaction"
+    - "Improve response time for citizen service requests"
+  critical_kpis:
+    - name: "Budget Variance"
+      target: "< 5%"
+      benchmark: "Best practice < 3%. > 10% triggers audit review."
+    - name: "Service Delivery Time"
+      target: "As mandated"
+      benchmark: "Compare vs service charter commitments."
+    - name: "Citizen Satisfaction"
+      target: "> 3.5 / 5"
+      benchmark: "Federal average 3.5. High-performing agencies > 4.0."
+  value_drivers:
+    - "Budget efficiency and variance management"
+    - "Service delivery speed and quality"
+    - "Compliance and reporting accuracy"
+    - "Citizen experience and satisfaction"
+  risk_indicators:
+    - "Budget overrun above 10%"
+    - "Service delivery below mandated timeframes"
+    - "Citizen satisfaction below 3.0"
+  common_report_sections:
+    - "Budget vs Actuals"
+    - "Service Delivery Performance"
+    - "Citizen Satisfaction Metrics"
+    - "Compliance Summary"
+  recommended_actions:
+    - "Conduct process improvement review for slowest service areas"
+    - "Implement citizen feedback loop for continuous improvement"
+  financial_levers:
+    - "Process automation reduces cost per transaction"
+
+support:
+  display_name: "Customer Support"
+  executive_objectives:
+    - "Achieve first-contact resolution above 70%"
+    - "Maintain customer satisfaction (CSAT) above 4.0"
+    - "Reduce average handle time without sacrificing quality"
+    - "Keep ticket backlog below 10% of monthly volume"
+    - "Improve SLA compliance to above 95%"
+  critical_kpis:
+    - name: "First Contact Resolution"
+      target: "> 70%"
+      benchmark: "Industry average 65-70%. Best-in-class > 80%."
+    - name: "CSAT Score"
+      target: "> 4.0 / 5"
+      benchmark: "Target > 4.0. Below 3.5 requires process intervention."
+    - name: "Avg Resolution Time"
+      target: "< 24 hours"
+      benchmark: "Standard SLA: 24-48h. Priority: < 4h."
+  value_drivers:
+    - "First contact resolution rate"
+    - "Agent productivity and ticket throughput"
+    - "Customer satisfaction scores"
+    - "Escalation rate and severity distribution"
+  risk_indicators:
+    - "Backlog above 20% of volume"
+    - "CSAT below 3.5"
+    - "SLA breach rate above 10%"
+  common_report_sections:
+    - "Ticket Volume and Backlog"
+    - "Resolution Time Analysis"
+    - "CSAT and Quality Scores"
+    - "SLA Compliance Report"
+  recommended_actions:
+    - "Build knowledge base to improve first contact resolution"
+    - "Review SLA breach tickets for root cause patterns"
+  financial_levers:
+    - "High CSAT correlates with retention and reduces churn"
+
+general:
+  display_name: "General Business"
+  executive_objectives:
+    - "Understand the structure and quality of the dataset"
+    - "Identify key metrics and trends"
+    - "Surface actionable insights from available data"
+  critical_kpis:
+    - name: "Data Completeness"
+      target: "> 95%"
+      benchmark: "Analysis confidence degrades below 90% completeness."
+  value_drivers:
+    - "Data quality and completeness"
+    - "Metric accuracy and reliability"
+  risk_indicators:
+    - "High missing value rate"
+    - "Significant duplicate records"
+    - "Data validation warnings"
+  common_report_sections:
+    - "Data Overview"
+    - "Quality Report"
+    - "Key Metrics"
+  recommended_actions:
+    - "Improve data quality before drawing conclusions"
+    - "Confirm domain and KPI definitions with the client"
+  financial_levers:
+    - "Data quality improvements enable more reliable business decisions"

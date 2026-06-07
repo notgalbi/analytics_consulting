@@ -640,6 +640,7 @@ def _calc_healthcare(df: pd.DataFrame, r: dict) -> dict:
     out = {}
     out["Total Appointments"] = f"{len(df):,}"
     no_show_col = _find_col(df, ["no_show", "no_shows", "did_not_attend"])
+    status_col  = _find_col(df, ["status", "appointment_status", "appt_status"])
     if no_show_col:
         col = df[no_show_col]
         if pd.api.types.is_bool_dtype(col):
@@ -649,6 +650,14 @@ def _calc_healthcare(df: pd.DataFrame, r: dict) -> dict:
         rate = no_show_n / len(df)
         out["No-Show Rate"]     = f"{rate * 100:.1f}%"
         out["Completion Rate"]  = f"{(1 - rate) * 100:.1f}%"
+    elif status_col:
+        statuses = df[status_col].astype(str).str.lower()
+        no_show_n   = statuses.isin(["no-show", "no_show", "noshow", "missed", "dna"]).sum()
+        completed_n = statuses.isin(["completed", "complete", "done", "attended", "seen"]).sum()
+        if no_show_n + completed_n > 0:
+            total = len(df)
+            out["No-Show Rate"]     = f"{no_show_n / total * 100:.1f}%"
+            out["Completion Rate"]  = f"{completed_n / total * 100:.1f}%"
     if r.get("wait_time_mins"):
         out["Avg Wait Time"] = f"{df[r['wait_time_mins']].mean():.0f} min"
     if r.get("duration_mins"):
