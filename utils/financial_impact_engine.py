@@ -432,15 +432,19 @@ def _impact_ecommerce(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFindin
             priority="High" if return_rate > 20 else "Medium",
         ))
 
-    if avg_days_ship is not None and avg_days_ship > 5:
+    if avg_days_ship is not None and avg_days_ship > 3 and total_revenue:
+        days_over = avg_days_ship - 3
+        repeat_risk = total_revenue * 0.03 * days_over
+        assumption = "3% repeat-purchase risk per day above 3-day benchmark (industry churn proxy)"
+        assumptions.append(assumption)
         findings.append(_finding(
-            title=f"Fulfillment Lead Time {avg_days_ship:.1f} Days — Conversion Risk",
-            category="Revenue Opportunity",
-            amount=None,
-            description=f"Shipping time of {avg_days_ship:.1f} days exceeds the 3-day customer expectation, directly affecting cart conversion and repeat purchase intent.",
-            assumption="Conversion rate impact not quantifiable without cart abandonment data",
-            confidence=0.6,
-            priority="Medium",
+            title=f"Fulfillment Lead Time {avg_days_ship:.1f} Days — Repeat Purchase Risk",
+            category="Revenue at Risk",
+            amount=repeat_risk,
+            description=f"Shipping time of {avg_days_ship:.1f} days exceeds the 3-day customer expectation by {days_over:.1f} days, increasing repeat-purchase churn risk.",
+            assumption=assumption,
+            confidence=0.65,
+            priority="High" if avg_days_ship > 7 else "Medium",
         ))
 
     return findings, assumptions

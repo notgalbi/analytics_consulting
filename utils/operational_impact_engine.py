@@ -390,7 +390,7 @@ def _ops_ecommerce(calc_kpis: dict, profile: dict):
     days_to_ship  = _parse_kpi(calc_kpis.get("Avg Days to Ship", ""))
     mom_growth    = _parse_kpi(calc_kpis.get("MoM Revenue Growth", ""))
 
-    if days_to_ship is not None and days_to_ship > 5:
+    if days_to_ship is not None and days_to_ship > 3:
         findings.append(_op(
             title=f"Fulfillment Time {days_to_ship:.1f} Days — Customer Experience Gap",
             category="Throughput",
