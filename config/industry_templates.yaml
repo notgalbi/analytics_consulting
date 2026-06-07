@@ -151,6 +151,55 @@ marketing:
     - "Improving ROAS from 2x to 4x doubles revenue at same budget"
     - "1% conversion rate improvement doubles revenue without increasing traffic"
 
+retail:
+  display_name: "Retail & Inventory Management"
+  executive_objectives:
+    - "Maintain optimal stock levels to prevent stockouts without excess overstock"
+    - "Maximise gross margin across all categories through pricing and supplier discipline"
+    - "Improve inventory turnover to free working capital and reduce holding costs"
+    - "Reduce supplier concentration risk through dual-sourcing and vendor diversification"
+    - "Identify and liquidate slow-moving inventory before it becomes a write-off"
+  critical_kpis:
+    - name: "Stockout Rate"
+      target: "< 5%"
+      benchmark: "Best practice < 5%; > 10% means active revenue loss"
+    - name: "Avg Gross Margin"
+      target: "> 40%"
+      benchmark: "Grocery 25-30%. Fashion 50-60%. Electronics 15-25%."
+    - name: "Inventory Turnover"
+      target: "> 0.5x monthly"
+      benchmark: "< 0.2x monthly signals slow-moving inventory"
+    - name: "Avg Days Cover"
+      target: "30-60 days"
+      benchmark: "< 30 days risks stockout; > 90 days traps working capital"
+  value_drivers:
+    - "Stockout prevention on high-velocity SKUs"
+    - "Gross margin improvement through repricing and supplier renegotiation"
+    - "Working capital release from slow-mover liquidation"
+    - "Supplier diversification to reduce single-vendor dependency"
+  risk_indicators:
+    - "Stockout rate above 5%"
+    - "Inventory turnover below 0.5x monthly"
+    - "Single supplier controlling more than 20% of SKUs"
+    - "Days of cover exceeding 90 days across the portfolio"
+    - "Margin variance greater than 15 percentage points across the assortment"
+  recommended_actions:
+    - "Emergency restock low-stock SKUs ranked by 30-day sales velocity"
+    - "Recalibrate reorder points to reflect actual demand, not static defaults"
+    - "Launch markdown programme on SKUs with over 90 days of cover"
+    - "Initiate dual-sourcing for top supplier's highest-velocity SKUs"
+    - "Implement category-specific inventory policies for seasonal categories"
+  financial_levers:
+    - "Each percentage point of stockout reduction recovers ~1% of 30-day revenue"
+    - "Reducing days cover from 150 to 60 releases 60% of working capital"
+    - "Moving bottom-quartile margin SKUs to median margin adds 3-5 points to overall margin"
+  common_report_sections:
+    - "Inventory Health Overview"
+    - "Stockout Risk Analysis"
+    - "Margin & Pricing Performance"
+    - "Supplier Concentration Risk"
+    - "Slow-Mover Liquidation Candidates"
+
 ecommerce:
   display_name: "E-commerce & Online Retail"
   executive_objectives:
