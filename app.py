@@ -207,19 +207,25 @@ if st.session_state.profile_data is None:
     progress.progress(55, text="Computing KPIs…")
     calculated_kpis = calculate_available_kpis(df, domain)
 
-    progress.progress(65, text="Generating and scoring charts…")
-    chart_specs_temp, figures_temp = score_and_select_charts(sanitized_df, domain)
-
-    progress.progress(72, text="Estimating financial impact…")
+    progress.progress(62, text="Estimating financial impact…")
     financial_impact_temp = estimate_financial_impact(domain, calculated_kpis, profile_temp)
 
-    progress.progress(78, text="Estimating operational impact…")
+    progress.progress(68, text="Estimating operational impact…")
     operational_impact_temp = estimate_operational_impact(domain, calculated_kpis, profile_temp)
 
-    progress.progress(84, text="Generating insights…")
+    progress.progress(74, text="Generating insights…")
     insights_temp = generate_insights(
         domain, calculated_kpis, profile_temp,
         financial_impact_temp, operational_impact_temp,
+    )
+
+    progress.progress(82, text="Selecting and scoring charts…")
+    chart_specs_temp, figures_temp = score_and_select_charts(
+        sanitized_df, domain,
+        insights=insights_temp,
+        calc_kpis=calculated_kpis,
+        financial_impact=financial_impact_temp,
+        operational_impact=operational_impact_temp,
     )
 
     progress.progress(88, text="Building recommendations…")
