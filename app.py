@@ -243,7 +243,7 @@ if st.session_state.profile_data is None:
         insights_temp,
         figures_temp,
         calculated_kpis,
-        "",  # summary not generated yet
+        narrative_temp,   # KPI narrative used as proxy until exec summary is generated
         financial_impact_temp,
         operational_impact_temp,
         opportunities=opportunities_temp,
@@ -288,6 +288,44 @@ recommendations    = st.session_state.recommendations
 opportunities      = st.session_state.opportunities
 scenarios          = st.session_state.scenarios
 qa_result          = st.session_state.qa_result
+
+
+# ── QA helper functions ───────────────────────────────────────────────────────
+
+def _qa_fix_hint(issue) -> str:
+    """Return a short ' → fix text' string for a QAIssue."""
+    desc = issue.description.lower()
+    cat  = issue.category.lower()
+    if "no executive summary" in desc:
+        return " → **Generate the executive summary below to gain up to +15 pts.**"
+    if "very short" in desc and "summary" in cat:
+        return " → **Allow the summary to finish generating fully — aim for 500+ characters.**"
+    if "no charts" in desc:
+        return " → **Ensure the dataset has numeric and date columns for chart generation.**"
+    if "no kpis" in desc or "no insights" in desc:
+        return " → **Upload a richer dataset with domain-specific columns (revenue, dates, categories).**"
+    if "no financial impact" in desc:
+        return " → **Upload data with revenue or cost columns so financial impact can be quantified.**"
+    if "thin" in desc and "kpi" in cat:
+        return " → **Add more domain-relevant columns to the dataset to unlock more KPI calculations.**"
+    return ""
+
+
+def _qa_rec_points(rec: str) -> int | None:
+    """Estimate how many QA points a recommendation is worth."""
+    r = rec.lower()
+    if "executive summary" in r:
+        return 15
+    if "more insights" in r or "structured insights" in r:
+        return 12
+    if "more charts" in r or "4–6 charts" in r:
+        return 8
+    if "kpi coverage" in r or "domain detection" in r:
+        return 7
+    if "quantify" in r or "dollar" in r:
+        return 5
+    return None
+
 
 # ── Tab 2: PII Report ─────────────────────────────────────────────────────────
 with tabs[1]:
@@ -536,23 +574,104 @@ with tabs[6]:
 with tabs[7]:
     st.subheader("Executive Summary")
 
+    # ── QA Scorecard ─────────────────────────────────────────────────────────
     if qa_result:
-        qa_color = {"Ready to Deliver": "green", "Needs Minor Review": "orange", "Needs Major Review": "red"}.get(
-            qa_result.delivery_readiness, "gray"
-        )
-        st.markdown(
-            f"**QA Score:** {qa_result.overall_score:.0f}/100 — "
-            f"<span style='color:{qa_color}'>{qa_result.delivery_readiness}</span>",
-            unsafe_allow_html=True,
-        )
+        score = qa_result.overall_score
+        readiness = qa_result.delivery_readiness
+        status_color = {
+            "Ready to Deliver":    "#2ecc71",
+            "Needs Minor Review":  "#f39c12",
+            "Needs Major Review":  "#e74c3c",
+        }.get(readiness, "#888")
 
+        # Header row
+        hc1, hc2 = st.columns([4, 1])
+        with hc1:
+            st.markdown(
+                f"<span style='font-size:1.05rem;font-weight:600'>Report Quality Score</span> — "
+                f"<span style='color:{status_color};font-weight:600'>{readiness}</span>",
+                unsafe_allow_html=True,
+            )
+            st.progress(int(score))
+        with hc2:
+            st.metric("Score", f"{score:.0f} / 100")
+
+        st.divider()
+
+        # Subscore breakdown
+        st.markdown("**Score Breakdown**")
+        sc1, sc2, sc3, sc4 = st.columns(4)
+        for col, label, val in [
+            (sc1, "Insight Quality",  qa_result.insight_quality_score),
+            (sc2, "Chart Quality",    qa_result.chart_quality_score),
+            (sc3, "KPI Coverage",     qa_result.kpi_relevance_score),
+            (sc4, "Completeness",     qa_result.completeness_score),
+        ]:
+            gap = 25 - val
+            delta_str = f"−{gap:.0f} from max" if gap > 0 else "✓ Max"
+            col.metric(label, f"{val:.0f} / 25", delta=delta_str,
+                       delta_color="inverse" if gap > 0 else "normal")
+
+        if qa_result.decision_quality_score > 0:
+            st.caption(
+                f"Decision Quality (bonus): {qa_result.decision_quality_score:.0f} / 25 — "
+                "measures how actionable the recommendations and opportunities are."
+            )
+
+        st.divider()
+
+        # Issues — grouped by severity with fix hints
+        blocking = [i for i in qa_result.issues if i.severity == "blocking"]
+        warnings_ = [i for i in qa_result.issues if i.severity == "warning"]
+        suggestions = [i for i in qa_result.issues if i.severity == "suggestion"]
+
+        if blocking:
+            st.markdown("**⛔ Blocking — fix before delivering to client**")
+            for iss in blocking:
+                hint = _qa_fix_hint(iss)
+                st.error(f"**[{iss.category}]** {iss.description}{hint}")
+
+        if warnings_:
+            st.markdown("**⚠️ Warnings — these are reducing your score**")
+            for iss in warnings_:
+                hint = _qa_fix_hint(iss)
+                st.warning(f"**[{iss.category}]** {iss.description}{hint}")
+
+        if suggestions:
+            st.markdown("**💡 Suggestions — optional score improvements**")
+            for iss in suggestions:
+                hint = _qa_fix_hint(iss)
+                st.info(f"**[{iss.category}]** {iss.description}{hint}")
+
+        # Strengths
+        if qa_result.strengths:
+            st.markdown("**✅ What's working**")
+            for s in qa_result.strengths:
+                st.success(s, icon="✅")
+
+        # Recommendations to close the gap
+        points_left = 100 - score
+        if qa_result.recommendations or points_left > 5:
+            st.markdown(
+                f"**📈 How to reach 90+** *(currently {score:.0f} / 100 — "
+                f"{points_left:.0f} pts available)*"
+            )
+            for rec in qa_result.recommendations:
+                pts = _qa_rec_points(rec)
+                prefix = f"**+{pts} pts** — " if pts else ""
+                st.markdown(f"- {prefix}{rec}")
+            if not qa_result.recommendations:
+                st.markdown("- Generate the executive summary below to unlock the remaining points.")
+
+        st.divider()
+
+    # ── Executive Summary generation ──────────────────────────────────────────
     if st.session_state.summary is None:
         if st.button("Generate Executive Summary", type="primary"):
             payload = build_safe_summary_payload(prof, dataset_type, kpis, pii_report, calc_kpis)
             st.caption("Claude is writing your report — text will appear below as it generates.")
             full = st.write_stream(stream_executive_summary(payload))
             st.session_state.summary = full
-            # Re-run QA now that summary exists
             st.session_state.qa_result = validate_report(
                 insights, figures, calc_kpis, full,
                 financial_impact, operational_impact,

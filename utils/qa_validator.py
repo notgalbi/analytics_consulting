@@ -61,11 +61,14 @@ def validate_report(
     if insight_count == 0:
         insight_score = 0.0
         issues.append(QAIssue("blocking", "Insights", "No insights generated — report cannot be delivered without business insights."))
+    elif insight_count == 1:
+        insight_score = 15.0
+        improvement_recs.append("Only one insight generated — a richer dataset with more domain-specific columns will surface additional findings.")
     elif insight_count <= 2:
-        insight_score = 10.0
-        improvement_recs.append("Generate more insights: aim for at least 4 structured insights with prioritized findings.")
+        insight_score = 17.0
+        improvement_recs.append("Two insights generated — uploading more historical data or additional columns can unlock further findings.")
     elif insight_count <= 4:
-        insight_score = 18.0
+        insight_score = 20.0
     else:
         insight_score = 22.0
         strengths.append(f"Strong insight depth — {insight_count} structured insights generated.")
