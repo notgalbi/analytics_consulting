@@ -19,6 +19,8 @@ from utils.operational_impact_engine import estimate_operational_impact
 from utils.insight_engine           import generate_insights
 from utils.recommendation_engine    import generate_recommendations
 from utils.qa_validator             import validate_report
+from utils.opportunity_scorer       import score_opportunities
+from utils.scenario_modeler         import model_scenarios
 from utils.claude_summary           import build_safe_summary_payload, generate_executive_summary, generate_kpi_narrative, stream_executive_summary
 from utils                          import storage
 
@@ -38,6 +40,12 @@ with st.sidebar:
     st.page_link("app.py",                      label="🏠 Upload & Analyse")
     st.page_link("pages/01_Admin_Review.py",    label="🔍 Admin Review")
     st.page_link("pages/02_Client_Dashboard.py",label="📈 Client Dashboard")
+    st.divider()
+    st.selectbox(
+        "Report Audience",
+        ["Business Owner", "Manager/Director", "VP/C-Suite"],
+        key="audience_level",
+    )
 
 
 # ── Session state init ────────────────────────────────────────────────────────
@@ -46,7 +54,8 @@ for key in ("df", "metadata", "profile_data", "pii", "sanitized_df",
             "kpi_narrative", "drive_content", "drive_filename",
             "client_drive_folder_id", "industry_context", "calc_kpis",
             "chart_specs", "financial_impact", "operational_impact",
-            "insights", "recommendations", "qa_result"):
+            "insights", "recommendations", "qa_result",
+            "opportunities", "scenarios"):
     if key not in st.session_state:
         st.session_state[key] = None
 
@@ -154,7 +163,8 @@ if st.session_state.get("_file_key") != file_key:
                         "kpis", "figures", "summary", "dashboard_id",
                         "industry_context", "calc_kpis", "chart_specs",
                         "financial_impact", "operational_impact",
-                        "insights", "recommendations", "qa_result"):
+                        "insights", "recommendations", "qa_result",
+                        "opportunities", "scenarios"):
                 st.session_state[key] = None
             st.session_state._file_key = file_key
         except (ValueError, RuntimeError) as e:
@@ -168,7 +178,8 @@ st.success(f"Loaded **{metadata['filename']}** — {metadata['row_count']:,} row
 
 # ── Tabs ──────────────────────────────────────────────────────────────────────
 tabs = st.tabs(["👀 Preview", "🔒 PII Report", "📋 Data Quality", "🎯 KPIs",
-                "📊 Charts", "💡 Insights", "💰 Impact", "📝 Summary"])
+                "📊 Charts", "💡 Insights", "💰 Impact", "📝 Summary",
+                "🎯 Opportunities", "📐 Scenarios"])
 
 # ── Tab 1: Preview ────────────────────────────────────────────────────────────
 with tabs[0]:
@@ -214,6 +225,10 @@ if st.session_state.profile_data is None:
     progress.progress(88, text="Building recommendations…")
     recommendations_temp = generate_recommendations(insights_temp, domain)
 
+    progress.progress(90, text="Scoring opportunities…")
+    opportunities_temp = score_opportunities(insights_temp, recommendations_temp, financial_impact_temp)
+    scenarios_temp = model_scenarios(opportunities_temp, financial_impact_temp)
+
     progress.progress(93, text="Running AI KPI analysis…")
     narrative_temp = generate_kpi_narrative(domain, calculated_kpis, profile_temp)
 
@@ -225,6 +240,7 @@ if st.session_state.profile_data is None:
         "",  # summary not generated yet
         financial_impact_temp,
         operational_impact_temp,
+        opportunities=opportunities_temp,
     )
 
     progress.progress(100, text="Analysis complete.")
@@ -244,6 +260,8 @@ if st.session_state.profile_data is None:
     st.session_state.operational_impact  = operational_impact_temp
     st.session_state.insights            = insights_temp
     st.session_state.recommendations     = recommendations_temp
+    st.session_state.opportunities       = opportunities_temp
+    st.session_state.scenarios           = scenarios_temp
     st.session_state.kpi_narrative       = narrative_temp
     st.session_state.qa_result           = qa_result_temp
 
@@ -261,6 +279,8 @@ financial_impact   = st.session_state.financial_impact
 operational_impact = st.session_state.operational_impact
 insights           = st.session_state.insights
 recommendations    = st.session_state.recommendations
+opportunities      = st.session_state.opportunities
+scenarios          = st.session_state.scenarios
 qa_result          = st.session_state.qa_result
 
 # ── Tab 2: PII Report ─────────────────────────────────────────────────────────
@@ -390,9 +410,28 @@ with tabs[5]:
         st.info("No insights generated. Ensure domain KPIs are present in the dataset.")
     else:
         priority_colors = {"High": "🔴", "Medium": "🟡", "Low": "🟢"}
+        _evidence_colors = {
+            "OBSERVED":   ("green",  "OBSERVED"),
+            "INFERRED":   ("blue",   "INFERRED"),
+            "BENCHMARK":  ("orange", "BENCHMARK"),
+            "HYPOTHESIS": ("gray",   "HYPOTHESIS"),
+        }
         for insight in insights:
             icon = priority_colors.get(insight.priority, "⚪")
-            with st.expander(f"{icon} **{insight.title}** — {insight.category}", expanded=insight.priority == "High"):
+            ev_type = getattr(insight, "evidence_type", "") or ""
+            ev_color, ev_label = _evidence_colors.get(ev_type, ("gray", ev_type or "—"))
+            ev_badge = (
+                f" <span style='background:{ev_color};color:white;padding:1px 6px;"
+                f"border-radius:4px;font-size:0.75em;font-weight:bold'>{ev_label}</span>"
+                if ev_type else ""
+            )
+            expander_label = f"{icon} **{insight.title}** — {insight.category}"
+            with st.expander(expander_label, expanded=insight.priority == "High"):
+                if ev_type:
+                    st.markdown(
+                        f"**Evidence type:** {ev_badge}",
+                        unsafe_allow_html=True,
+                    )
                 col_a, col_b = st.columns([3, 2])
                 with col_a:
                     st.markdown(f"**Finding:** {insight.finding}")
@@ -511,10 +550,88 @@ with tabs[7]:
             st.session_state.qa_result = validate_report(
                 insights, figures, calc_kpis, full,
                 financial_impact, operational_impact,
+                opportunities=opportunities,
             )
             st.rerun()
     if st.session_state.summary:
         st.markdown(st.session_state.summary)
+
+# ── Tab 9: Opportunities ──────────────────────────────────────────────────────
+with tabs[8]:
+    st.subheader("Ranked Business Opportunities")
+    if not opportunities:
+        st.info("Run the analysis pipeline to generate scored opportunities.")
+    else:
+        import pandas as pd
+        opp_rows = []
+        for o in opportunities:
+            opp_rows.append({
+                "Initiative": o.initiative[:80] + ("…" if len(o.initiative) > 80 else ""),
+                "Score": o.opportunity_score,
+                "Rank": o.rank,
+                "Expected Impact": o.expected_impact,
+                "Difficulty": o.implementation_difficulty,
+                "Timeline": o.timeline,
+                "Owner": o.owner,
+            })
+        opp_df = pd.DataFrame(opp_rows)
+        rank_icons = {"High": "🔴", "Medium": "🟡", "Low": "🟢"}
+        st.dataframe(
+            opp_df.style.format({"Score": "{:.1f}"}),
+            use_container_width=True,
+            hide_index=True,
+        )
+        st.divider()
+        st.markdown("#### Opportunity Details")
+        for o in opportunities:
+            rank_icon = rank_icons.get(o.rank, "⚪")
+            with st.expander(f"{rank_icon} [{o.rank}] {o.initiative[:100]}"):
+                c1, c2, c3, c4 = st.columns(4)
+                c1.metric("Opportunity Score", f"{o.opportunity_score:.1f}")
+                c2.metric("Impact Score", f"{o.impact_score:.1f}")
+                c3.metric("Confidence", f"{o.confidence:.0f}%")
+                c4.metric("Effort Score", f"{o.effort_score:.1f}")
+                st.caption(f"Owner: **{o.owner}** · Timeline: **{o.timeline}** · Difficulty: **{o.implementation_difficulty}**")
+
+# ── Tab 10: Scenarios ─────────────────────────────────────────────────────────
+with tabs[9]:
+    st.subheader("Scenario Models — Top Opportunities")
+    if not scenarios:
+        st.info("No scenario models available. Run the analysis pipeline first.")
+    else:
+        for sm in scenarios:
+            with st.expander(f"📐 {sm.initiative[:100]}", expanded=False):
+                st.markdown(f"**Recommendation:** {sm.recommendation}")
+                st.divider()
+                sc1, sc2, sc3 = st.columns(3)
+
+                def _fmt_scenario(s) -> None:
+                    label_color = {"Best Case": "green", "Expected Case": "blue", "Worst Case": "red"}.get(s.name, "gray")
+                    st.markdown(
+                        f"<span style='color:{label_color};font-weight:bold'>{s.name}</span> "
+                        f"<small>({s.probability} probability)</small>",
+                        unsafe_allow_html=True,
+                    )
+                    if s.revenue_impact > 0:
+                        rev = s.revenue_impact
+                        rev_str = f"${rev/1_000_000:.1f}M" if rev >= 1_000_000 else (f"${rev/1_000:.0f}K" if rev >= 1_000 else f"${rev:,.0f}")
+                        st.metric("Revenue Impact", rev_str)
+                    if s.cost_impact > 0:
+                        ci = s.cost_impact
+                        ci_str = f"${ci/1_000_000:.1f}M" if ci >= 1_000_000 else (f"${ci/1_000:.0f}K" if ci >= 1_000 else f"${ci:,.0f}")
+                        st.metric("Implementation Cost", ci_str)
+                    st.caption(f"Efficiency: {s.efficiency_impact}")
+                    if s.assumptions:
+                        st.markdown("**Assumptions:**")
+                        for a in s.assumptions:
+                            st.caption(f"• {a}")
+
+                with sc1:
+                    _fmt_scenario(sm.best_case)
+                with sc2:
+                    _fmt_scenario(sm.expected_case)
+                with sc3:
+                    _fmt_scenario(sm.worst_case)
 
 # ── Save Dashboard ────────────────────────────────────────────────────────────
 st.divider()

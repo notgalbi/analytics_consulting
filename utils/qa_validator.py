@@ -34,6 +34,7 @@ class QAResult:
     issues: list[QAIssue] = field(default_factory=list)
     strengths: list[str] = field(default_factory=list)
     recommendations: list[str] = field(default_factory=list)
+    decision_quality_score: float = 0.0  # 0–25, reported separately
 
 
 # ── Public function ───────────────────────────────────────────────────────────
@@ -45,6 +46,7 @@ def validate_report(
     summary: str,
     financial_impact: FinancialImpact,
     operational_impact: OperationalImpact,
+    opportunities: list | None = None,
 ) -> QAResult:
     """
     Score report quality and return delivery readiness verdict.
@@ -139,6 +141,24 @@ def validate_report(
 
     completeness_score = min(completeness_score, 25)
 
+    # ── Decision quality score (0–25, reported separately) ───────────────────
+    decision_score = 0.0
+    recommendations_list = [insight.recommended_action for insight in insights if insight.recommended_action]
+    if recommendations_list:
+        decision_score += 10
+    has_high_opportunity = (
+        opportunities is not None
+        and any(getattr(o, "rank", None) == "High" for o in opportunities)
+    )
+    if has_high_opportunity:
+        decision_score += 5
+    if financial_impact.has_quantifiable_impact:
+        decision_score += 5
+    has_high_insights = any(i.priority == "High" for i in insights)
+    if has_high_insights:
+        decision_score += 5
+    decision_score = min(decision_score, 25)
+
     # ── Overall score & delivery readiness ────────────────────────────────────
     overall = insight_score + chart_score + kpi_score + completeness_score
     has_blocking = any(i.severity == "blocking" for i in issues)
@@ -162,6 +182,7 @@ def validate_report(
         issues=issues,
         strengths=strengths,
         recommendations=improvement_recs,
+        decision_quality_score=round(decision_score, 1),
     )
 
 

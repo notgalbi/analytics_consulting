@@ -30,6 +30,7 @@ class Insight:
     expected_outcome: str   # What success looks like
     confidence_score: float # 0.0–1.0
     supporting_evidence: list[str] = field(default_factory=list)
+    evidence_type: str = ""  # "OBSERVED" | "INFERRED" | "BENCHMARK" | "HYPOTHESIS"
 
 
 # ── Public function ───────────────────────────────────────────────────────────
@@ -181,6 +182,11 @@ def generate_insights(
             confidence_score=0.85,
             supporting_evidence=[f"Column: {w.get('column')}", f"Issue: {w.get('issue')}", f"Detail: {w.get('detail', '')}"],
         ))
+
+    # Classify evidence type for each insight
+    from utils.evidence_classifier import classify_evidence
+    for ins in insights:
+        ins.evidence_type = classify_evidence(ins, calc_kpis, financial_impact)
 
     # Sort: High first, then Medium, then Low; cap at 7
     priority_order = {"High": 0, "Medium": 1, "Low": 2}

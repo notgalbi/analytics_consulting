@@ -248,12 +248,26 @@ def _grouped_time_series(
         if grouped.empty or grouped[cat_col].nunique() < 2:
             return None
 
+        # Insight-oriented title: detect trend direction
+        period_totals = grouped.groupby(date_col)[num_col].sum().sort_index()
+        if len(period_totals) >= 2:
+            first_val = period_totals.iloc[0]
+            last_val = period_totals.iloc[-1]
+            if last_val < first_val:
+                trend_prefix = "Declining: "
+            else:
+                trend_prefix = "Growing: "
+        else:
+            trend_prefix = ""
+
+        chart_title = f"{trend_prefix}{num_col} by {cat_col} Over Time"
+
         fig = px.line(
             grouped,
             x=date_col,
             y=num_col,
             color=cat_col,
-            title=f"{num_col} by {cat_col} Over Time",
+            title=chart_title,
             labels={num_col: num_col, date_col: "Period"},
             template=_CHART_TEMPLATE,
             color_discrete_sequence=_PALETTE,
@@ -350,11 +364,24 @@ def _bar_chart(
     if grouped.empty:
         return None
 
+    # Insight-oriented title: check if top 1 category dominates (>40% of total)
+    total_val = grouped.sum()
+    top_val = grouped.iloc[0] if len(grouped) > 0 else 0
+    top_cat = grouped.index[0] if len(grouped) > 0 else ""
+    n = len(grouped)
+    metric_label = agg_col if clean_num_cols else "Count"
+
+    if total_val > 0 and top_val / total_val > 0.40:
+        top_pct = int(round(top_val / total_val * 100))
+        chart_title = f"Top {n} {cat_col} Drive {top_pct}% of {metric_label}"
+    else:
+        chart_title = f"Top {cat_col} by {metric_label}"
+
     fig = px.bar(
         x=grouped.values,
         y=grouped.index.astype(str),
         orientation="h",
-        title=f"{cat_col} Breakdown",
+        title=chart_title,
         labels={"x": x_label, "y": cat_col},
         template=_CHART_TEMPLATE,
         color=grouped.values,
