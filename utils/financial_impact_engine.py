@@ -461,6 +461,37 @@ def _impact_retail(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFinding],
             source_kpi="Avg Gross Margin",
         ))
 
+    days_cover     = _parse_kpi(calc_kpis.get("Avg Days Cover", ""))
+    inv_value      = _parse_kpi(calc_kpis.get("Inventory Value", ""))
+    if days_cover is not None and days_cover > 60 and inv_value:
+        excess_days = days_cover - 60
+        # Industry standard carrying cost: 20–25% of inventory value per year
+        # (storage, insurance, obsolescence, opportunity cost)
+        carrying_cost_annual_rate = 0.22
+        carrying_cost = inv_value * carrying_cost_annual_rate * (excess_days / 365)
+        assumption = (
+            f"Excess {excess_days:.0f} days of cover above 60-day target × "
+            f"${inv_value:,.0f} inventory value × 22% annual carrying cost rate "
+            f"(NRF: storage, insurance, obsolescence, opportunity cost)"
+        )
+        assumptions.append(assumption)
+        findings.append(_finding(
+            title=f"Overstock {days_cover:.0f}-Day Cover — Carrying Cost Exposure",
+            category="Cost Savings",
+            amount=carrying_cost,
+            description=(
+                f"Average days cover of {days_cover:.0f} days is {excess_days:.0f} days above "
+                f"the 60-day upper target, tying up ${inv_value / 1_000_000:.1f}M in inventory "
+                f"value beyond what sell-through supports. At a 22% annual carrying cost rate "
+                f"(NRF benchmark: storage, insurance, obsolescence, opportunity cost), the excess "
+                f"stock generates {_fmt(carrying_cost)} in avoidable holding costs."
+            ),
+            assumption=assumption,
+            confidence=0.70,
+            priority="High" if excess_days > 60 else "Medium",
+            source_kpi="Avg Days Cover",
+        ))
+
     return findings, assumptions
 
 
