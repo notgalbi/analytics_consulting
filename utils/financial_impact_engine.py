@@ -195,6 +195,43 @@ def _impact_healthcare(calc_kpis: dict, profile: dict) -> tuple[list[ImpactFindi
             source_kpi="No-Show Rate",
         ))
 
+    completion_rate = _parse_kpi(calc_kpis.get("Completion Rate", ""))
+    if completion_rate is not None and completion_rate < 90 and avg_billing and row_count:
+        gap_pct = (90 - completion_rate) / 100
+        missed_slots = row_count * gap_pct
+        lost_revenue = missed_slots * avg_billing
+        assumption = f"Completion gap {90 - completion_rate:.1f}pp × {int(row_count)} appointments × ${avg_billing:,.0f} avg billing"
+        assumptions.append(assumption)
+        findings.append(_finding(
+            title=f"Completion Rate {completion_rate:.0f}% — Unbilled Appointment Gap",
+            category="Revenue at Risk",
+            amount=lost_revenue,
+            description=f"Completion rate of {completion_rate:.0f}% vs 90% benchmark means ~{int(missed_slots):,} appointment slots per period generate no billing. At ${avg_billing:,.0f} average billing, this represents a ${lost_revenue:,.0f} revenue gap that can be recovered through scheduling and follow-up improvements.",
+            assumption=assumption,
+            confidence=0.75,
+            priority="High" if (90 - completion_rate) > 15 else "Medium",
+            source_kpi="Completion Rate",
+        ))
+
+    satisfaction = _parse_kpi(calc_kpis.get("Patient Satisfaction", ""))
+    if satisfaction is not None and satisfaction < 3.5 and avg_billing and row_count:
+        sat_gap = 3.5 - satisfaction
+        non_return_rate = min(sat_gap * 0.35, 0.25)
+        at_risk_patients = row_count * non_return_rate
+        lost_revenue = at_risk_patients * avg_billing * 2
+        assumption = f"Satisfaction gap {sat_gap:.2f}pts × {non_return_rate:.0%} non-return rate × {int(row_count)} patients × 2 annual visits × ${avg_billing:,.0f}"
+        assumptions.append(assumption)
+        findings.append(_finding(
+            title=f"Low Satisfaction {satisfaction:.1f}/5 — Patient Retention Risk",
+            category="Revenue at Risk",
+            amount=lost_revenue,
+            description=f"Patient satisfaction of {satisfaction:.1f}/5 is {sat_gap:.1f} points below the 3.5 retention threshold. Patients rating below this level return at significantly lower rates, putting ~{int(at_risk_patients):,} patient relationships at risk. Lost revisit revenue estimated at ${lost_revenue:,.0f}.",
+            assumption=assumption,
+            confidence=0.65,
+            priority="High",
+            source_kpi="Patient Satisfaction",
+        ))
+
     if wait_time is not None and wait_time > 30:
         findings.append(_finding(
             title=f"Patient Attrition Risk — {wait_time:.0f}-Minute Average Wait",
