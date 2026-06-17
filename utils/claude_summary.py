@@ -186,6 +186,239 @@ Write exactly 3 single-sentence statements — punchy, specific, and strong enou
 """
 
 
+# ── Few-shot style examples ───────────────────────────────────────────────────
+# Each entry shows two high-quality examples per domain:
+#   "insight" — a strong Key Insight bullet in the expected format
+#   "exec"    — a strong Executive Summary opening sentence
+# These anchor Claude to the consulting quality and language expected.
+# Style drawn from McKinsey, Bain, Gartner, and KPMG advisory report conventions.
+
+_FEW_SHOT_EXAMPLES: dict[str, dict[str, str]] = {
+    "healthcare": {
+        "insight": (
+            "**[No-Show Rate 13.7% — $23K Revenue at Risk]** — At 5.7 percentage points above "
+            "the 8% MGMA benchmark, 82 billable slots per period go unbilled with no opportunity "
+            "to backfill. Implementing a 48-hour SMS confirmation with one-click cancellation "
+            "reduces no-shows 30–40% within 90 days in comparable practices (MGMA 2023); "
+            "assign the front-desk coordinator to pilot this by end of quarter."
+        ),
+        "exec": (
+            "With a completion rate of 69% — 21 points below the 90% HFMA benchmark — this "
+            "practice is leaving $35K in billable appointment revenue uncaptured each period "
+            "while simultaneously running a 13.7% no-show rate that compounds the revenue gap; "
+            "the highest-priority action is a same-day cancellation and waitlist protocol that "
+            "converts empty slots into revenue before the appointment window closes."
+        ),
+    },
+    "saas": {
+        "insight": (
+            "**[Churn Rate 19.5% — MRR Base Eroding at 4× Benchmark Rate]** — Monthly churn "
+            "nearly 10× the 2% Bessemer Cloud Index benchmark means the customer base turns over "
+            "completely in approximately 5 months, making sustainable ARR growth structurally "
+            "impossible without simultaneous churn intervention. Deploy an in-app health score "
+            "tracking login frequency and feature adoption depth; flag accounts below threshold "
+            "for proactive CSM outreach within the first 30 days post-signup."
+        ),
+        "exec": (
+            "A monthly churn rate of 19.5% is eroding MRR faster than new customer acquisition "
+            "can replace it — at current rates, every $100K in new MRR booked is offset by $195K "
+            "in contracted revenue lost; reducing churn to the 5% SaaS watch-zone threshold must "
+            "be treated as a higher priority than growth investment this quarter."
+        ),
+    },
+    "marketing": {
+        "insight": (
+            "**[ROAS 4.61x — Sitting Just Above Profitability Threshold with 30% Efficiency Gap]** "
+            "— ROAS is above the 4x break-even but well below the 6x top-quartile benchmark "
+            "(WordStream 2024), indicating the current channel mix is generating revenue at above "
+            "cost but leaving meaningful efficiency on the table. Reallocating 25% of budget from "
+            "the lowest-ROAS channel to the highest performer typically improves blended ROAS "
+            "15–20% within one billing cycle without increasing total spend."
+        ),
+        "exec": (
+            "The campaign portfolio is generating positive ROAS at 4.61x but operating "
+            "inefficiently — the spread between best and worst performing channels represents "
+            "a budget reallocation opportunity estimated at 15–20% revenue improvement at "
+            "identical spend levels; the single highest-impact action is a channel audit and "
+            "budget shift this month before the next campaign planning cycle."
+        ),
+    },
+    "ecommerce": {
+        "insight": (
+            "**[Avg Days to Ship 4.0 — Fulfilment Gap Driving Repeat Purchase Attrition]** "
+            "— Delivery time 1 day above the 3-day customer expectation threshold set by "
+            "Amazon Prime is the most actionable lever for repeat purchase rate; Shopify Merchant "
+            "data (2024) shows repeat purchase rate increases 15–20% when delivery time drops "
+            "from 4 to 2 days. Negotiate a next-day handoff SLA with the fulfilment partner "
+            "for orders placed before 2 PM, targeting a 2-day average within 30 days."
+        ),
+        "exec": (
+            "Revenue growth of +12.8% MoM is strong, but a 4-day average shipping time "
+            "is quietly suppressing repeat purchase rate — the most capital-efficient growth "
+            "lever available — and a return rate approaching the 10% amber threshold indicates "
+            "product-description or sizing accuracy issues that, if uncorrected, will compound "
+            "as volume scales; both gaps have identified fixes with 30-day implementation timelines."
+        ),
+    },
+    "retail": {
+        "insight": (
+            "**[Stockout Rate 10% — Double the NRF 5% Target, Demand Being Lost to Competitors]** "
+            "— 1 in 10 SKUs is at or below reorder point, meaning the business is turning away "
+            "demand in its highest-velocity lines; NRF data shows each percentage point of "
+            "stockout costs approximately 1–2% of annual revenue in missed sales. Prioritise "
+            "emergency replenishment for the 15 highest-velocity SKUs currently below reorder "
+            "point and adjust safety stock thresholds for the top 20% of SKUs by units sold."
+        ),
+        "exec": (
+            "A stockout rate of 10% and inventory turnover of 0.19x per month signals the "
+            "business has both a supply gap in fast-moving lines and a working capital trap in "
+            "slow-moving stock — the dual fix is tighter reorder triggers on velocity leaders "
+            "and a structured markdown programme for the bottom 20% by days-in-stock, which "
+            "together can recover 3–5% of annual revenue within one planning cycle."
+        ),
+    },
+    "hr": {
+        "insight": (
+            "**[Attrition Rate X% — Replacement Cost Exposure $1.75M+ Annually]** — At SHRM's "
+            "replacement cost estimate of 1.5–2× annual salary per departing employee, current "
+            "attrition represents a material and recurring expense that is largely invisible in "
+            "the P&L because it flows through recruiting, onboarding, and lost productivity line "
+            "items. Exit interview data segmented by department and tenure band will identify "
+            "whether the driver is compensation compression, management quality, or role fit."
+        ),
+        "exec": (
+            "Attrition is the primary financial risk in this workforce dataset — each percentage "
+            "point of turnover above the 10% SHRM benchmark translates directly to replacement "
+            "costs exceeding $100K per point at median salary levels; the immediate priority is "
+            "identifying the two or three departments driving disproportionate attrition and "
+            "intervening with targeted retention programmes before the talent gap widens further."
+        ),
+    },
+    "real_estate": {
+        "insight": (
+            "**[Avg Days on Market 43 Days — 13 Days Above NAR Median, Pricing or Presentation Gap]** "
+            "— Properties sitting 43 days on average — vs the 2024 NAR national median of 30 days "
+            "— indicate that listings are either priced above comparable market demand or lack "
+            "the presentation quality to compete. A pricing review on the 10 longest-sitting "
+            "listings (targeting within 2% of current comps) combined with professional staging "
+            "reduces time-to-sale 20–25% in comparable markets and improves list-to-sale ratio."
+        ),
+        "exec": (
+            "Listings averaging 43 days on market and a sale rate below the 85% NAR benchmark "
+            "signal a pipeline and pricing alignment issue — the portfolio is generating listings "
+            "but not closing them at the rate needed to sustain volume targets; a structured "
+            "pricing review on stale listings and a buyer pipeline audit by agent would identify "
+            "whether this is a demand, pricing, or conversion quality problem within two weeks."
+        ),
+    },
+    "hospitality": {
+        "insight": (
+            "**[Prime Cost X% — Above 65% NRA Benchmark, Margin Structurally at Risk]** "
+            "— Prime cost above 65% means food and labor alone are consuming more than two-thirds "
+            "of every revenue dollar, leaving insufficient margin to cover occupancy, utilities, "
+            "and debt service at current volume. Menu engineering — eliminating the 20% of dishes "
+            "with the worst combined margin-and-velocity score — typically reduces food cost 2–3 "
+            "percentage points within one menu cycle without reducing cover satisfaction scores."
+        ),
+        "exec": (
+            "The operation faces a prime cost structure that is financially unsustainable at "
+            "current revenue levels — with food and labor costs consuming the majority of each "
+            "revenue dollar before fixed costs, the path to profitability runs through cost "
+            "reduction rather than volume growth; the three highest-leverage interventions are "
+            "menu rationalisation, scheduling optimisation, and a reservation deposit policy "
+            "to eliminate the no-show revenue drain."
+        ),
+    },
+    "operations": {
+        "insight": (
+            "**[Avg Resolution Time 81 hrs — 69% Above 48-hr HDI Benchmark, CSAT at Risk]** "
+            "— Customers waiting 3.4 days on average for ticket resolution are experiencing a "
+            "service level that Zendesk CX Trends (2024) correlates with a 15–20% increase "
+            "in churn probability at next renewal. Each 10-hour reduction in mean resolution "
+            "time is associated with a 3–5% CSAT improvement; routing optimisation to match "
+            "ticket type to specialist skill set is the fastest lever to close the gap."
+        ),
+        "exec": (
+            "With average resolution time at 81 hours — nearly double the 48-hour HDI benchmark "
+            "— and a meaningful backlog of open tickets, the operations team is operating in a "
+            "reactive capacity-constrained mode that is eroding customer satisfaction scores and "
+            "increasing renewal risk; the first intervention must be triaging the open backlog "
+            "by severity and age, then addressing the routing and skill-gap issues driving the "
+            "resolution time overage."
+        ),
+    },
+    "sales": {
+        "insight": (
+            "**[Revenue Declining 59% MoM — Pipeline Collapse or Seasonality Requires Diagnosis]** "
+            "— A single-period revenue decline of this magnitude — unless fully attributable to "
+            "known seasonality — signals either a pipeline failure from 60–90 days prior, a "
+            "loss of a major account, or a pricing or competitive event that closed deals are "
+            "not yet reflecting. The first action is a deal-by-deal review of every opportunity "
+            "in the pipeline from that period to identify whether the issue is conversion rate, "
+            "average deal size, or sales cycle compression."
+        ),
+        "exec": (
+            "Revenue is declining at a rate that cannot be absorbed by the current business model "
+            "without structural intervention — with average discount already at 20% consuming margin "
+            "headroom, the path to recovery requires simultaneous pipeline acceleration and discount "
+            "discipline, not one or the other; the two highest-priority actions are a full pipeline "
+            "audit and a 15% discount threshold requiring manager approval for any exceptions."
+        ),
+    },
+    "finance": {
+        "insight": (
+            "**[Net Margin X% — Below D&B 5–15% Industry Range, Cost Structure Review Required]** "
+            "— A margin below the Dun & Bradstreet industry median indicates the current cost "
+            "structure is consuming an above-market share of revenue, which compounds over time "
+            "as revenue growth fails to outpace fixed cost inflation. The highest-leverage "
+            "intervention is a line-by-line variance analysis between actual spend and the "
+            "budget plan to identify the two or three cost lines driving the margin underperformance."
+        ),
+        "exec": (
+            "The financial picture shows a margin structure that is below industry benchmarks, "
+            "creating structural fragility — any revenue softness or cost increase at current "
+            "margins moves the business from thin profitability to loss; the priority is not "
+            "top-line growth but cost-line discipline, with a named owner and monthly accountability "
+            "for the three largest variance line items in the budget."
+        ),
+    },
+    "general": {
+        "insight": (
+            "**[High-Variance Column Identified — Revenue or Efficiency Impact Requires Segmentation]** "
+            "— Columns with coefficient of variation above 100% typically contain the business's "
+            "most important performance signals, as the spread between best and worst performers "
+            "represents the gap between current and potential performance. Segment the "
+            "highest-variance column by the primary categorical dimension to identify which "
+            "sub-group is driving the extremes and whether intervention or scaling is the "
+            "appropriate response."
+        ),
+        "exec": (
+            "The dataset contains meaningful performance variation that aggregate averages are "
+            "masking — the business's most impactful decisions will come from understanding what "
+            "drives the difference between top and bottom performers, not from optimising the mean; "
+            "the first priority is identifying the two or three variables most correlated with "
+            "outcome variance and assigning accountable owners to close the gap."
+        ),
+    },
+}
+
+
+def _few_shot_block(domain: str) -> str:
+    """Return a formatted few-shot style guide block for the given domain."""
+    ex = _FEW_SHOT_EXAMPLES.get(domain, _FEW_SHOT_EXAMPLES["general"])
+    return f"""
+STYLE EXAMPLES — match this quality, specificity, and tone in your output:
+
+Key Insight example:
+{ex['insight']}
+
+Executive Summary opening example:
+{ex['exec']}
+
+Apply this standard throughout: lead with the number, name the benchmark and source, quantify the business impact, give a specific action with a timeframe. Never write a finding without all four elements.
+"""
+
+
 # ── Domain-specific prompts ───────────────────────────────────────────────────
 
 def _prompt_real_estate(ctx: str, payload: dict) -> str:
@@ -196,6 +429,7 @@ Focus specifically on: market performance, pricing dynamics, listing efficiency,
 Dataset context (aggregate statistics only — no raw data):
 {ctx}
 {_RULES}
+{_few_shot_block("real_estate")}
 Use exactly this structure:
 
 ## Executive Summary
@@ -241,6 +475,7 @@ Focus specifically on: revenue performance, cost control (food cost, labor cost,
 Dataset context (aggregate statistics only — no raw data):
 {ctx}
 {_RULES}
+{_few_shot_block("hospitality")}
 Use exactly this structure:
 
 ## Executive Summary
@@ -286,6 +521,7 @@ Focus specifically on: revenue health (MRR, churn, LTV), growth trajectory, cust
 Dataset context (aggregate statistics only — no raw data):
 {ctx}
 {_RULES}
+{_few_shot_block("saas")}
 Use exactly this structure:
 
 ## Executive Summary
@@ -331,6 +567,7 @@ Focus specifically on: revenue performance, conversion and return rates, product
 Dataset context (aggregate statistics only — no raw data):
 {ctx}
 {_RULES}
+{_few_shot_block("ecommerce")}
 Use exactly this structure:
 
 ## Executive Summary
@@ -376,6 +613,7 @@ Focus specifically on: revenue attainment, pipeline velocity, rep performance, p
 Dataset context (aggregate statistics only — no raw data):
 {ctx}
 {_RULES}
+{_few_shot_block("sales")}
 Use exactly this structure:
 
 ## Executive Summary
@@ -421,6 +659,7 @@ Focus specifically on: headcount health, attrition risk, compensation equity, pe
 Dataset context (aggregate statistics only — no raw data):
 {ctx}
 {_RULES}
+{_few_shot_block("hr")}
 Use exactly this structure:
 
 ## Executive Summary
@@ -466,6 +705,7 @@ Focus specifically on: appointment efficiency, no-show impact, patient satisfact
 Dataset context (aggregate statistics only — no raw data):
 {ctx}
 {_RULES}
+{_few_shot_block("healthcare")}
 Use exactly this structure:
 
 ## Executive Summary
@@ -511,6 +751,7 @@ Focus specifically on: campaign ROI, channel efficiency, conversion performance,
 Dataset context (aggregate statistics only — no raw data):
 {ctx}
 {_RULES}
+{_few_shot_block("marketing")}
 Use exactly this structure:
 
 ## Executive Summary
@@ -556,6 +797,7 @@ Focus specifically on: inventory health, stock turnover, margin performance, sup
 Dataset context (aggregate statistics only — no raw data):
 {ctx}
 {_RULES}
+{_few_shot_block("retail")}
 Use exactly this structure:
 
 ## Executive Summary
@@ -599,6 +841,7 @@ def _prompt_general(ctx: str, payload: dict) -> str:
 Dataset context (aggregate statistics only — no raw data):
 {ctx}
 {_RULES}
+{_few_shot_block("general")}
 Use exactly this structure:
 
 ## Executive Summary
@@ -633,6 +876,52 @@ Write exactly 3 single-sentence statements — punchy, specific, and strong enou
 """
 
 
+def _prompt_operations(ctx: str, payload: dict) -> str:
+    return f"""You are a senior operations and service delivery analyst producing a client-ready performance report.
+
+Focus specifically on: ticket volume and backlog health, response and resolution time, SLA compliance, team efficiency, and customer satisfaction risk.
+
+Dataset context (aggregate statistics only — no raw data):
+{ctx}
+{_RULES}
+{_few_shot_block("operations")}
+Use exactly this structure:
+
+## Executive Summary
+Lead with the most critical service metric — resolution time breach, backlog size, or SLA compliance rate. Quantify the customer satisfaction and retention risk from current performance. Close with the single highest-priority operational action.
+
+## Key Insights
+4–5 bullets covering: resolution time vs benchmark (<48 hrs HDI target), response time SLA compliance, open backlog exposure, resolution rate, and ticket volume trend. Each: **[Finding]** — business impact + action.
+
+## Volume & Backlog Analysis
+Total ticket volume, open backlog size, and trend. Is the team keeping up with inflow or is the backlog growing? Quantify how many days at current resolution rate it would take to clear the backlog.
+
+## Response & Resolution Performance
+Average response time vs SLA target. Average resolution time vs benchmark. Identify the ticket categories or time periods with the worst performance and what is driving each gap.
+
+## Team Efficiency & Routing
+Resolution rate and first-contact resolution signals. Are tickets being routed to the right skill set? Where is rework or escalation creating capacity drag?
+
+## KPI Performance
+One sentence per KPI in kpi_names: what it measures, what the data shows, and whether it needs immediate attention.
+
+## Data Quality Assessment
+Completeness, missing resolution time or status fields, and how gaps affect SLA and CSAT analysis.
+
+## Recommended Actions
+3–5 numbered steps specific to operations — SLA rule configuration, routing optimisation, specialist skill-gap training, backlog triage, tooling improvement.
+
+## Chart-Level Insights
+For each status distribution, resolution time trend, or volume pattern visible in the data, one sentence: pattern, anomaly, and action.
+
+## Callout Insights
+Write exactly 3 single-sentence statements — punchy, specific, and strong enough to use as report preview bullets or marketing copy:
+- Revenue: one sentence on revenue loss or revenue opportunity (include a dollar figure or percentage if the data supports it)
+- Efficiency: one sentence on the most critical operational efficiency gap
+- Experience: one sentence on customer, patient, or client experience risk
+"""
+
+
 _DOMAIN_PROMPTS = {
     "real_estate":  _prompt_real_estate,
     "hospitality":  _prompt_hospitality,
@@ -643,6 +932,7 @@ _DOMAIN_PROMPTS = {
     "healthcare":   _prompt_healthcare,
     "marketing":    _prompt_marketing,
     "retail":       _prompt_retail,
+    "operations":   _prompt_operations,
     "finance":      _prompt_general,
     "general":      _prompt_general,
 }
@@ -719,18 +1009,23 @@ def generate_kpi_narrative(
         return ""
 
     kpi_lines = "\n".join(f"  {k}: {v}" for k, v in calculated_kpis.items())
+    ex = _FEW_SHOT_EXAMPLES.get(domain, _FEW_SHOT_EXAMPLES["general"])
     prompt = f"""You are a senior business consultant interpreting KPI results for a {domain} business. Your analysis will appear in a client-facing report.
 
 Calculated KPIs from {profile.get('row_count', 0):,} records:
 {kpi_lines}
 
+Style example — match this quality and tone:
+"{ex['exec']}"
+
 Write 4–5 sentences of executive-quality analysis:
 - Open by naming the standout metric — is it a strength or a warning sign?
-- Reference specific industry benchmarks where you know them (e.g. SaaS churn <5%, retail margin >40%)
-- Identify any metric that demands immediate management attention and say why
+- Compare to the specific industry benchmark and name the source (e.g. MGMA, Bessemer, NRF, SHRM)
+- Quantify the business impact in dollars or percentage points where the data supports it
+- Identify the metric demanding immediate management attention and explain the consequence of inaction
 - Close with the single highest-priority action the business should take this quarter
 
-Rules: flowing prose only, no bullet points, no "Here is" or "Based on" opener. Be direct, specific, and confident. Never use the phrase "further analysis is needed"."""
+Rules: flowing prose only, no bullet points, no "Here is" or "Based on" opener. Be direct, specific, and confident. Never use "further analysis is needed" or "it appears that"."""
 
     try:
         import anthropic
