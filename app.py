@@ -232,7 +232,7 @@ if st.session_state.profile_data is None:
     recommendations_temp = generate_recommendations(insights_temp, domain)
 
     progress.progress(90, text="Scoring opportunities…")
-    opportunities_temp = score_opportunities(insights_temp, recommendations_temp, financial_impact_temp)
+    opportunities_temp = score_opportunities(insights_temp, recommendations_temp, financial_impact_temp, domain=domain)
     scenarios_temp = model_scenarios(opportunities_temp, financial_impact_temp)
 
     progress.progress(93, text="Running AI KPI analysis…")

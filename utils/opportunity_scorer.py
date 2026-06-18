@@ -36,17 +36,17 @@ def score_opportunities(
     insights: list[Insight],
     recommendations: list[Recommendation],
     financial_impact: FinancialImpact,
+    domain: str = "general",
 ) -> list[OpportunityScore]:
     """
     Score and rank every recommendation as a business opportunity.
+    Formula: weighted sum of impact (45%), confidence (35%), ease (20%).
     Returns list sorted by opportunity_score descending.
     """
     scores: list[OpportunityScore] = []
 
-    # Build a lookup: insight title → insight
     insight_map: dict[str, Insight] = {i.title: i for i in insights}
 
-    # Compute the total quantifiable financial impact for the threshold check
     total_financial = (
         financial_impact.total_revenue_at_risk
         + financial_impact.total_revenue_opportunity
@@ -54,42 +54,44 @@ def score_opportunities(
     )
 
     for rec in recommendations:
-        # Resolve the linked insight (if any)
         insight = insight_map.get(rec.related_insight_title)
 
-        # ── Impact score ─────────────────────────────────────────────────────
+        # ── Impact score (0–100) ──────────────────────────────────────────────
         if insight:
-            base_impact = {"High": 80.0, "Medium": 50.0, "Low": 25.0}.get(insight.priority, 50.0)
+            base_impact = {"High": 80.0, "Medium": 55.0, "Low": 30.0}.get(insight.priority, 55.0)
         else:
-            base_impact = {"Critical": 80.0, "High": 65.0, "Medium": 50.0, "Low": 25.0}.get(rec.priority, 50.0)
+            base_impact = {"Critical": 85.0, "High": 70.0, "Medium": 50.0, "Low": 30.0}.get(rec.priority, 50.0)
 
-        # Bonus for large financial impact
-        if total_financial > 100_000:
-            base_impact = min(base_impact + 20, 100)
-        elif total_financial > 10_000:
-            base_impact = min(base_impact + 10, 100)
+        # Small uplift for quantified financial impact — bounded to avoid inflating all scores
+        if total_financial > 500_000:
+            base_impact = min(base_impact + 8, 100)
+        elif total_financial > 50_000:
+            base_impact = min(base_impact + 5, 100)
+        elif total_financial > 5_000:
+            base_impact = min(base_impact + 2, 100)
 
         impact_score = base_impact
 
-        # ── Confidence ───────────────────────────────────────────────────────
+        # ── Confidence (0–100) ────────────────────────────────────────────────
         confidence = (insight.confidence_score * 100) if insight else (rec.confidence * 100)
 
-        # ── Effort score (derived from timeline keywords) ─────────────────────
+        # ── Effort score (0–100, higher = harder) ────────────────────────────
         effort_score = _effort_from_text(rec.timeline + " " + rec.action)
         timeline = _canonical_timeline(effort_score)
 
-        # ── Opportunity score ─────────────────────────────────────────────────
-        raw_opp = (impact_score * confidence / 100) / max(effort_score, 1) * 100
-        opportunity_score = min(round(raw_opp, 1), 100.0)
+        # ── Ease score (inverse of effort, 0–100) ────────────────────────────
+        ease_score = 100 - effort_score
 
-        # ── Rank ──────────────────────────────────────────────────────────────
+        # ── Opportunity score — weighted sum, stays in 0–100 naturally ────────
+        # Impact 45% · Confidence 35% · Ease 20%
+        opportunity_score = round(
+            impact_score * 0.45 + confidence * 0.35 + ease_score * 0.20,
+            1,
+        )
+
         rank = _rank(opportunity_score)
-
-        # ── Owner ─────────────────────────────────────────────────────────────
         category = insight.category if insight else "Operations"
-        owner = _owner_from_category(category)
-
-        # ── Labels ───────────────────────────────────────────────────────────
+        owner = _owner_from_category(category, domain)
         expected_impact = _expected_impact(impact_score)
         difficulty = _difficulty(effort_score)
 
@@ -161,18 +163,117 @@ def _difficulty(effort_score: float) -> str:
     return "High"
 
 
-def _owner_from_category(category: str) -> str:
-    mapping = {
-        "Revenue":              "Revenue/Sales Team",
-        "Cost":                 "Finance/Operations",
-        "Risk":                 "Risk & Compliance",
-        "Efficiency":           "Operations Manager",
-        "Customer Experience":  "Customer Success",
-        "Data Quality":         "Data/IT Team",
-        "Growth":               "Revenue/Sales Team",
-        "Operations":           "Operations Manager",
+def _owner_from_category(category: str, domain: str = "general") -> str:
+    """Return a domain-specific functional owner for the given insight category."""
+    domain_owners: dict[str, dict[str, str]] = {
+        "healthcare": {
+            "Revenue":             "Practice Manager",
+            "Cost":                "Finance/Billing Manager",
+            "Risk":                "Clinical Director",
+            "Efficiency":          "Scheduling Coordinator",
+            "Customer Experience": "Patient Experience Lead",
+            "Data Quality":        "Billing/IT Team",
+            "Growth":              "Practice Manager",
+            "Operations":          "Scheduling Coordinator",
+        },
+        "saas": {
+            "Revenue":             "VP of Revenue",
+            "Cost":                "Finance Manager",
+            "Risk":                "VP of Customer Success",
+            "Efficiency":          "Product/Engineering Lead",
+            "Customer Experience": "Head of Customer Success",
+            "Data Quality":        "Data Engineering",
+            "Growth":              "Head of Growth",
+            "Operations":          "Head of Operations",
+        },
+        "marketing": {
+            "Revenue":             "Head of Performance Marketing",
+            "Cost":                "Marketing Manager",
+            "Risk":                "Marketing Director",
+            "Efficiency":          "Campaign Manager",
+            "Customer Experience": "Brand Manager",
+            "Data Quality":        "Marketing Ops",
+            "Growth":              "Growth Lead",
+            "Operations":          "Marketing Ops",
+        },
+        "retail": {
+            "Revenue":             "Head of Merchandising",
+            "Cost":                "Supply Chain Manager",
+            "Risk":                "Inventory Manager",
+            "Efficiency":          "Operations Manager",
+            "Customer Experience": "Head of Retail Experience",
+            "Data Quality":        "Data/IT Team",
+            "Growth":              "Commercial Director",
+            "Operations":          "Store Operations Manager",
+        },
+        "ecommerce": {
+            "Revenue":             "Head of eCommerce",
+            "Cost":                "Fulfilment Manager",
+            "Risk":                "eCommerce Manager",
+            "Efficiency":          "Operations Manager",
+            "Customer Experience": "CX Manager",
+            "Data Quality":        "Data/IT Team",
+            "Growth":              "Growth Lead",
+            "Operations":          "Fulfilment Manager",
+        },
+        "hr": {
+            "Revenue":             "HR Director",
+            "Cost":                "HR Manager",
+            "Risk":                "HR Business Partner",
+            "Efficiency":          "Talent Acquisition Lead",
+            "Customer Experience": "Employee Experience Lead",
+            "Data Quality":        "HR Operations",
+            "Growth":              "HR Director",
+            "Operations":          "HR Operations Manager",
+        },
+        "hospitality": {
+            "Revenue":             "General Manager",
+            "Cost":                "F&B Director",
+            "Risk":                "Operations Manager",
+            "Efficiency":          "Front-of-House Manager",
+            "Customer Experience": "Guest Experience Manager",
+            "Data Quality":        "Operations/IT",
+            "Growth":              "Revenue Manager",
+            "Operations":          "Operations Manager",
+        },
+        "real_estate": {
+            "Revenue":             "Sales Director",
+            "Cost":                "Office Manager",
+            "Risk":                "Principal Agent",
+            "Efficiency":          "Operations Manager",
+            "Customer Experience": "Client Relations Lead",
+            "Data Quality":        "Operations/IT",
+            "Growth":              "Business Development Lead",
+            "Operations":          "Operations Manager",
+        },
+        "operations": {
+            "Revenue":             "Operations Director",
+            "Cost":                "Operations Manager",
+            "Risk":                "Risk & Compliance Lead",
+            "Efficiency":          "Process Improvement Lead",
+            "Customer Experience": "Service Delivery Manager",
+            "Data Quality":        "Data/IT Team",
+            "Growth":              "Operations Director",
+            "Operations":          "Operations Manager",
+        },
     }
-    return mapping.get(category, "Business Owner")
+
+    domain_map = domain_owners.get(domain, {})
+    if domain_map and category in domain_map:
+        return domain_map[category]
+
+    # Generic fallback
+    generic = {
+        "Revenue":             "Revenue/Sales Team",
+        "Cost":                "Finance/Operations",
+        "Risk":                "Risk & Compliance",
+        "Efficiency":          "Operations Manager",
+        "Customer Experience": "Customer Success",
+        "Data Quality":        "Data/IT Team",
+        "Growth":              "Revenue/Sales Team",
+        "Operations":          "Operations Manager",
+    }
+    return generic.get(category, "Business Owner")
 
 
 __all__ = ["OpportunityScore", "score_opportunities"]
