@@ -142,7 +142,7 @@ def generate_insights(
                 so_what=f"Benchmark violations in {v['name']} indicate underperformance relative to peers and acceptable operating standards.",
                 business_impact=f"Continued underperformance in {v['name']} will compound over time into larger operational and financial gaps.",
                 financial_impact="Not quantified",
-                recommended_action=f"Review the processes driving {v['name']} and assign a named owner with a 30-day improvement target.",
+                recommended_action=_benchmark_action(domain, v["name"]),
                 expected_outcome=f"{v['name']} improved to benchmark level within one business quarter.",
                 confidence_score=0.7,
                 supporting_evidence=[f"Current value: {v['value']}", v["note"]],
@@ -319,14 +319,144 @@ def _find_benchmark_violations(domain: str, calc_kpis: dict[str, str]) -> list[d
 
 
 def _financial_action(domain: str, category: str, title: str) -> str:
-    """Derive a recommended action string from domain and finding category."""
+    """Return a specific, time-bound recommended action matched to the finding title."""
+    t = title.lower()
+
+    # ── Healthcare ────────────────────────────────────────────────────────────
+    if "no-show revenue loss" in t or ("no-show" in t and "healthcare" in domain.lower()):
+        return "Implement automated SMS/email reminders 48 hrs and 2 hrs before appointments and introduce a cancellation fill list to recover no-show slots within 30 days."
+    if "completion rate" in t and "unbilled" in t:
+        return "Audit cancellation and 'incomplete' workflows by department; introduce a same-day rescheduling protocol and track weekly completion rate per provider."
+    if "low satisfaction" in t and "retention" in t:
+        return "Deploy a post-visit survey to surface the top 3 pain points; prioritise wait time and provider communication improvements and review results at 30 and 60 days."
+    if "patient attrition" in t and "wait" in t:
+        return "Audit appointment block lengths by type and department; stagger arrivals to reduce check-in queue congestion and target average wait under 15 minutes within 60 days."
+
+    # ── Hospitality / Clinic ──────────────────────────────────────────────────
+    if "no-show revenue leakage" in t:
+        return "Introduce a deposit or prepayment policy for peak bookings; send confirmation reminders 24–48 hrs before and review cancellation policy with front-desk staff."
+    if "food cost" in t and "recoverable margin" in t:
+        return "Review supplier contracts and portion sizes against recipes; audit waste logs weekly and identify the top 3 contributors to excess food cost within 30 days."
+
+    # ── Marketing ─────────────────────────────────────────────────────────────
+    if "roas" in t and "below" in t:
+        return "Pause the lowest-performing ad groups immediately; reallocate budget to the top 20% of campaigns by ROAS and test 2 new creative variants within 2 weeks."
+    if "roas" in t and "optimisation" in t:
+        return "Set a ROAS floor in campaign bidding at your target level; shift budget from below-floor ad sets to above-floor performers on a weekly review cycle."
+    if "conversion rate" in t and "benchmark" in t:
+        return "A/B test landing page headline and CTA within 2 weeks; audit checkout or form flow for friction points and review offer clarity and trust signals."
+
+    # ── SaaS ─────────────────────────────────────────────────────────────────
+    if "churn" in t and "revenue at risk" in t:
+        return "Identify all accounts that churned in the last 90 days and conduct 5 exit interviews; implement a proactive health score alert for customers inactive for 60+ days."
+    if "nps" in t and "product-market fit" in t:
+        return "Segment detractors by cohort and usage tier; schedule discovery calls with the bottom 10% of accounts within 2 weeks to identify top churn risks early."
+
+    # ── Sales ─────────────────────────────────────────────────────────────────
+    if "avg discount" in t and "revenue recovery" in t:
+        return "Set a discount approval floor — discounts above the identified threshold require manager sign-off; track discounting by rep monthly to identify coaching opportunities."
+    if "revenue declining" in t:
+        return "Identify the top 3 accounts driving the revenue decline and schedule retention calls this week; review pipeline conversion rates by stage for early warning signals."
+
+    # ── Retail ───────────────────────────────────────────────────────────────
+    if "stockout rate" in t and "lost sales" in t:
+        return "Configure reorder point alerts at 2× lead time buffer for the top 20% of SKUs by sales velocity; review supplier lead time SLAs within 30 days."
+    if "gross margin" in t and "floor" in t:
+        return "Identify the bottom 10 SKUs by margin and review supplier cost, sell price, and shrinkage; renegotiate terms or delist underperformers within 60 days."
+    if "overstock" in t and "carrying cost" in t:
+        return "Run a markdown or clearance promotion for SKUs with cover days exceeding 90; freeze replenishment orders on overstocked items until cover normalises below 60 days."
+
+    # ── Ecommerce ─────────────────────────────────────────────────────────────
+    if "return rate" in t and "net revenue" in t:
+        return "Analyse return reasons by product category; improve size guides and descriptions for the top 5 return SKUs and introduce a monthly 'returns by SKU' review."
+    if "fulfillment lead time" in t and "repeat purchase" in t:
+        return "Audit the warehouse pick-pack-ship cycle by carrier and zone; set a 3-day fulfillment SLA target and address the top 3 bottleneck steps within 30 days."
+
+    # ── Real Estate ───────────────────────────────────────────────────────────
+    if "avg dom" in t and "carrying cost" in t:
+        return "Review pricing on all listings exceeding 45 DOM; schedule price reduction conversations with sellers within 1 week and track active-to-sold conversion by agent."
+    if "listing conversion gap" in t:
+        return "Review the top unsold listings for price positioning vs. comparables; implement a 30-day price review cadence for all active listings to reduce days-on-market."
+    if "price distribution skew" in t:
+        return "Prioritise marketing spend on premium-tier listings with DOM > 30 days; consider staging or photography refreshes to improve conversion on stale high-end listings."
+
+    # ── HR ────────────────────────────────────────────────────────────────────
+    if "attrition cost" in t:
+        return "Conduct stay interviews with all employees in their first 12 months; identify the top 3 attrition drivers from exit data and assign HR ownership with a 30-day action plan."
+
+    # ── Operations ────────────────────────────────────────────────────────────
+    if "backlog" in t:
+        return "Triage the backlog by priority and age; assign dedicated capacity to clear items older than 30 days within 2 weeks and establish a daily backlog burn metric."
+    if "resolution time" in t and "sla breach" in t:
+        return "Map the resolution workflow to identify the top handoff delays; set stage-by-stage SLA targets and implement escalation triggers for tickets breaching 24 hours."
+
+    # ── Finance ───────────────────────────────────────────────────────────────
+    if "negative net margin" in t:
+        return "Identify the top 3 cost centres exceeding budget; freeze discretionary spend and schedule a P&L review with department heads within 2 weeks."
+    if "thin margin" in t:
+        return "Run a margin bridge analysis to identify the largest drag between gross and net margin; target one cost reduction initiative per quarter with measurable targets."
+
+    # ── Generic fallbacks by category ─────────────────────────────────────────
     if "Revenue at Risk" in category:
-        return f"Assign a named owner to investigate and remediate the identified revenue risk within 30 days."
+        return "Identify the root cause of the revenue loss; assign a named owner and establish a 30-day recovery plan with weekly check-ins."
     if "Cost Savings" in category:
-        return f"Launch a cost reduction initiative targeting the identified savings opportunity within 60 days."
+        return "Launch a cost reduction initiative targeting the identified savings; assign ownership and set a 60-day milestone review."
     if "Revenue Opportunity" in category:
-        return f"Develop and test a strategy to capture the identified revenue opportunity within 45 days."
-    return "Review the identified issue with relevant team leads and establish a 30-day action plan."
+        return "Develop and test a capture strategy for the identified revenue opportunity; pilot within 45 days and measure impact at 90 days."
+    return "Review the identified issue with relevant team leads; assign ownership and establish a 30-day improvement target."
+
+
+def _benchmark_action(domain: str, kpi_name: str) -> str:
+    """Return a specific action for a KPI that breached its industry benchmark."""
+    actions: dict[str, str] = {
+        # Healthcare
+        "No-Show Rate": "Implement automated SMS/email reminders 48 hrs and 2 hrs before appointments; introduce a cancellation fill list and track no-show rate weekly by provider.",
+        "Avg Wait Time": "Audit appointment block lengths and stagger patient arrivals; target average wait under 15 minutes and review scheduling templates within 30 days.",
+        "Patient Satisfaction": "Deploy a post-visit survey to surface the top 3 pain points; action the highest-impact item within 30 days and re-measure at 60 days.",
+        "Completion Rate": "Audit incomplete appointment workflows by department; introduce a same-day rescheduling protocol and track weekly completion rate per provider.",
+        # SaaS
+        "Churn Rate": "Identify all churned accounts from the last 90 days and run 5 exit interviews; implement a customer health score with alerts for accounts inactive for 60+ days.",
+        "Avg NPS Score": "Segment NPS detractors by cohort and usage; schedule calls with the bottom 10% of accounts within 2 weeks and address the top-cited complaint within 30 days.",
+        "MoM MRR Growth": "Review pipeline conversion rates and time-to-close by stage; identify the top 3 growth levers (new logos, expansion, churn recovery) and set a 90-day MRR target.",
+        "Avg Contract Length": "Offer a 10–15% annual prepay discount to convert month-to-month accounts; train sales on multi-year value framing and track annual contract rate monthly.",
+        # Marketing
+        "ROAS": "Pause the lowest-performing 20% of ad spend by ROAS immediately; reallocate to top performers and test 2 new creatives within 2 weeks.",
+        "CTR": "Refresh ad creative for the lowest CTR campaigns; test 3 headline variants per ad set and review audience targeting overlap within 2 weeks.",
+        "Conversion Rate": "A/B test the landing page headline and CTA button; audit the checkout flow for friction points and review trust signals within 2 weeks.",
+        "CPC": "Tighten keyword match types to reduce irrelevant clicks; review bid strategies and add negative keywords weekly to drive CPC below the $8 threshold.",
+        "CPA": "Identify the 3 highest-CPA campaigns and audit targeting, creative, and landing page alignment; pause or restructure within 1 week.",
+        # Retail
+        "Inventory Turnover": "Identify the bottom 20% of SKUs by turnover rate; run a clearance promotion and freeze replenishment on slow movers until stock normalises.",
+        "Avg Days Cover": "Flag all SKUs with cover exceeding 60 days; initiate markdowns or bundle promotions and pause reorders until cover falls below the 60-day threshold.",
+        "Stockout Rate": "Configure reorder alerts at 2× lead time buffer for top-velocity SKUs; review supplier lead time SLAs and safety stock levels within 30 days.",
+        "Gross Margin": "Identify the bottom 10 SKUs by margin; review pricing, supplier cost, and shrinkage and renegotiate or delist underperformers within 60 days.",
+        # Ecommerce
+        "Return Rate": "Analyse return reasons by category; improve product descriptions and size guides for the top 5 return SKUs and introduce a monthly SKU-level returns review.",
+        "Avg Days to Ship": "Audit the pick-pack-ship cycle by carrier zone; set a 3-day fulfillment SLA and address the top 3 bottleneck steps within 30 days.",
+        "Avg Order Value": "Test bundle offers and upsell recommendations at checkout; introduce a free-shipping threshold 20% above current AOV and measure AOV lift at 30 days.",
+        # HR
+        "Attrition Rate": "Conduct stay interviews with employees in their first 12 months; identify the top 3 attrition drivers from exit data and assign HR ownership within 30 days.",
+        "Avg Tenure": "Review onboarding and 90-day engagement programmes; introduce structured check-ins at 30, 60, and 90 days to improve early-tenure retention.",
+        "Avg Time to Hire": "Audit the hiring funnel stage by stage; identify the top 2 bottlenecks, streamline interview rounds and target offer-to-accept within 3 business days.",
+        # Hospitality / Restaurant
+        "Table Turnover Rate": "Optimise reservation slot duration based on actual dining times; introduce a pacing strategy for peak hours to reduce idle table time.",
+        "Food Cost %": "Conduct a weekly waste audit and review portion sizes against recipes; renegotiate supplier pricing on the top 5 ingredients by cost within 30 days.",
+        "Labor Cost %": "Review scheduling against cover counts; reduce idle labour during off-peak hours and align shift patterns with historical demand data.",
+        "Avg Check Size": "Train staff on suggestive selling for starters, sides, and beverages; introduce a daily specials briefing and track avg check size per server weekly.",
+        # Real Estate
+        "Avg DOM": "Review pricing on all listings exceeding 45 DOM; schedule price adjustment conversations with sellers within 1 week and track active-to-sold conversion by agent.",
+        "Sale Rate": "Audit listings that expired without sale; review pricing strategy vs. comparables and implement a 30-day price review cadence for all active listings.",
+        # Operations
+        "Resolution Rate": "Identify the top 3 ticket categories with lowest resolution rates; build resolution playbooks for each and set a weekly resolution rate target per team.",
+        "Avg Response Time": "Implement first-response SLA alerts; triage incoming volume by channel and assign dedicated coverage during peak hours to reduce response lag.",
+        # Finance
+        "Net Profit Margin": "Run a margin bridge analysis from gross to net; identify the top 3 cost centres over budget and freeze discretionary spend pending a P&L review.",
+        "Gross Profit Margin": "Review the top 10 products or services by margin; renegotiate supplier terms or adjust pricing on the lowest-margin items within 60 days.",
+    }
+    action = actions.get(kpi_name)
+    if action:
+        return action
+    return f"Investigate the root cause of underperformance in {kpi_name}; assign a named owner, set a target, and review progress at 30 and 60 days."
 
 
 def _ops_category(ops_category: str) -> str:
