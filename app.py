@@ -839,14 +839,21 @@ if st.session_state.summary:
         from utils.pdf_generator import generate_pdf
         with st.spinner("Building PDF…"):
             pdf_data = {
-                "metadata":  metadata,
-                "profile":   prof,
-                "kpis":      {"recommended": kpis, "calculated": calc_kpis,
-                              "narrative":   st.session_state.kpi_narrative or ""},
-                "summary":   st.session_state.summary,
-                "domain":    dataset_type,
-                "charts":    {},
-                "approved_charts": None,
+                "metadata":           metadata,
+                "profile":            prof,
+                "kpis":               {"recommended": kpis, "calculated": calc_kpis,
+                                       "narrative":   st.session_state.kpi_narrative or ""},
+                "calc_kpis":          calc_kpis,
+                "summary":            st.session_state.summary,
+                "domain":             dataset_type,
+                "charts":             {},
+                "approved_charts":    None,
+                "insights":           insights or [],
+                "financial_impact":   financial_impact,
+                "operational_impact": operational_impact,
+                "recommendations":    recommendations or [],
+                "opportunities":      opportunities or [],
+                "scenarios":          scenarios or [],
             }
             pdf_bytes = generate_pdf(pdf_data)
         fname = (metadata.get("filename", "report") or "report").rsplit(".", 1)[0] + "_report.pdf"
