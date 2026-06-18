@@ -668,7 +668,8 @@ with tabs[7]:
     # ── Executive Summary generation ──────────────────────────────────────────
     if st.session_state.summary is None:
         if st.button("Generate Executive Summary", type="primary"):
-            payload = build_safe_summary_payload(prof, dataset_type, kpis, pii_report, calc_kpis)
+            payload = build_safe_summary_payload(prof, dataset_type, kpis, pii_report, calc_kpis,
+                                                  audience_level=st.session_state.get("audience_level", "Business Owner"))
             st.caption("Claude is writing your report — text will appear below as it generates.")
             full = st.write_stream(stream_executive_summary(payload))
             st.session_state.summary = full
@@ -706,6 +707,29 @@ with tabs[8]:
             use_container_width=True,
             hide_index=True,
         )
+        st.divider()
+        st.markdown("#### Decision Matrix")
+        st.caption("Ranked by opportunity score (Impact × Confidence ÷ Effort). Use this to decide what to action first.")
+        import pandas as _pd
+        dm_rows = []
+        for o in opportunities:
+            rank_icon = rank_icons.get(o.rank, "⚪")
+            dm_rows.append({
+                "Priority": f"{rank_icon} {o.rank}",
+                "Initiative": o.initiative[:70] + ("…" if len(o.initiative) > 70 else ""),
+                "Expected Impact": o.expected_impact,
+                "Difficulty": o.implementation_difficulty,
+                "Confidence": f"{o.confidence:.0f}%",
+                "Owner": o.owner,
+                "Timeline": o.timeline,
+                "Score": f"{o.opportunity_score:.0f}",
+            })
+        st.dataframe(
+            _pd.DataFrame(dm_rows),
+            use_container_width=True,
+            hide_index=True,
+        )
+
         st.divider()
         st.markdown("#### Opportunity Details")
         for o in opportunities:
@@ -805,3 +829,31 @@ else:
                 st.session_state.dashboard_id = did
             st.success(f"Dashboard saved! ID: `{did}`")
             st.info("Go to the **Admin Review** page to review before sending to your client.")
+
+# ── PDF Download ──────────────────────────────────────────────────────────────
+if st.session_state.summary:
+    st.divider()
+    st.header("Step 3 — Download PDF Report")
+    st.caption("A styled, client-ready PDF covering the executive summary, KPIs, data quality, and charts.")
+    if st.button("📄 Generate PDF", type="secondary"):
+        from utils.pdf_generator import generate_pdf
+        with st.spinner("Building PDF…"):
+            pdf_data = {
+                "metadata":  metadata,
+                "profile":   prof,
+                "kpis":      {"recommended": kpis, "calculated": calc_kpis,
+                              "narrative":   st.session_state.kpi_narrative or ""},
+                "summary":   st.session_state.summary,
+                "domain":    dataset_type,
+                "charts":    {},
+                "approved_charts": None,
+            }
+            pdf_bytes = generate_pdf(pdf_data)
+        fname = (metadata.get("filename", "report") or "report").rsplit(".", 1)[0] + "_report.pdf"
+        st.download_button(
+            label="⬇️ Download PDF",
+            data=pdf_bytes,
+            file_name=fname,
+            mime="application/pdf",
+            type="primary",
+        )

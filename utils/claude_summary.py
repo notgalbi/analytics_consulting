@@ -29,6 +29,7 @@ def build_safe_summary_payload(
     kpis: list[dict],
     pii_report: dict,
     calc_kpis: dict | None = None,
+    audience_level: str = "Business Owner",
 ) -> dict:
     """
     Construct a payload from safe aggregate data only.
@@ -61,6 +62,7 @@ def build_safe_summary_payload(
     }
     if calc_kpis:
         payload["calculated_kpis"] = calc_kpis
+    payload["audience_level"] = audience_level
     return payload
 
 
@@ -132,12 +134,46 @@ def _call_claude(payload: dict, api_key: str) -> str:
         )
 
 
+_AUDIENCE_DIRECTIVES = {
+    "Business Owner": """
+AUDIENCE — Business Owner (non-technical):
+- Write as if explaining to a smart friend who doesn't work in analytics or finance
+- Avoid all jargon: no "MoM", "CAGR", "NRR", "LTV/CAC ratio" — spell out what every metric means
+- When you mention a number, say what it means in plain English immediately after (e.g. "your no-show rate is 13.7% — that means roughly 1 in 7 patients who book an appointment don't show up")
+- Use analogies and everyday comparisons to make numbers real
+- Frame everything as: "here's what's happening, here's why it costs you money, here's the one thing to do about it"
+- Keep sentences short. No more than 25 words per sentence.
+- Replace every technical benchmark citation with plain context (instead of "MGMA 2024 benchmark", say "industry standard" or "what similar businesses typically achieve")
+- Use "you" and "your business" — this is personal and direct
+""",
+    "Manager/Director": """
+AUDIENCE — Manager / Director:
+- Use professional business language but avoid heavy financial jargon
+- Metrics and KPIs are fine; acronyms should be spelled out on first use
+- Focus on operational levers and team-level actions
+- Include benchmark sources where relevant
+- Tone: clear, evidence-based, actionable
+""",
+    "VP/C-Suite": """
+AUDIENCE — VP / C-Suite:
+- Executive-level tone: decisive, data-driven, strategic
+- Lead every section with the business implication, not the data point
+- Include benchmark sources and industry context
+- Focus on revenue impact, risk exposure, and strategic decisions
+- Assume financial literacy and comfort with KPI terminology
+""",
+}
+
+
 def _build_prompt(payload: dict) -> str:
     """Route to the appropriate domain-specific prompt."""
     domain = payload.get("domain", "general")
+    audience = payload.get("audience_level", "Business Owner")
     ctx = json.dumps(payload, indent=2, default=str)
     builder = _DOMAIN_PROMPTS.get(domain, _prompt_general)
-    return builder(ctx, payload)
+    base_prompt = builder(ctx, payload)
+    audience_block = _AUDIENCE_DIRECTIVES.get(audience, _AUDIENCE_DIRECTIVES["Business Owner"])
+    return audience_block.strip() + "\n\n" + base_prompt
 
 
 # ── Shared rules block ────────────────────────────────────────────────────────
